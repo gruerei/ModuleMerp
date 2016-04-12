@@ -1,1 +1,6 @@
 /build/
+#Ignores
+\.classpath
+\.project
+\.settings
+\.metadata
