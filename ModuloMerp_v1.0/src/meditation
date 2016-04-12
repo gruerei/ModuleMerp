@@ -1,0 +1,93 @@
+Meditation Trance
+
+“Eliriel  was  incredibly  tired.  She  knew  she  had  to 
+get  some  rest,  else  she  would  not  make  it  through 
+the next day. But the group was small and the need 
+for a watch was dire. She would only get two hours 
+of meditation.”
+
+The Meditation  skill consists  of six  subgroups:  
+Cleansing
+Death
+Healing
+Ki
+Sleep
+Trance
+
+They are all similar skills at 1/2, but have widely different functions. 
+Only one skill can be used during each rest.
+
+Meditation  Trance  is  the  elven  variant  of  Meditation Sleep. 
+
+The skill have two different uses: 
+-it allows elves to set a time for their meditation to end, and it can be used 
+to lessen the negative effects of too little rest or broken 
+rest.
+
+ Since the skill have different uses, the static maneuver table will give two different numbers
+  in addition to the describing text. Reduced penalties from lacking or broken rest.
+  
+ Meditation Trance
+Static Maneuver Table SM-10.2.5
+-26 down  Spectacular Failure 
+
+You try hard to get some rest, but trying hard is not resting. You 
+fail to enter a state of meditation and the hours spent trying will not 
+benefit you at all (i.e no rest, no healing and no PP recovered). 
+
+-25 – -04 Absolute Failure 
+d100
+You enter a meditative trance, but dark and worried memories 
+prevent you from repose. You may only count half of the time spent 
+as rest, will heal at half rate and recover only half of your normal 
+PP recovery. 
+
+05 – 75 Failure 
+d3d10
+You break meditation within 3-30 minutes of set time. All penalties 
+for broken or inadequate rest applies.
+
+76 – 90 Partial Success 
+2d10
+You manage to break meditation within 2-20 minutes of set time, 
+but any penalties remain.
+
+91 – 110 Near Success 
+1d10
+The meditative rest give you time to contemplate your memories 
+and recover from the days worries. You rest well and manage to 
+break meditation with an exactness of 1-10 minutes of your chosen 
+endtime. Any penalties from lack of rest or broken meditation will 
+be offset by 10.
+
+111 – 175 Success 
+1d6
+Entering a trance in which you recuperate your memories and 
+heal your mind. You are able to wake from meditation within 
+1-6 minutes of set time and any penalties from broken rest or 
+inadequate rest is lowered by 20. If using the Rejuvenation skill to 
+recover additional power points, add a +20 to that roll.
+
+176 – 225 Absolute Success 
+1d3
+You successfully meditate and are able to exit meditation with an 
+exactness of 1-6 minutes within the set time. Penalties from broken 
+rest or inadequate rest is lowered by 30. If using the Rejuvenation 
+skill to recover additional power points, add a +20 to that roll.
+
+226 up  Remarkable Success 
+exact
+You are able to wake yourself from meditation on exactly the 
+predestined minute. Impressive! Any penalties from lack of rest or 
+broken rest will be offset by 40. If using the Rejuvenation skill to 
+recover additional power points, add a +20 to that roll.
+
+Static maneuver modifications:
+Open-ended d100 roll
+- 10 for deliberately shortening the meditation by 1 hour.
+- 20 for deliberately shortening the meditation by 2 hours.
+- 20 if being awakened by violent actions before the meditation 
+was set to end.
+- 10 per day this skill have been used to shorten the period of 
+meditation.
+All penalties are cumulative
