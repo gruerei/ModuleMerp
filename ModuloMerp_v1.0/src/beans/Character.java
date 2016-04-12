@@ -7,6 +7,7 @@ import java.util.Map;
 
 public class Character {
 
+/*Personaje*/
 	public int id;
 	
 	/*Principales*/
