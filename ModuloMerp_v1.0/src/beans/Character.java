@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Character {
-
+	/*Prueba de comentario porque yo lo quiero*/
 	public int id;
 	
 	/*Principales*/
