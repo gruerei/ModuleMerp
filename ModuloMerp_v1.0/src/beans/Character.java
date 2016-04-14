@@ -1,9 +1,12 @@
 package beans;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class Character {
 	public int id;
@@ -49,7 +52,8 @@ public class Character {
 	public float load;
 	
 	/*COMBATE*/
-	public int life;//vida total
+	public int totalLife;//vida total
+	public int gradesLife;//vida total
 	public int wounds;//heridas sufridas
 	public int offguardBD;//sin contar el bono por agilidad
 	public int totalBD;//BD con escudo
@@ -116,7 +120,7 @@ public class Character {
 
 	
 	public Character(String name, String player, int lvl, int PX, String raceIn, String cultureIn, String professionIn, Map<String, Item> equippedGear , int sTR, int aGI, int cON, int iNT, int i,
-			int cAR, int aP, String magicalDomainChoosen,int[] skillGrades ,int[][] specialSkillModif){
+			int cAR, int aP, int gradesLife, String magicalDomainChoosen,int[] skillGrades ,int[][] specialSkillModif){
 
 		this.name = name;
 		this.player = player;
@@ -136,6 +140,7 @@ public class Character {
 		Attribute charis = new Attribute(Attribute.CHARISMA, cAR);
 		/*Al carisma le sumo-resto la apariencia*/
 		
+		this.gradesLife = gradesLife;
 		
 		/**Calcular modifTotal*/
 		strength.calculModifTotal(race.getModStrength());
@@ -145,7 +150,9 @@ public class Character {
 		intuition.calculModifTotal(race.getModIntuition());
 		
 		/** Regla Nueva: Al carisma le sumo el bono de Apariencia*/
-		charis.setModifAtt(charis.getModifAtt() + appear.getModifAtt());
+		if(Attribute.isCharismaBeneficiedByAppearance())
+			charis.setModifAtt(charis.getModifAtt() + appear.getModifAtt());
+		
 		charis.calculModifTotal(race.getModCharisma());
 		
 		
@@ -168,7 +175,7 @@ public class Character {
 		
 		this.skillGrades = skillGrades;
 		/*Calcular bonos a skills de los objetos en uso*/
-		this.skills = calculSkills(this.skillGrades,this.profession,this.level,this.attributes
+		this.skills = calculSkills(this.skillGrades,this.profession, this.race, this.level, this.gradesLife, this.attributes
 				,equippedGear,specialSkillModif);
 		
 		/*Calcula Resistance Rolls*/
@@ -177,16 +184,17 @@ public class Character {
 
 	}
 	
-	private Map<Integer, Skill> calculSkills(int[] skillGrades2, Profession profession2, int level2,
+	private Map<Integer, Skill> calculSkills(int[] skillGrades2, Profession profession2, Race race, int level2, int gradesLife,
 			Map<String, Attribute> attributes2, Map<String, Item> equippedGear2,int[][] specialSkillModif2) {
 		
 		Map<Integer, Skill> skills = new HashMap<Integer, Skill>();
 		
 		for(int skillidx = 0; skillidx < Skill.SKILLS_TOTAL_NUMBER ; skillidx++){
 			Skill skill = new Skill(skillidx,skillGrades2[skillidx]);
-			skill.calculGradesModifier();
-			skill.calculAttribModifier(attributes2);
+			skill.calculGradesModifier(gradesLife);
+			skill.calculAttribModifier(attributes2,race);
 			skill.calculProfessionModifier(profession2.getName(), level2);
+			skill.calculSkillObjectMods(equippedGear2);
 			skill.calculSpecialModifiers(specialSkillModif2);
 			skill.calculTotalModifiers();
 			skills.put(skillidx, skill);
@@ -342,9 +350,7 @@ public class Character {
 		return load;
 	}
 
-	public int getLife() {
-		return life;
-	}
+
 
 	public int getWounds() {
 		return wounds;
@@ -503,10 +509,6 @@ public class Character {
 		this.load = load;
 	}
 
-	public void setLife(int life) {
-		this.life = life;
-	}
-
 	public void setWounds(int wounds) {
 		this.wounds = wounds;
 	}
@@ -543,44 +545,24 @@ public class Character {
 		this.rangedAttack = rangedAttack;
 	}
 
-	public static void setWEAPON1_USED(String wEAPON1_USED) {
-		WEAPON1_USED = wEAPON1_USED;
+
+	public int getTotalLife() {
+		return totalLife;
 	}
 
-	public static void setWEAPON2_USED(String wEAPON2_USED) {
-		WEAPON2_USED = wEAPON2_USED;
+
+	public void setTotalLife(int totalLife) {
+		this.totalLife = totalLife;
 	}
 
-	public static void setSHIELD_USED(String sHIELD_USED) {
-		SHIELD_USED = sHIELD_USED;
+
+	public int getGradesLife() {
+		return gradesLife;
 	}
 
-	public static void setGREAVES_USED(String gREAVES_USED) {
-		GREAVES_USED = gREAVES_USED;
-	}
 
-	public static void setGLOVES_USED(String gLOVES_USED) {
-		GLOVES_USED = gLOVES_USED;
-	}
-
-	public static void setHELMET_USED(String hELMET_USED) {
-		HELMET_USED = hELMET_USED;
-	}
-
-	public static void setRING1_USED(String rING1_USED) {
-		RING1_USED = rING1_USED;
-	}
-
-	public static void setRING2_USED(String rING2_USED) {
-		RING2_USED = rING2_USED;
-	}
-
-	public static void setARMOR_USED(String aRMOR_USED) {
-		ARMOR_USED = aRMOR_USED;
-	}
-
-	public static void setTALISMAN_USED(String tALISMAN_USED) {
-		TALISMAN_USED = tALISMAN_USED;
+	public void setGradesLife(int gradesLife) {
+		this.gradesLife = gradesLife;
 	}
 
 
@@ -637,6 +619,12 @@ public class Character {
 		return totalGearSkillMods;
 	}
 
+
+	public Map<Integer, Skill> getSkills() {
+		return skills;
+	}
+	
+	
 	public void setSkills(Map<Integer, Skill> skills) {
 		this.skills = skills;
 	}
@@ -677,6 +665,7 @@ public class Character {
 			.append("\nPX: \t\t\t").append(getPX())
 			.append("\nPP: \t\t\t").append(getPP())
 			
+			.append("\n\n------------------------------------------------------------------------------------------")
 			.append("\n\nAttributes\t\tValue\tNormal\tRacial\t Total")
 			.append("\nStrength: \t\t").append(str.getValue()).append("\t")
 			.append(str.getModifAtt()).append("\t ").append(getRace().getModStrength()).append("\t ").append(str.getModifTotal())
@@ -693,7 +682,8 @@ public class Character {
 			.append("\nAppearance: \t\t").append(appea.getValue()).append("\t")
 			.append(appea.getModifAtt())
 			
-			.append("\n\n\t\t\tAttrib.\tObjects\tSpecial\t Total")
+			.append("\n\n------------------------------------------------------------------------------------------")
+			.append("\n\t\t\tAttrib.\tObjects\tSpecial\t Total")
 			.append("\nTR Essence: \t\t").append(essence.getBonusAttribute()).append("\t")
 			.append(essence.getBonusObjects()).append("\t ").append(essence.getBonusSpecial()).append("\t ").append(essence.getBonusTotal())
 			.append("\nRR Channeling: \t\t").append(channel.getBonusAttribute()).append("\t")
@@ -702,11 +692,42 @@ public class Character {
 			.append(poison.getBonusObjects()).append("\t ").append(poison.getBonusSpecial()).append("\t ").append(poison.getBonusTotal())
 			.append("\nRR Disease: \t\t").append(disease.getBonusAttribute()).append("\t")
 			.append(disease.getBonusObjects()).append("\t ").append(disease.getBonusSpecial()).append("\t ").append(disease.getBonusTotal())
-			;
+
+			.append("\n\n------------------------------------------------------------------------------------------")
+			.append("\n\nHabilidad.\t\tGrades\tBf.Grad\tBf.Att\tBf.Prof\tBf.Obj\tBf.Spec\tBf.Spec2\t Bf.Total")
+			.append("\nMOVEMENT_MANEUVERS\n");
+			
+		
+		int prevCategory = Skill.MOVEMENT_MANEUVERS;
+		int newCategory = Skill.MOVEMENT_MANEUVERS;
+		
+		List<Integer> rangedSkills = new ArrayList<Integer>(skills.keySet());
+		Collections.sort(rangedSkills);
+		
+		//for (Map.Entry<Integer, Skill> entry : skills.entrySet()) {
+		for (int key : rangedSkills){
+			//Skill sk = entry.getValue();
+			Skill sk = skills.get(key);
+			newCategory = sk.getCategory();
+			
+			if(newCategory >= Skill.SECONDARY )
+				newCategory = Skill.SECONDARY; 
+			
+			if(newCategory != prevCategory){
+				sb.append("\n------------------------------------------------------------------------------------------")
+				  .append("\n").append(Tables.getSkillCategories()[newCategory]).append("\n");
+			}
+			sb.append("\n").append(Utils.padRight(sk.getDescription(), 20)).append("\t").append(sk.getGrades()).append("\t").append(sk.getModifGrades()).append("\t")
+				.append(sk.getModifAttributes()).append("\t").append(sk.getModifClass()).append("\t").append(sk.getModifObjects()).append("\t")
+				.append(sk.getModifSpecial()).append("\t").append(sk.getModifSpecial2()).append("\t\t ").append(sk.getModifTotal());
+		
+			prevCategory = newCategory;
+		}
 		
 		System.out.println(sb.toString());
 		
 	}
+
 	
 	
 	

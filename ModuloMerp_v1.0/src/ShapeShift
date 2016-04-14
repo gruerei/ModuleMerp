@@ -1,0 +1,84 @@
+Requisitos: 
+- Culto de Orome y al oso.
+- Profesión Multiforme (Segunda Edicion)
+- Beornida Noble y de Sangre Pura
+- Coger la Habilidad Secundaria cambio de Forma como punto de historial
+
+
+- Drelic Monks of Ereg Eiren
+- High-priestess of Benish Armon
+- People struck by the shapechanger's disease
+- Scara-Hai-Orcs
+- Swan-mays
+- Shapeshifters of the Arvandor and the Blood-wights
+- Some maiarin Werewolves and their half-maiarin offspring
+- Wereworms
+- Were-Rats
+- Maiarin Vampires
+
+Shape Changer
+This article is a development from the MERP 2nd ED rules for shape shifting. These rules are also converted to RM2 with concern to the special set of houserules in use by my gaming group.
+
+A shape changer is a character that can change to and from an animal form while still maintaining his normal human persona (e.g like Beorn in the Hobbit). In MERP, Shape Changers must be Beornings that can change into bears. The skill bonus in the secondary skill Control Lycantrophy is used to perform a controlled change. The skill cost for Control Lycantrophy is lowered to 1/3 for Beornings.
+
+A Shape Changer can attempt to voluntarily change form (human to animal or animal to human). The character must make a static maneuver:
+-	open-ended 1-100 roll + his Control Lycantrophy bonus
++5 for every consecutive round that he concentrates
++20 for a successful Meditation static maneuver
+
+-	If the result is 101+, the change take place (takes one full round).
+-	If the result is 76-100 there is no change, but he can try again next round (any rounds of concentration remain consecutive).
+-	If the result is 26-75, there is no change and the character loses his concentration (he must start over at zero consecutive rounds of concentration).
+-	If the result is less than 25, there is no change and character may not try again until he has slept a normal sleep cycle.
+
+A Shape Changer also has a chance of involuntarily changing from human to animal whenever he is angry, he is struck or he falls. That chance is equal to 30% minus his skill ranks in Control Lycantrophy, although never lower than UM05. other modifications can be decided by the GM dependent on the campaign and situation. If an unvoluntarily change occur, he will react as a wild beast (i.e he will attack the target of his anger, whoever struck him or the closest target – GM choice). He will continue to act as a wild animal until he makes a successful Control Lycantrophy static maneuver as outlined above (he may try once a round).
+
+A Beorning Shape Changer in bear form is a fearsome sight for most. A normal bear might be dangerous enough, but the Shape Changer is always larger than its natural counterpart. Those few among the Beornings that have the ability to shape change also have recognizable faunas, i.e they always change into the same bear form (except for size which increases with every level).
+
+Example: Grimbeorn the old, son of Beorn, took the shape of a uniquely greyskinned bear with a bold spot on the head and neck. Before his death, Grimbeorn in bear form weigh 1650 lbs and was 13 feet tall on his hind legs.
+
+Size
+The size is calculated from the characters inherent size and his level. First, take characters weight multipled by three (in Grimbeorns case he weighs 250 lbs in human form, that makes 750 lbs bear), then add the level times fifty (as Grimbeorn is 18th lvl that makes another 900 pounds, which makes his total size 1650 lbs, or 749 kg). As you may notice, this is far beyond the size most natural bears reach, but Grimbeorn was the son of Beorn the Great, who’s size was even beyond that of his son.
+
+Abilities and Drawbacks
+A Shape Changers capabilities change when in animal form. To keep track of the useable skills and abilities the player might wish to download the Shape Changer character sheet (pdf) from the Download section of this webpage. The following is a list of capabilities and drawbacks:
+-	Hit points are doubled (when character changes back to human form, he has taken equal amount of damage in percent).
+-	When the bear form has taken its total hits the Shape Changer will return to human form, which will have passed out due to the amount of hits taken.
+-	The following bonuses are doubled: General Perception, Climb, Tracking, Distance running, Endurance, Sprinting, Melee Scuffle, Instinctive Maneuver, Stunned Maneuver, Blind Fighting (smell), Way of the Warrior, Direction Sense, Sense Ambush/Assassination and Foraging.
+-	The following bonuses are normal: Lore skills, understanding languages, Frenzy, Adrenal Moves (except for Quickdraw which is unusable), Beast Master, Tumbling Attack, Jumping, Control Lycantrophy, Swim, Stalk & Hide, Adrenal Defense, Meditation, all stat bonuses and all RR bonuses.
+-	The following bonuses are halved: Ambush, Acrobatics, Animal Handling, Caving, Contortions and Signaling.
+-	All other skills are normally not usable at all (GM discretion).
+-	His Armor Type is Heavy Hide AT/4 with +2 per level DB (inherent, i.e the bonus is drawn from all incoming attacks)
+-	All criticals against him are resolved on the Large Creatures Critical Tables (and as usual for Large Creatures he ignores all “A” severity crits).
+-	His DB is 10 plus his QU-bonus, plus his Adrenal Defense bonus (if skill is developed).
+-	The Shape Changer develops special attack skills for his animal form. These skills are primary skills for which he has 5 dev.pts extra in addition to his regular development points. His attack is either a Bite (AG/EQ/ST, Medium, cost 2/4), a Claw/Talon (ST/ST/AG/EQ, Large, cost 1/3), a Bash (ST, Medium, cost 1/2) or a Grapple attack (AG/ST, Large, cost 1/3). His oB is 25 plus his appropriate skill bonus. Levelbonus for Combat applies. The attack size increases with level (see Level dependent abilities in next chapter).
+-	He may not speak human languages, but he can understand those that he could in human form. He may converse fluently with other bears, and he may communicate at Rank I with badgers and other “bear-like” creatures.
+-	He may not cast any spells or use any items. During the transformation clothes and items fall off. Leather straps holding armor might burst and tight clothes might be ripped off during transformation. Since such action hurts, most Shape Changers dress in lose clothes.
+
+Level dependent abilities
+While becoming larger and more experienced in his bear form, additional abilities is bestowed upon the Shape Changer. These abilities start at 10th lvl. The list below should be considered optional and not complete, the GM should feel free to add additional abilities for powerful shape shifters and withdraw abilities he not see fit.
+  
+-	10th lvl abilities
+o	Larger attacks, the Shape Changer has the ability to do Large Bite, Huge Claw/Talon, Large Bash and Huge Grapple.
+o	Reduces bleeding by 1 hit point every round (i.e after one round a 3 hit/rnd bleeding only bleeds at a rate of 2 hits/rnd, after 2 rounds it only bleeds 1 hit/rnd and after 3 rounds it has closed).
+
+-	15th lvl abilities
+o	lower the severity of criticals by 1 degree.
+o	does x1,5 concussion damage.
+o	Heals 1 hit point per round while not engaging in combat or other straining activities.
+o	a +10 initiative bonus.
+o	Ignores one round of stun from every critical.
+
+-	20th lvl abilities
+o	Half-Hide Plate AT/11.
+o	may use spells that are listed as “Self” considering he has the spell list and powerpoints required in human form.
+o	a +20 initiative bonus (replaces the bonus given on 15th lvl). 
+
+-	25th lvl abilities
+o	Full-Hide Plate AT/12.
+o	does x2 concussion damage. 
+o	Ignores 2 rounds of stun from every critical. 
+
+-	30th lvl abilities
+o	Hit points are multiplied by x2,5 in bear form.
+o	Hide is so thick that it prevents some damage (25% chance of ignoring any criticals).

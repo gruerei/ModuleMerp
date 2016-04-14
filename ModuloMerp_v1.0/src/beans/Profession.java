@@ -1,38 +1,6 @@
 package beans;
 
 public class Profession {
-	/*COLUMNS CGT4*/
-	public static final int	WAR = 0;
-	public static final int	MAG = 1;
-	public static final int	ANI = 2;
-	public static final int	SCO = 3;
-	public static final int	RAN = 4;
-	public static final int	BRD = 5;
-	public static final int	BAR = 6;
-	public static final int	ROG = 7;
-	public static final int	CIV = 8;
-	public static final int	CON = 9;
-	public static final int	WIZ = 10;
-	public static final int	SCH = 11;
-	public static final int	BUR = 12;
-	public static final int	MNK = 13;
-	public static final int	WMNK = 14;
-	public static final int	SS = 15;
-	public static final int	TRA = 16;
-	public static final int	SHA = 17;
-	
-	/*ROWS CGT4*/
-	public static final int MM = 0;
-	public static final int WEA = 1;
-	public static final int GEN = 2;
-	public static final int SUB = 3;
-	public static final int MGC = 4;
-	public static final int BOD = 5;
-	public static final int IDI = 6;
-	public static final int SPE = 7;
-	public static final int MARC = 8;
-	public static final int ADR = 9;
-	public static final int SEC = 10;
 	
 	/*BASICAS*/
 	public static final String ANIMIST = "ANIMIST";//CLERIGO, SANADOR
@@ -68,25 +36,7 @@ public class Profession {
 	public static final int SECONDARIES = 6;//SECUNDARIAS
 	public static final int BODY_DEVELOPMENT = 7;//SECUNDARIAS
 	
-	/**CGT4_TABLE : Development Points by Profession */
-	private static int[][] CGT4 =
-		{      
-				// 0   1   2   3   4   5     6    7   8   9  10  11  12  13  14   15  16 17
-				//WAR MAG ANI SCO RAN BRD   BAR ROG CIV CON SCH WIZ BUR MNK WMNK SS TRA SHA
-				{  3 , 0 , 1 , 1 , 2 , 0    , 1 , 2 , 0 , 0 , 1 , 0 , 2 , 0 , 0 , 1 , 2 , 1 }, /*MM  [0]*/
-				{  5 , 0 , 1 , 3 , 3 , 2    , 5 , 4 , 1 , 1 , 1 , 0 , 1 , 1 , 1 , 1 , 2 , 2 }, /*WEA [1]*/
-				{  2 , 2 , 2 , 3 , 4 , 2    , 5 , 3 , 2 , 1 , 3 , 2 , 2 , 2 , 1 , 1 , 5 , 1 }, /*GEN [2]*/
-				{  2 , 0 , 1 , 5 , 2 , 2    , 1 , 3 , 0 , 4 , 0 , 0 , 8 , 2 , 2 , 1 , 4 , 3 }, /*SUB [3]*/
-				{  0 , 5 , 2 , 0 , 0 , 3    , 0 , 1 , 0 , 3 , 0 , 5 , 0 , 1 , 0 , 0 , 0 , 5 }, /*MGC [4]*/
-				{  3 , 1 , 1 , 2 , 2 , 1    , 3 , 2 , 1 , 1 , 1 , 1 , 1 , 1 , 3 , 3 , 1 , 1 }, /*BOD [5]*/
-				{  0 , 2 , 2 , 1 , 1 , 3    , 0 , 0 , 0 , 1 , 4 , 2 , 1 , 1 , 0 , 1 , 1 , 0 }, /*IDI [6]*/
-				{  0 , 5 , 5 , 0 , 1 , 2    , 0 , 0 , 0 , 4 , 0 , 5 , 0 , 2 , 0 , 0 , 0 , 2 }, /*SPE [7]*/
-				
-				{  0 , 0 , 0 , 0 , 0 , 0    , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 3 , 5 , 3 , 0 , 0 }, /*MARC [8]*/
-				{  0 , 0 , 0 , 0 , 0 , 0    , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 2 , 3 , 3 , 0 , 0 }, /*ADR [9]*/
-				{  0 , 0 , 0 , 0 , 0 , 0    , 0 , 0 ,11 , 0 , 5 , 0 , 0 , 0 , 0 , 0 , 0 , 0 }, /*SEC [10]*/						
-		}; 
-	
+
 
 	private String name;
 	/**Si se desea, se puede reemplazar la principal por 90 (si las tiradas no fueron buenas)*/
@@ -350,18 +300,18 @@ public class Profession {
 	}
 	
 	public static void changeRuleBardClass(){
-		CGT4[Profession.MM][Profession.BRD] = CGT4[Profession.MM][Profession.BRD] + 1;
-		CGT4[Profession.MGC][Profession.BRD] = CGT4[Profession.MGC][Profession.BRD] - 1;
+		Tables.getCGT4()[Tables.MM_CGT4][Tables.BRD_CGT4] = Tables.getCGT4()[Tables.MM_CGT4][Tables.BRD_CGT4] + 1;
+		Tables.getCGT4()[Tables.MGC_CGT4][Tables.BRD_CGT4] = Tables.getCGT4()[Tables.MGC_CGT4][Tables.BRD_CGT4] + 1;
 		changeRuleBardClass = true;
 		/** Regla de la casa para BARDOS, dejarles repartir 15 puntos como quieran
 		 * poniendo como limite : WEA (4), BOD(3), IDI(3), SPE(2) */
 	}
 	
 	public static void changeRuleScholarClass(){
-		CGT4[Profession.MGC][Profession.SCH] = CGT4[Profession.MGC][Profession.SCH] + 2;
-		CGT4[Profession.SPE][Profession.SCH] = CGT4[Profession.SPE][Profession.SCH] + 2;
-		CGT4[Profession.IDI][Profession.SCH] = CGT4[Profession.IDI][Profession.SCH] - 2;
-		CGT4[Profession.SEC][Profession.SCH] = CGT4[Profession.SEC][Profession.SCH] - 2;
+		Tables.getCGT4()[Tables.MGC_CGT4][Tables.SCH_CGT4] = Tables.getCGT4()[Tables.MGC_CGT4][Tables.SCH_CGT4] + 2;
+		Tables.getCGT4()[Tables.SPE_CGT4][Tables.SCH_CGT4] = Tables.getCGT4()[Tables.SPE_CGT4][Tables.SCH_CGT4] + 2;
+		Tables.getCGT4()[Tables.IDI_CGT4][Tables.SCH_CGT4] = Tables.getCGT4()[Tables.IDI_CGT4][Tables.SCH_CGT4] - 2;	
+		Tables.getCGT4()[Tables.SEC_CGT4][Tables.SCH_CGT4] = Tables.getCGT4()[Tables.SEC_CGT4][Tables.SCH_CGT4] - 2;
 		changeRuleScholarClass = true;
 	}
 	

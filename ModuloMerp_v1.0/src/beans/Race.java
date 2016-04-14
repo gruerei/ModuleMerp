@@ -2,37 +2,6 @@ package beans;
 
 public class Race {
 	
-	/*BT3 - ROWS*/
-	public static final int HOBBIT = 0;
-	public static final int UMLI = 1;
-	public static final int DWARF = 2;
-	public static final int WOSE = 3;
-	public static final int HUMAN = 4;
-	public static final int DUNEDAIN = 5;
-	public static final int HALF_ELF = 6;
-	public static final int SILVAN_ELF = 7;
-	public static final int SINDARIN_ELF = 8;
-	public static final int NOLDOR_ELF = 9;
-	public static final int HALF_ORC = 10;
-	public static final int ORC = 11;
-	public static final int URUK_HAI = 12;
-	public static final int HALF_TROLL = 13;
-	public static final int TROLL = 14;
-	public static final int OLOG_HAI = 15;
-	
-	/*BT3 - COLUMNS*/
-	public static final int STR = 0;
-	public static final int AGI = 1;
-	public static final int CON = 2;
-	public static final int INT = 3;
-	public static final int I   = 4;
-	public static final int CHAR = 5;
-	public static final int ESE = 6;
-	public static final int CHAN = 7;
-	public static final int POI = 8;
-	public static final int ILL = 9;
-	 
-	
 	private String name;
 	private String culture;//SUBRACE
 	private int modStrength;
@@ -57,64 +26,64 @@ public class Race {
 		int race = 0;
 		
 		if(name.equalsIgnoreCase("HOBBIT")){
-			race = HOBBIT;
+			race = Tables.HOBBIT_BT3;
 		}
 		else if(name.equalsIgnoreCase("UMLI")){
-			race = UMLI;
+			race = Tables.UMLI_BT3;
 		}
 		else if(name.equalsIgnoreCase("DWARF")){
-			race = DWARF;
+			race = Tables.DWARF_BT3;
 		}
 		else if(name.equalsIgnoreCase("WOSE")){
-			race = WOSE;
+			race = Tables.WOSE_BT3;
 		}
 		else if(name.equalsIgnoreCase("HUMAN")){
-			race = HUMAN;
+			race = Tables.HUMAN_BT3;
 		}
 		else if(name.equalsIgnoreCase("DUNEDAIN")){
-			race = DUNEDAIN;
+			race = Tables.DUNEDAIN_BT3;
 		}
 		else if(name.equalsIgnoreCase("HALF_ELF")){
-			race = HALF_ELF;
+			race = Tables.HALF_ELF_BT3;
 		}
 		else if(name.equalsIgnoreCase("SILVAN_ELF")){
-			race = SILVAN_ELF;
+			race = Tables.SILVAN_ELF_BT3;
 		}
 		else if(name.equalsIgnoreCase("SINDARIN_ELF")){
-			race = SINDARIN_ELF;
+			race = Tables.SINDARIN_ELF_BT3;
 		}
 		else if(name.equalsIgnoreCase("NOLDOR_ELF")){
-			race = NOLDOR_ELF;
+			race = Tables.NOLDOR_ELF_BT3;
 		}
 		else if(name.equalsIgnoreCase("HALF_ORC")){
-			race = HALF_ORC;
+			race = Tables.HALF_ORC_BT3;
 		}
 		else if(name.equalsIgnoreCase("ORC")){
-			race = ORC;
+			race = Tables.ORC_BT3;
 		}
 		else if(name.equalsIgnoreCase("HALF_TROLL")){
-			race = HALF_TROLL;
+			race = Tables.HALF_TROLL_BT3;
 		}
 		else if(name.equalsIgnoreCase("TROLL")){
-			race = TROLL;
+			race = Tables.TROLL_BT3;
 		}
 		else if(name.equalsIgnoreCase("OLOG_HAI")){
-			race = OLOG_HAI;
+			race = Tables.OLOG_HAI_BT3;
 		}
 		
-		modStrength=Tables.getTableValue("BT3",race,STR);
-		modAgility=Tables.getTableValue("BT3",race,AGI);
-		modConstitution=Tables.getTableValue("BT3",race,CON);
-		modIntelligence=Tables.getTableValue("BT3", race, INT);
-		modIntuition=Tables.getTableValue("BT3",race,I);
+		modStrength=Tables.getTableValue("BT3",race,Tables.STR_BT3);
+		modAgility=Tables.getTableValue("BT3",race,Tables.AGI_BT3);
+		modConstitution=Tables.getTableValue("BT3",race,Tables.CON_BT3);
+		modIntelligence=Tables.getTableValue("BT3", race, Tables.INT_BT3);
+		modIntuition=Tables.getTableValue("BT3",race,Tables.I_BT3);
 		
-		modCharisma=Tables.getTableValue("BT3",race,CHAR);
-		modPresence=Tables.getTableValue("BT3",race,CHAR);
+		modCharisma=Tables.getTableValue("BT3",race,Tables.CHAR_BT3);
+		modPresence=Tables.getTableValue("BT3",race,Tables.CHAR_BT3);
 		
-		modEssence=Tables.getTableValue("BT3",race,ESE);
-		modChanneling=Tables.getTableValue("BT3",race,CHAN);
-		modPoison=Tables.getTableValue("BT3",race,POI);
-		modDisease=Tables.getTableValue("BT3",race,ILL);
+		modEssence=Tables.getTableValue("BT3",race,Tables.ESE_BT3);
+		modChanneling=Tables.getTableValue("BT3",race,Tables.CHAN_BT3);
+		modPoison=Tables.getTableValue("BT3",race,Tables.POI_BT3);
+		modDisease=Tables.getTableValue("BT3",race,Tables.ILL_BT3);
 		
 	}
 

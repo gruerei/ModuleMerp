@@ -85,6 +85,13 @@ public class Attribute {
 	public int getModifTotal() {
 		return modifTotal;
 	}
+
+
+	public static boolean isCharismaBeneficiedByAppearance() {
+		return charismaBeneficiedByAppearance;
+	}
+
+
 	
 	
 }
