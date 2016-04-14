@@ -1,5 +1,7 @@
 package beans;
 
+import utils.Utils;
+
 public class Profession {
 	
 	/*BASICAS*/

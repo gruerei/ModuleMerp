@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import utils.Utils;
+
 public class Character {
 	public int id;
 	

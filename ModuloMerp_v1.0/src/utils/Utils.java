@@ -1,4 +1,4 @@
-package beans;
+package utils;
 
 public class Utils {
 
