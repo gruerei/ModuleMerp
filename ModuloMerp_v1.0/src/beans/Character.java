@@ -59,6 +59,7 @@ public class Character {
 	public int wounds;//heridas sufridas
 	public int offguardBD;//sin contar el bono por agilidad
 	public int totalBD;//BD con escudo
+	public int noShieldBD;//BD sin escudo
 	public int totalNoShield;//BD sin escudo
 	public int movSpeed;//Movimiento
 	public int loadPenal;//PenalizadorCarga
@@ -179,6 +180,12 @@ public class Character {
 		/*Calcular bonos a skills de los objetos en uso*/
 		this.skills = calculSkills(this.skillGrades,this.profession, this.race, this.level, this.gradesLife, this.attributes
 				,equippedGear,specialSkillModif);
+		
+		this.totalLife = this.skills.get(Skill.BODY_DEVELOPMENT).getModifTotal();
+		this.totalBD = this.skills.get(Skill.BD).getModifTotal();
+		ArmourItem shield = (ArmourItem)this.equippedGear.get(ArmourItem.SHIELD);
+		
+		this.noShieldBD = totalBD - shield.getBD() - shield.getBonusArmourMagic1() - shield.getBonusArmourMagic2();
 		
 		/*Calcula Resistance Rolls*/
 		this.setResistanceRolls(calculResistanceRolls(equippedGear));

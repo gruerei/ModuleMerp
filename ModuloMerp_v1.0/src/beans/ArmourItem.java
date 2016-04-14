@@ -11,10 +11,10 @@ public class ArmourItem extends Item{
 	public int BD;//Bonus defensivo
 	public int type;//Escudo, Armadura, Grebas, Brazales
 	public int material;//Cuero, Madera, Metal
-	public String bonusArmourMagic1;//Normalmente bonus a BD
-	public String bonusArmourMagic1AppliedTo;
-	public String bonusArmourMagic2;
-	public String bonusArmourMagic2AppliedTo;
+	public int bonusArmourMagic1;//Normalmente bonus a BD
+	public int bonusArmourMagic1AppliedTo;
+	public int bonusArmourMagic2;
+	public int bonusArmourMagic2AppliedTo;
 	
 	public int getBD() {
 		return BD;
@@ -35,32 +35,32 @@ public class ArmourItem extends Item{
 	public void setType(int type) {
 		this.type = type;
 	}
-	public String getBonusArmourMagic1() {
+	public int getBonusArmourMagic1() {
 		return bonusArmourMagic1;
 	}
-	public void setBonusArmourMagic1(String bonusArmourMagic1) {
+	public void setBonusArmourMagic1(int bonusArmourMagic1) {
 		this.bonusArmourMagic1 = bonusArmourMagic1;
 	}
-	public String getBonusArmourMagic1AppliedTo() {
+	public int getBonusArmourMagic1AppliedTo() {
 		return bonusArmourMagic1AppliedTo;
 	}
-	public void setBonusArmourMagic1AppliedTo(String bonusArmourMagic1AppliedTo) {
+	public void setBonusArmourMagic1AppliedTo(int bonusArmourMagic1AppliedTo) {
 		this.bonusArmourMagic1AppliedTo = bonusArmourMagic1AppliedTo;
 	}
-	public String getBonusArmourMagic2() {
+	public int getBonusArmourMagic2() {
 		return bonusArmourMagic2;
 	}
-	public void setBonusWeaponMagic2(String bonusArmourMagic2) {
+	public void setBonusWeaponMagic2(int bonusArmourMagic2) {
 		this.bonusArmourMagic2 = bonusArmourMagic2;
 	}
-	public String getBonusArmourMagic2AppliedTo() {
+	public int getBonusArmourMagic2AppliedTo() {
 		return bonusArmourMagic2AppliedTo;
 	}
-	public void setBonusArmourMagic2AppliedTo(String bonusArmourMagic2AppliedTo) {
+	public void setBonusArmourMagic2AppliedTo(int bonusArmourMagic2AppliedTo) {
 		this.bonusArmourMagic2AppliedTo = bonusArmourMagic2AppliedTo;
 	}
 	
-	public void setBonusArmourMagic2(String bonusArmourMagic2) {
+	public void setBonusArmourMagic2(int bonusArmourMagic2) {
 		this.bonusArmourMagic2 = bonusArmourMagic2;
 	}
 

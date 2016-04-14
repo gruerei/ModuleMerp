@@ -460,7 +460,7 @@ public class Skill {
 			if(this.category == BD &&  item instanceof ArmourItem){
 				ArmourItem ai = (ArmourItem)item;
 				if(ai.getType() == ArmourItem.SHIELD){
-					sumModifObjects = sumModifObjects + 25;
+					sumModifObjects = sumModifObjects + ai.getBD() + ai.getBonusArmourMagic1() + ai.getBonusArmourMagic2();
 				}
 			}
 			
