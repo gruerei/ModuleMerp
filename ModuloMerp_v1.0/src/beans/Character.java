@@ -185,7 +185,10 @@ public class Character {
 		this.totalBD = this.skills.get(Skill.BD).getModifTotal();
 		ArmourItem shield = (ArmourItem)this.equippedGear.get(ArmourItem.SHIELD);
 		
-		this.noShieldBD = totalBD - shield.getBD() - shield.getBonusArmourMagic1() - shield.getBonusArmourMagic2();
+		if(shield != null)
+			this.noShieldBD = totalBD - shield.getBD() - shield.getBonusArmourMagic1() - shield.getBonusArmourMagic2();
+		else
+			this.noShieldBD = totalBD;
 		
 		/*Calcula Resistance Rolls*/
 		this.setResistanceRolls(calculResistanceRolls(equippedGear));
