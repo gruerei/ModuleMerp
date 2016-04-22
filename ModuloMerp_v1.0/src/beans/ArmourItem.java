@@ -2,19 +2,24 @@ package beans;
 
 public class ArmourItem extends Item{
 	
-	public static final int ARMOUR = 0;
-	public static final int SHIELD = 1;
-	public static final int HELMET = 2;
-	public static final int BRACERS = 3;
-	public static final int GREAVES = 4;
+	public static final int ARMOUR = 1;
+	public static final int SHIELD = 2;
+	public static final int HELMET = 3;
+	public static final int BRACERS = 4;
+	public static final int GREAVES = 5;
 	
 	public int BD;//Bonus defensivo
-	public int type;//Escudo, Armadura, Grebas, Brazales
+	public int category;//Armour, Shield, Helmet, Bracers, Greaves
 	public int material;//Cuero, Madera, Metal
 	public int bonusArmourMagic1;//Normalmente bonus a BD
 	public int bonusArmourMagic1AppliedTo;
 	public int bonusArmourMagic2;
 	public int bonusArmourMagic2AppliedTo;
+	
+	
+	public ArmourItem(String type, float weight, Price price) {
+		super(type, weight, price);
+	}
 	
 	public int getBD() {
 		return BD;
@@ -29,12 +34,7 @@ public class ArmourItem extends Item{
 	public void setMaterial(int material) {
 		this.material = material;
 	}
-	public int getType() {
-		return type;
-	}
-	public void setType(int type) {
-		this.type = type;
-	}
+
 	public int getBonusArmourMagic1() {
 		return bonusArmourMagic1;
 	}
@@ -63,7 +63,14 @@ public class ArmourItem extends Item{
 	public void setBonusArmourMagic2(int bonusArmourMagic2) {
 		this.bonusArmourMagic2 = bonusArmourMagic2;
 	}
+	public int getCategory() {
+		return category;
+	}
+	public void setCategory(int category) {
+		this.category = category;
+	}
 
+	
 	
 	
 }

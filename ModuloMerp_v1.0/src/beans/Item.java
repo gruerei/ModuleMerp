@@ -4,16 +4,23 @@ public class Item {
 	
 	public int id;
 	public String name;
-	public String description;
-	public String weight;
+	public String type;
+	public float weight;
 	public boolean used;
-	public Price basePrice;
+	public Price price;
 	private int modEssence;
 	private int modChanneling;
 	private int modPoison;
 	private int modDisease;
 	
 	private int[] skillMods = new int[Skill.SKILLS_TOTAL_NUMBER];
+	
+
+	public Item(String type, float weight, Price price) {
+		this.type = type;
+		this.weight = weight;
+		this.price = price;
+	}
 	
 	public int getId() {
 		return id;
@@ -28,24 +35,19 @@ public class Item {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getDescription() {
-		return description;
+	public String getType() {
+		return type;
 	}
-	public void setDescription(String description) {
-		this.description = description;
+	public void setType(String type) {
+		this.type = type;
 	}
-	public String getWeight() {
+	public float getWeight() {
 		return weight;
 	}
-	public void setWeight(String weight) {
+	public void setWeight(float weight) {
 		this.weight = weight;
 	}
-	public Price getBasePrice() {
-		return basePrice;
-	}
-	public void setBasePrice(Price basePrice) {
-		this.basePrice = basePrice;
-	}
+
 	public boolean isUsed() {
 		return used;
 	}
@@ -81,6 +83,12 @@ public class Item {
 	}
 	public void setSkillMods(int[] skillMods) {
 		this.skillMods = skillMods;
+	}
+	public Price getPrice() {
+		return price;
+	}
+	public void setPrice(Price price) {
+		this.price = price;
 	}
 
 	

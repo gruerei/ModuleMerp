@@ -2,6 +2,8 @@ package utils;
 
 public class Utils {
 
+	public static final String PROPERTIES_MAIN_SEPARATOR = ",";
+	public static final String PROPERTIES_SECONDARY_SEPARATOR = "-";
 	
 	/*Devuelve numero de PP segun el attributo de entrada*/
 	public static int getPPbyAttrib(int value){
@@ -34,5 +36,26 @@ public class Utils {
 	}
 	
 	
+	public static String blankIfNull(String chain){
+		if(chain == null){
+			return "";
+		}else {
+			return chain;
+		}
+	}
+	
+	public static int castToInt(String chain){
+		if(chain != null && !chain.isEmpty()){
+			return Integer.parseInt(chain);
+		}else
+			return 0;
+	}
+	
+	public static float castToFloat(String chain){
+		if(chain != null && !chain.isEmpty()){
+			return Float.parseFloat(chain);
+		}else
+			return 0;
+	}
 	
 }

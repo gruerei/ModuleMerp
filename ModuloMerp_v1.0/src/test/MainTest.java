@@ -2,6 +2,7 @@ package test;
 
 import beans.Race;
 import beans.Skill;
+import utils.ReadProperties;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +16,9 @@ public class MainTest {
 
 	public static void main(String[] args) {
 
+		//Fixed configurations from property files
+		initConfigurations();
+		
 		//Lectura Basicos
 		String name = "Galadhil";
 		String player = "PlayerTest";
@@ -53,6 +57,10 @@ public class MainTest {
 		
 		Galadhil.show();
 
+	}
+
+	private static void initConfigurations() {
+		ReadProperties.readConfigurationFiles();
 	}
 
 	
