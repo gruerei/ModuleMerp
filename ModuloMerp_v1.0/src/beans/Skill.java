@@ -105,8 +105,8 @@ public class Skill {
 	
 	public Skill(int name, int grades){
 		this.name = name;
-		this.description = Tables.getSkillDetailsTable()[name][0];
-		this.category = Integer.parseInt(Tables.getSkillDetailsTable()[name][1]);
+		this.description = Tables.getSkillCategoryTable()[name][0];
+		this.category = Integer.parseInt(Tables.getSkillCategoryTable()[name][1]);
 		this.grades = grades;
 
 	}

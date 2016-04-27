@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 import beans.Botch;
+import beans.Critical;
 import beans.Price;
 import beans.WeaponItem;
 
@@ -57,34 +58,35 @@ public class ReadProperties {
 				}
 				
 				
-				String main_critical = weaponProperties.getProperty("weapon." + weapon + ".maincritical");
-				String second_critical = weaponProperties.getProperty("weapon." + weapon + ".secondcritical");
-				
-				String botch_ = weaponProperties.getProperty("weapon." + weapon + ".botch");
-				String botchCriticaltaken = weaponProperties.getProperty("weapon." + weapon + ".botch.criticaltaken");
+				String main_critical_ = weaponProperties.getProperty("weapon." + weapon + ".maincritical");
+				Critical main_critical = createCritical(main_critical_);
+			
+				String second_critical_ = weaponProperties.getProperty("weapon." + weapon + ".secondcritical");
+				Critical second_critical = createCritical(second_critical_);
 	
-				Botch botch = new Botch();
+				String botch_ = weaponProperties.getProperty("weapon." + weapon + ".botch");
+				String botchCriticaltaken_ = weaponProperties.getProperty("weapon." + weapon + ".botch.criticaltaken");
+	
+				Botch botch = createBotch(botch_,botchCriticaltaken_);
 				
-				if(botch_.contains(Utils.PROPERTIES_SECONDARY_SEPARATOR)){
-					String [] botch_numbers = botch_.split(Utils.PROPERTIES_SECONDARY_SEPARATOR);
-					botch.setMin(Integer.parseInt(botch_numbers[0]));
-					botch.setMax(Integer.parseInt(botch_numbers[1]));
-					
-					if(!botchCriticaltaken.isEmpty()){
-						
-						botch.setCriticalTakenGravity(botchCriticaltaken);
-						
-						if(botchCriticaltaken.equals("SL"))
-							botch.setCriticalTakenType(WeaponItem.CRITICAL_SLASH);
-						else if(botchCriticaltaken.equals("PU")){
-							botch.setCriticalTakenType(WeaponItem.CRITICAL_PUNCTURE);
-						}else if(botchCriticaltaken.equals("CR")){
-							botch.setCriticalTakenType(WeaponItem.CRITICAL_CRUNCH);
-						}
-					}
+				/**INI-IF THIS WEAPON CAN BE 2H USED*/
+				boolean usedTwoHanded = Utils.castToBoolean(weaponProperties.getProperty("weapon." + weapon + ".two_handed"));
+				Botch botchTwoHanded = null;
+				Critical botch_critical = null;
+				int bonus2H = 0;
+				
+				if(usedTwoHanded){
+					String botch2H = weaponProperties.getProperty("weapon." + weapon + ".two_handed.botch");
+					botchTwoHanded = createBotch(botch2H,botchCriticaltaken_);
+					String botch_critical_in = weaponProperties.getProperty("weapon." + weapon + ".two_handed.critical");
+					botch_critical = createCritical(botch_critical_in);
+					String bonus2H_ = weaponProperties.getProperty("weapon." + weapon + ".two_handed.mod");
+					bonus2H = Utils.castToInt(bonus2H_);
+
 				}
+				/**END-IF THIS WEAPON CAN BE 2H USED*/
 				
-				int range = Utils.castToInt(weaponProperties.getProperty("weapon." + weapon + ".range"));
+				float range = Utils.castToFloat(weaponProperties.getProperty("weapon." + weapon + ".range"));
 				float weight = Utils.castToFloat(weaponProperties.getProperty("weapon." + weapon + ".weight"));
 				int typeMod1 = Utils.castToInt(weaponProperties.getProperty("weapon." + weapon + ".weapontypemod1"));
 				int typeMod2 = Utils.castToInt(weaponProperties.getProperty("weapon." + weapon + ".weapontypemod2"));
@@ -113,8 +115,9 @@ public class ReadProperties {
 				WeaponItem wi = new WeaponItem(type,category,main_critical,second_critical,botch,range
 						,weight,typeMod1,typeMod1AppliedTo,typeMod2,typeMod2AppliedTo,
 						specialMod1,specialMod1AppliedTo,specialMod2,specialMod2AppliedTo
-						,reloadAssaults,malusNoReload,price_obj);
-				
+						,reloadAssaults,malusNoReload,price_obj,usedTwoHanded,botchTwoHanded,
+						botch_critical,bonus2H);
+
 				System.out.println(wi.toString());
 				
 				
@@ -127,4 +130,41 @@ public class ReadProperties {
 			System.out.println("Error, Reading the file has not been possible");
 		}
 	}
+	
+	private static Botch createBotch(String botch_in, String botchCriticaltaken_in ){
+		Botch botch = new Botch();
+		
+		if(botch_in.contains(Utils.PROPERTIES_SECONDARY_SEPARATOR)){
+			String [] botch_numbers = botch_in.split(Utils.PROPERTIES_SECONDARY_SEPARATOR);
+			botch.setMin(Integer.parseInt(botch_numbers[0]));
+			botch.setMax(Integer.parseInt(botch_numbers[1]));
+			
+			if(!botchCriticaltaken_in.isEmpty()){
+
+				Critical botchCriticalTaken = new Critical();
+				String[] botch_cri_array = botchCriticaltaken_in.split(Utils.PROPERTIES_SECONDARY_SEPARATOR);
+				botchCriticalTaken.setCriticalMaxGravity(botch_cri_array[1]);
+				botchCriticalTaken.setCriticalType(Critical.assesCriticalType(botch_cri_array[0]));
+				botch.setCriticalTaken(botchCriticalTaken);
+			}
+		}
+		return botch;
+	}
+	
+	private static Critical createCritical(String critical_in){
+		Critical critical = new Critical();
+		
+		if(!critical_in.isEmpty()){
+			
+			String[] cri_array = critical_in.split(Utils.PROPERTIES_SECONDARY_SEPARATOR);
+			critical.setCriticalType(Critical.assesCriticalType(cri_array[0]));
+			
+			if(cri_array.length > 1){
+				critical.setCriticalMaxGravity(cri_array[1]);
+			}
+		}
+		return critical;
+	}
+	
+
 }

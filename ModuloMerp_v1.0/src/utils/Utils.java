@@ -1,5 +1,9 @@
 package utils;
 
+import javax.annotation.Generated;
+
+import beans.Tables;
+
 public class Utils {
 
 	public static final String PROPERTIES_MAIN_SEPARATOR = ",";
@@ -56,6 +60,38 @@ public class Utils {
 			return Float.parseFloat(chain);
 		}else
 			return 0;
+	}
+	
+	public static boolean castToBoolean(String chain){
+		boolean ret = false;
+		
+		if(chain != null && !chain.isEmpty())
+			if(chain.equals("1"))
+				ret = true;
+		
+		return ret;
+	}
+	
+	public static String printTable(Object[] objs){
+		
+		StringBuffer ret = new StringBuffer("");
+		
+		if(objs != null){
+		
+			for(int i = 0; i < objs.length ; ret.append(" "), i++){
+				
+				if(objs instanceof Integer[]){
+					ret.append(Tables.getSkillCategoryTable()[(Integer)objs[i]][0]);
+				}else if(objs instanceof String[]){
+					ret.append(objs[i]);
+				}
+				
+			}
+			
+		}
+		
+		return ret.toString();
+		
 	}
 	
 }

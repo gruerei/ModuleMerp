@@ -148,7 +148,7 @@ public class Tables {
 				{  4 , 4 , 2 , 3 , 4 , 3 , 5 , 5 , 3 , 5 , 5 , 3 , 4 , 4 , 5 , 5 , 5 , 4 , 5 , 4 , 5 , 5 , 2 , 2 , 3 , 1 , 1 , 2 }, /*HIST  [23]*/
 		};
 	
-	private static String[][] skill_details_table = {
+	private static String[][] skill_category_table = {
 			{"NO_ARMOR","0"},
 			{"SOFT_LEATHER","0"},
 			{"RIGID_LEATHER","0"},
@@ -202,8 +202,8 @@ public class Tables {
 			"OTHERS","SECONDARY","SECONDARY_ART", "SECONDARY_ATL", "SECONDARY_WRK", "SECONDARY_INFL", "SECONDARY_KNOW", "SECONDARY_MART_ART"};	
 	
 	
-	public static String[][] getSkillDetailsTable() {
-		return skill_details_table;
+	public static String[][] getSkillCategoryTable() {
+		return skill_category_table;
 	}
 
 	public static String[] getMagicRealmsDescripTable() {

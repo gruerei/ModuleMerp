@@ -3,8 +3,7 @@ package beans;
 public class Botch {
 	private int min;
 	private int max;
-	private int criticalTakenType;
-	private String criticalTakenGravity;
+	private Critical criticalTaken;
 	
 	
 	public Botch(int min, int max) {
@@ -13,10 +12,10 @@ public class Botch {
 	}
 	
 	
-	public Botch(int min, int max, String criticalTaken) {
+	public Botch(int min, int max, Critical criticalTaken) {
 		this.min = min;
 		this.max = max;
-
+		this.criticalTaken = criticalTaken;
 	}
 
 	public Botch() {
@@ -37,23 +36,13 @@ public class Botch {
 	}
 
 
-	public int getCriticalTakenType() {
-		return criticalTakenType;
+	public Critical getCriticalTaken() {
+		return criticalTaken;
 	}
 
 
-	public void setCriticalTakenType(int criticalTakenType) {
-		this.criticalTakenType = criticalTakenType;
-	}
-
-
-	public String getCriticalTakenGravity() {
-		return criticalTakenGravity;
-	}
-
-
-	public void setCriticalTakenGravity(String criticalTakenGravity) {
-		this.criticalTakenGravity = criticalTakenGravity;
+	public void setCriticalTaken(Critical criticalTaken) {
+		this.criticalTaken = criticalTaken;
 	}
 
 	
