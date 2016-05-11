@@ -2,11 +2,6 @@ package beans;
 
 public class ArmourItem extends Item{
 	
-	public static final int ARMOUR = 1;
-	public static final int SHIELD = 2;
-	public static final int HELMET = 3;
-	public static final int BRACERS = 4;
-	public static final int GREAVES = 5;
 	
 	public int BD;//Bonus defensivo
 	public int category;//Armour, Shield, Helmet, Bracers, Greaves

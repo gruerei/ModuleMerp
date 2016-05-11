@@ -423,19 +423,45 @@ public class Skill {
 	
 	
 	/*Recorre el equipo en uso y obtiene y suman los bonos a habilidades de los objetos equipados*/
-	public void calculSkillObjectMods(Map<String, Item> inUseGear){
+	public void calculSkillObjectMods(Map<Integer, Item> inUseGear){
 
 		int sumModifObjects = 0;
 		
 		//iterate over In Use Gear
-		for (Map.Entry<String, Item> entry : inUseGear.entrySet()) {
+		for (Map.Entry<Integer, Item> entry : inUseGear.entrySet()) {
 			//String key = entry.getKey();
 			Item item = entry.getValue();
+			
+			//Si el item es un Arma de Filo, Aumentamos Sus Bonos al bono por objetos
+			if(item instanceof WeaponItem){
+				WeaponItem wi = (WeaponItem)item;
+				if(wi.getCategory() == this.name){
+					if(wi.getSpecialMod1()>0 && wi.getSpecialMod1AppliedTo() == null){
+						//Here, it's added any special/magical modified to the particular Skill
+						
+						//AppliedtoNull means to any  race, armor, situation, ... in particular, so it's for ALL Situations
+						//it is calculated here because it's the default situation (otherwise it'd be in the Combat Class)
+						sumModifObjects = sumModifObjects + wi.getSpecialMod1();
+					}
+					if(wi.getSpecialMod2()>0 && wi.getSpecialMod2AppliedTo() == null){
+						//Same if it has any second special/magical modifier
+						sumModifObjects = sumModifObjects + wi.getSpecialMod2();
+					}
+					
+					/**TODO  Calculate the TypeWeaponModifier in the Combat
+					//because here you don't have any information related to the enemy armor*/
+					
+					/**TODO En Caso de algun modificador magico/especial de un arma aplicado
+					 * a una raza o armadura especifica, de momento no esta hecho*/
+				}
+			}
+
+			
 			
 			/*Si el item es un casco reducimos la PERCEPCION en 5*/
 			if(this.name == PERCEPTION &&  item instanceof ArmourItem){
 				ArmourItem ai = (ArmourItem)item;
-				if(ai.getCategory() == ArmourItem.HELMET){
+				if(ai.getCategory() == Item.HELMET){
 					sumModifObjects = sumModifObjects - 5;
 				}
 			}
@@ -443,7 +469,7 @@ public class Skill {
 			/*Si el item son grebas reducimos las MM en 5*/
 			if(this.category == MOVEMENT_MANEUVERS &&  item instanceof ArmourItem){
 				ArmourItem ai = (ArmourItem)item;
-				if(ai.getCategory() == ArmourItem.GREAVES){
+				if(ai.getCategory() == Item.GREAVES){
 					sumModifObjects = sumModifObjects - 5;
 				}
 			}
@@ -451,7 +477,7 @@ public class Skill {
 			/*Si el item son brazales reducimos las Habilidades de Armas en 5*/
 			if(this.category == WEAPON &&  item instanceof ArmourItem){
 				ArmourItem ai = (ArmourItem)item;
-				if(ai.getCategory() == ArmourItem.BRACERS){
+				if(ai.getCategory() == Item.BRACERS){
 					sumModifObjects = sumModifObjects - 5;
 				}
 			}
@@ -459,7 +485,7 @@ public class Skill {
 			/*Si el item es un escudo aumentamos la BD en 25*/
 			if(this.category == BD &&  item instanceof ArmourItem){
 				ArmourItem ai = (ArmourItem)item;
-				if(ai.getCategory() == ArmourItem.SHIELD){
+				if(ai.getCategory() == Item.SHIELD){
 					sumModifObjects = sumModifObjects + ai.getBD() + ai.getBonusArmourMagic1() + ai.getBonusArmourMagic2();
 				}
 			}

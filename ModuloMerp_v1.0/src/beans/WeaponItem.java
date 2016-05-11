@@ -2,7 +2,7 @@ package beans;
 
 import utils.Utils;
 
-public class WeaponItem extends Item{
+public class WeaponItem extends Item implements Cloneable{
 	
 	public static final int EDGED = 5;//Filo
 	public static final int CONCUSSION = 6;//Contundentes
@@ -11,7 +11,35 @@ public class WeaponItem extends Item{
 	public static final int PROJECTILE = 9;//Proyectil (Arcos)
 	public static final int POLEARM = 10;//De asta
 	
-
+	public static final int BROADSWORD = 1;
+	public static final int DAGGER = 2;
+	public static final int AXE = 3;
+	public static final int SCIMITAR = 4;
+	public static final int SHORTSWORD = 5;
+	public static final int CLUB = 6;
+	public static final int MACE = 7;
+	public static final int MORNINGSTAR = 8;
+	public static final int NET = 9;
+	public static final int WARHAMMER = 10;
+	public static final int WHIP = 11;
+	public static final int JAVELIN = 12;
+	public static final int SPEAR = 13;
+	public static final int LANCE = 14;
+	public static final int HALBERD = 15;
+	public static final int BATTLEAXE = 16;
+	public static final int FLAIL = 17;
+	public static final int STAFF = 18;
+	public static final int GREATSWORD = 19;
+	public static final int BOLAS = 20;
+	public static final int COMPOSITEBOW = 21;
+	public static final int SHORTBOW = 22;
+	public static final int LONGBOW = 23;
+	public static final int CROSSBOW = 24;
+	public static final int SLING = 25;
+	public static final int BASTARDSWORD = 26;
+	public static final int DOUBLEAXE = 27;
+	
+	
 	private int category;//Filo, Contundente, 2 Manos, Arrojadiza, Proyectiles ,Asta
 	private Botch botch;
 	private Critical mainCritical;
@@ -41,8 +69,8 @@ public class WeaponItem extends Item{
 	private int twoHandedMod;
 
 	public WeaponItem(String type, int category, Critical main_critical, Critical second_critical, Botch botch,
-			float range, float weight, int typeMod1, String [] typeMod1Applied, int typeMod2,
-			String [] typeMod2Applied, int specialMod1, String [] specialMod1Applied, int specialMod2,
+			float range, float weight, int typeMod1, Integer [] typeMod1Applied, int typeMod2,
+			Integer [] typeMod2Applied, int specialMod1, String [] specialMod1Applied, int specialMod2,
 			String [] specialMod2Applied, int reloadAssaults, int malusNoReload, Price price_obj
 			,boolean usedTwoHanded,Botch twoHandedBotch, Critical twoHandedCritical,int twoHandedMod) {
 		
@@ -53,8 +81,6 @@ public class WeaponItem extends Item{
 		this.secondCritical = second_critical;
 		this.botch = botch;
 		this.range = range;
-		this.typeMod1 = typeMod1;
-		this.typeMod2 = typeMod2;
 		this.specialMod1 = specialMod1;
 		this.specialMod2 = specialMod2;
 		this.reloadAssaults = reloadAssaults;
@@ -64,48 +90,38 @@ public class WeaponItem extends Item{
 		this.twoHandedCritical = twoHandedCritical;
 		this.twoHandedMod = twoHandedMod;
 		
-		/*
-		 	public static final int SOFT_LEATHER = 1;//Cuero
-			public static final int RIGID_LEATHER = 2;//Cuero Endurecido
-			public static final int CHAIN = 3;//Cota de Malla
-			public static final int PLATE = 4;//Coraza
-		  
-		 */
-		if(typeMod1Applied.length > 0 && !typeMod1Applied[0].isEmpty())
-		{
-			this.typeMod1AppliedTo = new Integer[typeMod1Applied.length];
-			for(int i = 0; i < typeMod1Applied.length ; i++ ){
-				if(typeMod1Applied[i].equals("NO_ARMOR")){
-					this.typeMod1AppliedTo [i] = Skill.NO_ARMOR;
-				}else if(typeMod1Applied[i].equals("SOFT_LEATHER")){
-					this.typeMod1AppliedTo [i] = Skill.SOFT_LEATHER;
-				}else if(typeMod1Applied[i].equals("RIGID_LEATHER")){
-					this.typeMod1AppliedTo [i] = Skill.RIGID_LEATHER;
-				}else if(typeMod1Applied[i].equals("CHAIN")){
-					this.typeMod1AppliedTo [i] = Skill.CHAIN;
-				}else if(typeMod1Applied[i].equals("PLATE")){
-					this.typeMod1AppliedTo [i] = Skill.PLATE;
-				}
-			}
-		}
+		this.typeMod1 = typeMod1;
+		this.typeMod2 = typeMod2;
+		this.typeMod1AppliedTo = typeMod1Applied;
+		this.typeMod2AppliedTo = typeMod2Applied;
 		
-		if(typeMod2Applied.length > 0 && !typeMod2Applied[0].isEmpty())
-		{
-			this.typeMod2AppliedTo = new Integer[typeMod2Applied.length];
-				for(int i = 0; i < typeMod2Applied.length ; i++ ){
-					if(typeMod2Applied[i].equals("NO_ARMOR")){
-						this.typeMod2AppliedTo [i] = Skill.NO_ARMOR;
-					}else if(typeMod2Applied[i].equals("SOFT_LEATHER")){
-						this.typeMod2AppliedTo [i] = Skill.SOFT_LEATHER;
-					}else if(typeMod2Applied[i].equals("RIGID_LEATHER")){
-						this.typeMod2AppliedTo [i] = Skill.RIGID_LEATHER;
-					}else if(typeMod2Applied[i].equals("CHAIN")){
-						this.typeMod2AppliedTo [i] = Skill.CHAIN;
-					}else if(typeMod2Applied[i].equals("PLATE")){
-						this.typeMod2AppliedTo [i] = Skill.PLATE;
-					}
-				}
-		}
+		if(specialMod1Applied != null && !specialMod1Applied[0].isEmpty())
+			this.specialMod1AppliedTo = specialMod1Applied;
+		
+		if(specialMod2Applied != null && !specialMod2Applied[0].isEmpty())
+			this.specialMod2AppliedTo = specialMod2Applied;
+	}
+	
+	public WeaponItem(String type, int category, Critical main_critical, Critical second_critical, Botch botch,
+			float range, float weight, int specialMod1, String [] specialMod1Applied, int specialMod2,
+			String [] specialMod2Applied, int reloadAssaults, int malusNoReload, Price price_obj
+			,boolean usedTwoHanded,Botch twoHandedBotch, Critical twoHandedCritical,int twoHandedMod) {
+		
+		super(type,weight,price_obj);
+		
+		this.category = category;
+		this.mainCritical = main_critical;
+		this.secondCritical = second_critical;
+		this.botch = botch;
+		this.range = range;
+		this.specialMod1 = specialMod1;
+		this.specialMod2 = specialMod2;
+		this.reloadAssaults = reloadAssaults;
+		this.malusNotReload = malusNoReload;
+		this.usedTwoHanded = usedTwoHanded;
+		this.twoHandedBotch = twoHandedBotch;
+		this.twoHandedCritical = twoHandedCritical;
+		this.twoHandedMod = twoHandedMod;
 		
 		if(!specialMod1Applied[0].isEmpty())
 			this.specialMod1AppliedTo = specialMod1Applied;
@@ -113,6 +129,7 @@ public class WeaponItem extends Item{
 		if(!specialMod2Applied[0].isEmpty())
 			this.specialMod2AppliedTo = specialMod2Applied;
 	}
+
 	public String getName() {
 		return name;
 	}
@@ -275,6 +292,75 @@ public class WeaponItem extends Item{
 		return sb.toString();
 		
 	}
+	@Override
+	public boolean equals(Object obj) {
+		
+		boolean ret = super.equals(obj);
+		
+		if(ret == true){
+			WeaponItem wi = (WeaponItem)obj;
+			if(this.category != wi.getCategory()){
+				ret = false;
+			}
+			if(!this.type.equals(wi.getType())){
+				ret = false;
+			}
+			return ret;	
+		}else{
+			return ret;
+		}
+		
+	}
+	
+	public void conversionTypeMod(int selector, String [] typeModApplied){
+		
+		if(typeModApplied.length > 0 && !typeModApplied[0].isEmpty())
+		{
+			if(selector == 1){
+					this.typeMod1AppliedTo = new Integer[typeModApplied.length];
+					for(int i = 0; i < typeModApplied.length ; i++ ){
+						if(typeModApplied[i].equals("NO_ARMOR")){
+							this.typeMod1AppliedTo [i] = Skill.NO_ARMOR;
+						}else if(typeModApplied[i].equals("SOFT_LEATHER")){
+							this.typeMod1AppliedTo [i] = Skill.SOFT_LEATHER;
+						}else if(typeModApplied[i].equals("RIGID_LEATHER")){
+							this.typeMod1AppliedTo [i] = Skill.RIGID_LEATHER;
+						}else if(typeModApplied[i].equals("CHAIN")){
+							this.typeMod1AppliedTo [i] = Skill.CHAIN;
+						}else if(typeModApplied[i].equals("PLATE")){
+							this.typeMod1AppliedTo [i] = Skill.PLATE;
+						}
+					}
+			}else if(selector == 2){
+				this.typeMod2AppliedTo = new Integer[typeModApplied.length];
+				for(int i = 0; i < typeModApplied.length ; i++ ){
+					if(typeModApplied[i].equals("NO_ARMOR")){
+						this.typeMod2AppliedTo [i] = Skill.NO_ARMOR;
+					}else if(typeModApplied[i].equals("SOFT_LEATHER")){
+						this.typeMod2AppliedTo [i] = Skill.SOFT_LEATHER;
+					}else if(typeModApplied[i].equals("RIGID_LEATHER")){
+						this.typeMod2AppliedTo [i] = Skill.RIGID_LEATHER;
+					}else if(typeModApplied[i].equals("CHAIN")){
+						this.typeMod2AppliedTo [i] = Skill.CHAIN;
+					}else if(typeModApplied[i].equals("PLATE")){
+						this.typeMod2AppliedTo [i] = Skill.PLATE;
+					}
+				}
+			}
+		}
+		
+	}
+	
+	public WeaponItem clone(){
+		WeaponItem clon = new WeaponItem(this.type, this.category, this.mainCritical, this.secondCritical,
+				this.botch, this.range, this.weight, this.typeMod1, this.typeMod1AppliedTo, this.typeMod2,
+				this.typeMod2AppliedTo, this.specialMod1, this.specialMod1AppliedTo, this.specialMod2,
+				this.specialMod2AppliedTo, this.reloadAssaults, this.malusNotReload, this.price,
+				this.usedTwoHanded,this.twoHandedBotch, this.twoHandedCritical,this.twoHandedMod);
+		return clon;
+	}
+	
+
 
 	
 }

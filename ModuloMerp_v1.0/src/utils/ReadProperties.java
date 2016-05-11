@@ -4,24 +4,33 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.Map;
 
 import beans.Botch;
 import beans.Critical;
 import beans.Price;
 import beans.WeaponItem;
+import cache.Cache;
 
 public class ReadProperties {
 
 	public static void main(String arg[]) {
 
-		ReadProperties.readConfigurationFiles();
-	}
+		ReadProperties.readWeaponFile();
+		
+
+		for(Map.Entry<Integer, WeaponItem> entry: Cache.weaponItems.entrySet()){
+			WeaponItem weapon = entry.getValue();
+			System.out.println(weapon.toString());
+		}
+		
+	} 
 
 	/**
 	 * Lee un archivo de propiedades desde una ruta especifica y se imprime en
 	 * pantalla.
 	 */
-	public static void readConfigurationFiles() {
+	public static void readWeaponFile() {
 		try {
 
 			/** Creamos un Objeto de tipo Properties */
@@ -34,6 +43,7 @@ public class ReadProperties {
 			String weaponsFile =  weaponProperties.getProperty("weapon.types");
 			String [] weapons = weaponsFile.split(Utils.PROPERTIES_MAIN_SEPARATOR);
 			
+
 			for(String weapon : weapons){
 				
 				String name = weaponProperties.getProperty("weapon." + weapon + ".name");
@@ -112,15 +122,20 @@ public class ReadProperties {
 				String price = weaponProperties.getProperty("weapon." + weapon + ".price");
 				Price price_obj = new Price(price);
 				 
+				/*----------------------------------*/
 				WeaponItem wi = new WeaponItem(type,category,main_critical,second_critical,botch,range
-						,weight,typeMod1,typeMod1AppliedTo,typeMod2,typeMod2AppliedTo,
-						specialMod1,specialMod1AppliedTo,specialMod2,specialMod2AppliedTo
+						,weight,specialMod1,specialMod1AppliedTo,specialMod2,specialMod2AppliedTo
 						,reloadAssaults,malusNoReload,price_obj,usedTwoHanded,botchTwoHanded,
 						botch_critical,bonus2H);
+				
+				wi.setTypeMod1(typeMod1);
+				wi.conversionTypeMod(1,typeMod1AppliedTo);
+				wi.setTypeMod2(typeMod2);
+				wi.conversionTypeMod(2,typeMod2AppliedTo);
+				/*--------------------------------------*/
+				
+				Cache.weaponItems.put(getWeaponKey(weapon), wi);
 
-				System.out.println(wi.toString());
-				
-				
 
 			}
 			
@@ -164,6 +179,67 @@ public class ReadProperties {
 			}
 		}
 		return critical;
+	}
+	
+	private static Integer getWeaponKey(String weaponType){
+		
+		if(weaponType.equalsIgnoreCase("BROADSWORD")){
+			return WeaponItem.BROADSWORD;
+		}else if(weaponType.equalsIgnoreCase("DAGGER")){
+			return WeaponItem.DAGGER;
+		}else if(weaponType.equalsIgnoreCase("AXE")){
+			return WeaponItem.AXE;
+		}else if(weaponType.equalsIgnoreCase("SCIMITAR")){
+			return WeaponItem.SCIMITAR;
+		}else if(weaponType.equalsIgnoreCase("SHORTSWORD")){
+			return WeaponItem.SHORTSWORD;
+		}else if(weaponType.equalsIgnoreCase("CLUB")){
+			return WeaponItem.CLUB;
+		}else if(weaponType.equalsIgnoreCase("MACE")){
+			return WeaponItem.MACE;
+		}else if(weaponType.equalsIgnoreCase("MORNINGSTAR")){
+			return WeaponItem.MORNINGSTAR;
+		}else if(weaponType.equalsIgnoreCase("NET")){
+			return WeaponItem.NET;
+		}else if(weaponType.equalsIgnoreCase("WARHAMMER")){
+			return WeaponItem.WARHAMMER;
+		}else if(weaponType.equalsIgnoreCase("WHIP")){
+			return WeaponItem.WHIP;
+		}else if(weaponType.equalsIgnoreCase("JAVELIN")){
+			return WeaponItem.JAVELIN;
+		}else if(weaponType.equalsIgnoreCase("SPEAR")){
+			return WeaponItem.SPEAR;
+		}else if(weaponType.equalsIgnoreCase("LANCE")){
+			return WeaponItem.LANCE;
+		}else if(weaponType.equalsIgnoreCase("HALBERD")){
+			return WeaponItem.HALBERD;
+		}else if(weaponType.equalsIgnoreCase("BATTLEAXE")){
+			return WeaponItem.BATTLEAXE;
+		}else if(weaponType.equalsIgnoreCase("FLAIL")){
+			return WeaponItem.FLAIL;
+		}else if(weaponType.equalsIgnoreCase("STAFF")){
+			return WeaponItem.STAFF;
+		}else if(weaponType.equalsIgnoreCase("GREATSWORD")){
+			return WeaponItem.GREATSWORD;
+		}else if(weaponType.equalsIgnoreCase("BOLAS")){
+			return WeaponItem.BOLAS;
+		}else if(weaponType.equalsIgnoreCase("COMPOSITEBOW")){
+			return WeaponItem.COMPOSITEBOW;
+		}else if(weaponType.equalsIgnoreCase("SHORTBOW")){
+			return WeaponItem.SHORTBOW;
+		}else if(weaponType.equalsIgnoreCase("LONGBOW")){
+			return WeaponItem.LONGBOW;
+		}else if(weaponType.equalsIgnoreCase("CROSSBOW")){
+			return WeaponItem.CROSSBOW;
+		}else if(weaponType.equalsIgnoreCase("SLING")){
+			return WeaponItem.SLING;
+		}else if(weaponType.equalsIgnoreCase("BASTARDSWORD")){
+			return WeaponItem.BASTARDSWORD;
+		}else if(weaponType.equalsIgnoreCase("DOUBLEAXE")){
+			return WeaponItem.DOUBLEAXE;
+		}
+		return null;
+
 	}
 	
 

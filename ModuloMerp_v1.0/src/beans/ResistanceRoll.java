@@ -11,7 +11,7 @@ public class ResistanceRoll {
 	public static final String POISON = "POISON";//VENENO
 	public static final String DISEASE = "DISEASE";//ENFERMEDAD
 	
-	public Map<String, Item> equippedGear = new HashMap<String, Item>();
+	public Map<Integer, Item> equippedGear = new HashMap<Integer, Item>();
 	Map<String, Attribute> attributes = new HashMap<String, Attribute>();
 	public Race race;
 	
@@ -23,7 +23,7 @@ public class ResistanceRoll {
 	
 	
 	
-	public ResistanceRoll(String name, Race race, Map<String, Item> equippedGear, Map<String, Attribute> attributes ) {
+	public ResistanceRoll(String name, Race race, Map<Integer, Item> equippedGear, Map<String, Attribute> attributes ) {
 		this.name = name;
 		this.race = race;
 		this.equippedGear = equippedGear;

@@ -84,7 +84,7 @@ public class Character {
 	List<Item> inventory = new ArrayList<Item>();
 	
 	/*EQUIPO EN USO*/
-	Map<String, Item> equippedGear = new HashMap<String, Item>();
+	Map<Integer, Item> equippedGear = new HashMap<Integer, Item>();
 	
 	/*GEAR SKILL MODS*/
 	Map<Integer, Integer> totalGearSkillMods  = new HashMap<Integer, Integer>();
@@ -122,7 +122,7 @@ public class Character {
 	}
 
 	
-	public Character(String name, String player, int lvl, int PX, String raceIn, String cultureIn, String professionIn, Map<String, Item> equippedGear , int sTR, int aGI, int cON, int iNT, int i,
+	public Character(String name, String player, int lvl, int PX, String raceIn, String cultureIn, String professionIn, Map<Integer, Item> equippedGear , int sTR, int aGI, int cON, int iNT, int i,
 			int cAR, int aP, int gradesLife, String magicalDomainChoosen,int[] skillGrades ,int[][] specialSkillModif){
 
 		this.name = name;
@@ -158,7 +158,6 @@ public class Character {
 		
 		charis.calculModifTotal(race.getModCharisma());
 		
-		
 		this.getAttributes().put(Attribute.STRENTGTH, strength);
 		this.getAttributes().put(Attribute.AGILITY, agility);
 		this.getAttributes().put(Attribute.CONSTITUTION, constitution);
@@ -183,7 +182,7 @@ public class Character {
 		
 		this.totalLife = this.skills.get(Skill.BODY_DEVELOPMENT).getModifTotal();
 		this.totalBD = this.skills.get(Skill.BD).getModifTotal();
-		ArmourItem shield = (ArmourItem)this.equippedGear.get(ArmourItem.SHIELD);
+		ArmourItem shield = (ArmourItem)this.equippedGear.get(Item.SHIELD);
 		
 		if(shield != null)
 			this.noShieldBD = totalBD - shield.getBD() - shield.getBonusArmourMagic1() - shield.getBonusArmourMagic2();
@@ -191,13 +190,13 @@ public class Character {
 			this.noShieldBD = totalBD;
 		
 		/*Calcula Resistance Rolls*/
-		this.setResistanceRolls(calculResistanceRolls(equippedGear));
+		this.setResistanceRolls(calculResistanceRolls());
 		
 
 	}
 	
 	private Map<Integer, Skill> calculSkills(int[] skillGrades2, Profession profession2, Race race, int level2, int gradesLife,
-			Map<String, Attribute> attributes2, Map<String, Item> equippedGear2,int[][] specialSkillModif2) {
+			Map<String, Attribute> attributes2, Map<Integer, Item> equippedGear2,int[][] specialSkillModif2) {
 		
 		Map<Integer, Skill> skills = new HashMap<Integer, Skill>();
 		
@@ -216,7 +215,7 @@ public class Character {
 	}
 
 	/*Calcula las Tiradas de Resistancia de un personaje*/
-	private Map<String, ResistanceRoll> calculResistanceRolls(Map<String, Item> equippedGear2) {
+	private Map<String, ResistanceRoll> calculResistanceRolls() {
 		
 		Map<String, ResistanceRoll> rRolls = new  HashMap<String, ResistanceRoll>();
 		
@@ -400,7 +399,7 @@ public class Character {
 		return rangedAttack;
 	}
 
-	public Map<String, Item> getEquippedGear() {
+	public Map<Integer, Item> getEquippedGear() {
 		return equippedGear;
 	}
 
@@ -582,7 +581,7 @@ public class Character {
 		this.inventory = inventory;
 	}
 
-	public void setEquippedGear(Map<String, Item> equippedGear) {
+	public void setEquippedGear(Map<Integer, Item> equippedGear) {
 		this.equippedGear = equippedGear;
 	}
 
@@ -600,7 +599,7 @@ public class Character {
 
 
 	/*Recorre el equipo en uso y obtiene y suma el total de las resistencias de todos estos objetos*/
-	public Map<String, Integer> calculTotalGearResistances(Map<String, Item> inUseGear){
+	public Map<String, Integer> calculTotalGearResistances(Map<Integer, Item> inUseGear){
 		
 		Map<String, Integer> totalGearResistances = new HashMap<String, Integer>();
 		int essenceRes = 0;
@@ -609,7 +608,7 @@ public class Character {
 		int diseaseRes = 0;
 		
 
-		for (Map.Entry<String, Item> entry : inUseGear.entrySet()) {
+		for (Map.Entry<Integer, Item> entry : inUseGear.entrySet()) {
 			//String key = entry.getKey();
 			Item item = entry.getValue();
 			essenceRes = essenceRes + item.getModEssence();

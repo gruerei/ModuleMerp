@@ -2,6 +2,8 @@ package test;
 
 import beans.Race;
 import beans.Skill;
+import beans.WeaponItem;
+import cache.Cache;
 import utils.ReadProperties;
 
 import java.util.HashMap;
@@ -36,7 +38,23 @@ public class MainTest {
 		int life = 24;
 		
 		//Lectura Equipo en uso
-		Map<String, Item> equippedGear = new HashMap<String, Item>();
+		Map<Integer, Item> equippedGear = new HashMap<Integer, Item>();
+		
+		//Lectura de equipamiento en el Excel
+		//Identificada arma de uso, extraer la de la plantilla y clonarla
+		WeaponItem scimitarHighQuality = Cache.weaponItems.get(WeaponItem.SCIMITAR).clone();
+		//Aplicar modificaciones adicionales respecto de la plantilla
+		scimitarHighQuality.setSpecialMod1(10);
+		//Añador al equipamiento en uso
+		equippedGear.put(Item.WEAPON_1, scimitarHighQuality);
+		
+		/**TODO Los casos donde un arma puede usarse de dos formas:
+		 * Por defecto se usará lo que viene en el .properties en su categoria
+		 * Bastard Sword and Double Axe : Por defecto (EDGED - 1 HAND)
+		 * DAGGER, AXE : Por defecto (EDGED - 1 HAND) 
+		 * 
+		 * Modificable en el Combate
+		 * */
 
 		//Lectura Habilidades
 		int[] skillGrades = new int[Skill.SKILLS_TOTAL_NUMBER];
@@ -60,7 +78,7 @@ public class MainTest {
 	}
 
 	private static void initConfigurations() {
-		ReadProperties.readConfigurationFiles();
+		ReadProperties.readWeaponFile();
 	}
 
 	
