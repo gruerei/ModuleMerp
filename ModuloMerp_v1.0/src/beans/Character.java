@@ -54,9 +54,9 @@ public class Character {
 	public float load;
 	
 	/*COMBATE*/
-	public int totalLife;//vida total
-	public int gradesLife;//vida total
-	public int wounds;//heridas sufridas
+	public Life life;//vida total
+	public int gradesLife;//vida obtenida a partir de las tiradas de dados
+	
 	public int offguardBD;//sin contar el bono por agilidad
 	public int totalBD;//BD con escudo
 	public int noShieldBD;//BD sin escudo
@@ -123,7 +123,7 @@ public class Character {
 
 	
 	public Character(String name, String player, int lvl, int PX, String raceIn, String cultureIn, String professionIn, Map<Integer, Item> equippedGear , int sTR, int aGI, int cON, int iNT, int i,
-			int cAR, int aP, int gradesLife, String magicalDomainChoosen,int[] skillGrades ,int[][] specialSkillModif){
+			int cAR, int aP, int baseLife, String magicalDomainChoosen,int[] skillGrades ,int[][] specialSkillModif){
 
 		this.name = name;
 		this.player = player;
@@ -142,8 +142,6 @@ public class Character {
 		Attribute appear = new Attribute(Attribute.APPEARANCE, aP);
 		Attribute charis = new Attribute(Attribute.CHARISMA, cAR);
 		/*Al carisma le sumo-resto la apariencia*/
-		
-		this.gradesLife = gradesLife;
 		
 		/**Calcular modifTotal*/
 		strength.calculModifTotal(race.getModStrength());
@@ -183,10 +181,15 @@ public class Character {
 		
 		this.skillGrades = skillGrades;
 		/*Calcular bonos a skills de los objetos en uso*/
-		this.skills = calculSkills(this.skillGrades,this.profession, this.race, this.level, this.gradesLife, this.attributes
+		
+		
+		this.skills = calculSkills(this.skillGrades,this.profession, this.race, this.level, baseLife, this.attributes
 				,equippedGear,specialSkillModif);
 		
-		this.totalLife = this.skills.get(Skill.BODY_DEVELOPMENT).getModifTotal();
+	
+		int totalLife = this.skills.get(Skill.BODY_DEVELOPMENT).getModifTotal();
+		this.life = new Life(baseLife,totalLife);
+		
 		this.totalBD = this.skills.get(Skill.BD).getModifTotal();
 		ArmourItem shield = (ArmourItem)this.equippedGear.get(Item.SHIELD);
 		
@@ -381,11 +384,6 @@ public class Character {
 	}
 
 
-
-	public int getWounds() {
-		return wounds;
-	}
-
 	public int getOffguardBD() {
 		return offguardBD;
 	}
@@ -539,9 +537,6 @@ public class Character {
 		this.load = load;
 	}
 
-	public void setWounds(int wounds) {
-		this.wounds = wounds;
-	}
 
 	public void setOffguardBD(int offguardBD) {
 		this.offguardBD = offguardBD;
@@ -576,13 +571,13 @@ public class Character {
 	}
 
 
-	public int getTotalLife() {
-		return totalLife;
+	public Life getLife() {
+		return life;
 	}
 
 
-	public void setTotalLife(int totalLife) {
-		this.totalLife = totalLife;
+	public void setLife(Life life) {
+		this.life = life;
 	}
 
 
@@ -701,6 +696,7 @@ public class Character {
 			.append("\n\nLevel: \t\t\t").append(getLevel())
 			.append("\nPX: \t\t\t").append(getPX())
 			.append("\nPP: \t\t\t").append(getPP())
+			.append("\nLife:\t\t\t").append(life.getCurrentLife()).append("/").append(life.getTotalLife())
 			
 			
 			.append("\n\n---------------------------------------ATTRIBUTES---------------------------------------------------")

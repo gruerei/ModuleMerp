@@ -84,6 +84,8 @@ public class MainTest {
 		Character Galadhil = new Character(name, player, lvl, PX, raceIn, cultureIn, professionIn, equippedGear
 				,str, agi, con, inte, i, car, ap, life, magicalDomainChoosen, skillGrades ,specialSkillModi);
 		
+		Galadhil.getLife().lifePointsLost(10);
+		
 		Galadhil.show();
 
 	}
