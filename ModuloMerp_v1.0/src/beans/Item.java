@@ -2,13 +2,14 @@ package beans;
 
 public class Item{
 
-	public static final int ARMOUR = 1;
-	public static final int SHIELD = 2;
-	public static final int HELMET = 3;
-	public static final int BRACERS = 4;
-	public static final int GREAVES = 5;
-	public static final int WEAPON_1 = 6;
-	public static final int WEAPON_2 = 7;
+
+	public static final int WEAPON_1 = 1;
+	public static final int WEAPON_2 = 2;
+	public static final int ARMOUR = 3;
+	public static final int SHIELD = 4;
+	public static final int HELMET = 5;
+	public static final int BRACERS = 6;
+	public static final int GREAVES = 7;
 	public static final int RING_1 = 8;
 	public static final int RING_2 = 9;
 	public static final int AMULET = 10;
@@ -26,13 +27,14 @@ public class Item{
 	private int modChanneling;
 	private int modPoison;
 	private int modDisease;
+	
+	protected int[] skillMods = new int[Skill.SKILLS_TOTAL_NUMBER];
 
-	private int[] skillMods = new int[Skill.SKILLS_TOTAL_NUMBER];
-
-	public Item(String type, float weight, Price price) {
+	public Item(String type, float weight, Price price, int[] skillMods) {
 		this.type = type;
 		this.weight = weight;
 		this.price = price;
+		this.skillMods = skillMods;
 	}
 
 	public int getId() {
@@ -123,6 +125,7 @@ public class Item{
 		this.price = price;
 	}
 
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == null) {
@@ -141,5 +144,11 @@ public class Item{
 
 		return true;
 	}
+	
+	@Override
+	public  Item clone(){
+		Item clon = new Item(this.type, this.weight, this.price, this.skillMods);
+		return clon;
+	};
 
 }

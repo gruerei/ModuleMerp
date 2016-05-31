@@ -9,6 +9,7 @@ import utils.ReadProperties;
 import java.util.HashMap;
 import java.util.Map;
 
+import beans.ArmourItem;
 import beans.Attribute;
 import beans.Character;
 import beans.Item;
@@ -20,6 +21,8 @@ public class MainTest {
 
 		//Fixed configurations from property files
 		initConfigurations();
+		
+		Attribute.changeRuleCharismaBeneficiedByAppearance(false);
 		
 		//Lectura Basicos
 		String name = "Galadhil";
@@ -42,12 +45,20 @@ public class MainTest {
 		
 		//Lectura de equipamiento en el Excel
 		//Identificada arma de uso, extraer la de la plantilla y clonarla
-		WeaponItem scimitarHighQuality = Cache.weaponItems.get(WeaponItem.SCIMITAR).clone();
+		WeaponItem scimitarHighQuality = (WeaponItem)Cache.weaponItems.get(WeaponItem.SCIMITAR).clone();
 		//Aplicar modificaciones adicionales respecto de la plantilla
-		scimitarHighQuality.setSpecialMod1(10);
-		//Añador al equipamiento en uso
+		/*Dos formas de hacer lo mismo (¿Quitar la primera o dejarla para cosas especiales(ver)?)*/
+		//scimitarHighQuality.setSpecialMod1(10);
+		scimitarHighQuality.getSkillMods()[Skill.EDGED] = 10;
+		scimitarHighQuality.setName("Silver Scimitar");
 		equippedGear.put(Item.WEAPON_1, scimitarHighQuality);
 		
+		equippedGear.put(Item.ARMOUR, Cache.armourItems.get(ArmourItem.RIGID_LEATHER).clone());
+		equippedGear.put(Item.SHIELD, Cache.armourItems.get(ArmourItem.MEDIUM_SHIELD).clone());
+		//equippedGear.put(Item.BRACERS, Cache.armourItems.get(ArmourItem.METAL_BRACERS).clone());
+		//equippedGear.put(Item.GREAVES, Cache.armourItems.get(ArmourItem.METAL_GREAVERS).clone());
+		//equippedGear.put(Item.HELMET, Cache.armourItems.get(ArmourItem.METAL_HELMET).clone());
+	
 		/**TODO Los casos donde un arma puede usarse de dos formas:
 		 * Por defecto se usará lo que viene en el .properties en su categoria
 		 * Bastard Sword and Double Axe : Por defecto (EDGED - 1 HAND)
@@ -79,6 +90,7 @@ public class MainTest {
 
 	private static void initConfigurations() {
 		ReadProperties.readWeaponFile();
+		ReadProperties.readArmourFile();
 	}
 
 	

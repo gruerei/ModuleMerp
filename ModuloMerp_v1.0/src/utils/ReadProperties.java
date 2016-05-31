@@ -6,9 +6,12 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.Map;
 
+import beans.ArmourItem;
 import beans.Botch;
 import beans.Critical;
+import beans.Item;
 import beans.Price;
+import beans.Skill;
 import beans.WeaponItem;
 import cache.Cache;
 
@@ -16,15 +19,132 @@ public class ReadProperties {
 
 	public static void main(String arg[]) {
 
-		ReadProperties.readWeaponFile();
 		
-
-		for(Map.Entry<Integer, WeaponItem> entry: Cache.weaponItems.entrySet()){
-			WeaponItem weapon = entry.getValue();
-			System.out.println(weapon.toString());
-		}
+		//ReadProperties.readWeaponFile();
+		ReadProperties.readArmourFile();
+		
+		//resetDefaults();
+		
+		//print(Cache.weaponItems);
+		print(Cache.armourItems);
+		
 		
 	} 
+
+
+
+	public static void readArmourFile() {
+		
+		try {
+			/** Creamos un Objeto de tipo Properties */
+			Properties armourProperties = new Properties();
+	
+			/** Cargamos el archivo desde la ruta especificada */
+			armourProperties.load(new FileInputStream(
+				"src/properties/armour.properties"));
+			
+			String armoursFile =  armourProperties.getProperty("armour.types");
+			String [] armours = armoursFile.split(Utils.PROPERTIES_MAIN_SEPARATOR);
+
+			for(String armour : armours){
+				
+				int [] skillMods = new int[Skill.SKILLS_TOTAL_NUMBER];
+				
+				String name = armourProperties.getProperty("armour." + armour + ".name");
+				String type = armourProperties.getProperty("armour." + armour + ".type");
+				String category_ = armourProperties.getProperty("armour." + armour + ".category");
+				int category = Item.ARMOUR;
+				
+				float weight = Utils.castToFloat(armourProperties.getProperty("armour." + armour + ".weight"));
+				String material = armourProperties.getProperty("armour." + armour + ".material");
+				
+				String price = armourProperties.getProperty("armour." + armour + ".price");
+				Price price_obj = new Price(price);
+				
+				ArmourItem ai = new ArmourItem(type, weight,price_obj,category, material, skillMods, 0);
+				
+				Cache.armourItems.put(getKey(armour), ai);
+		
+			}
+
+			String shieldsFile =  armourProperties.getProperty("shield.types");
+			String [] shields = shieldsFile.split(Utils.PROPERTIES_MAIN_SEPARATOR);
+			
+			
+			for(String shield : shields){
+				
+				int [] skillMods = new int[Skill.SKILLS_TOTAL_NUMBER];
+				
+				int category = Item.SHIELD;
+				String type = armourProperties.getProperty("shield." + shield + ".type");
+				float weight = Utils.castToFloat(armourProperties.getProperty("shield." + shield + ".weight"));
+				String material = armourProperties.getProperty("shield." + shield + ".material");
+				String price = armourProperties.getProperty("shield." + shield + ".price");
+				Price price_obj = new Price(price);
+				
+				int BD = Utils.castToInt(armourProperties.getProperty("shield." + shield + ".BD"));
+				int BO = Utils.castToInt(armourProperties.getProperty("shield." + shield + ".BO"));
+						
+				skillMods[Skill.BD] = skillMods[Skill.BD] + BD;
+				skillMods[Skill.EDGED] = skillMods[Skill.EDGED] + BO;
+				skillMods[Skill.CONCUSSION] = skillMods[Skill.CONCUSSION] + BO;
+				skillMods[Skill.TWO_HANDED] = skillMods[Skill.TWO_HANDED] + BO;
+				skillMods[Skill.THROWN] = skillMods[Skill.THROWN] + BO;
+				skillMods[Skill.PROJECTILE] = skillMods[Skill.PROJECTILE] + BO;
+				skillMods[Skill.POLEARM] = skillMods[Skill.POLEARM] + BO;
+				
+				ArmourItem ai = new ArmourItem(type, weight,price_obj,category, material, skillMods, BO);
+				
+				Cache.armourItems.put(getKey(shield+"_shield"), ai);
+			}
+			
+			
+			String [] gear = {"helmet","bracers","greaves"};
+			String [] materials = {"leather","metal"};
+			
+			for(String item : gear){
+				for(String material : materials){
+					
+					int [] skillMods = new int[Skill.SKILLS_TOTAL_NUMBER];
+					int bonusBo = 0;
+					int category = 0;
+					if(item.equals("helmet")){
+						category = Item.HELMET;
+						skillMods[Skill.PERCEPTION] = skillMods[Skill.PERCEPTION] - 5;
+					}else if(item.equals("bracers")){
+						category = Item.BRACERS;
+						skillMods[Skill.EDGED] = skillMods[Skill.EDGED] - 5;
+						skillMods[Skill.CONCUSSION] = skillMods[Skill.CONCUSSION] - 5;
+						skillMods[Skill.TWO_HANDED] = skillMods[Skill.TWO_HANDED] - 5;
+						skillMods[Skill.THROWN] = skillMods[Skill.THROWN] - 5;
+						skillMods[Skill.PROJECTILE] = skillMods[Skill.PROJECTILE] - 5;
+						skillMods[Skill.POLEARM] = skillMods[Skill.POLEARM] - 5;
+						bonusBo = -5;
+					}else if(item.equals("greaves")){
+						category = Item.GREAVES;
+						skillMods[Skill.NO_ARMOR] = skillMods[Skill.NO_ARMOR] - 5;
+						skillMods[Skill.SOFT_LEATHER] = skillMods[Skill.SOFT_LEATHER] - 5;
+						skillMods[Skill.RIGID_LEATHER] = skillMods[Skill.RIGID_LEATHER] - 5;
+						skillMods[Skill.CHAIN] = skillMods[Skill.CHAIN] - 5;
+						skillMods[Skill.PLATE] = skillMods[Skill.PLATE] - 5;
+					}
+						
+					String type = armourProperties.getProperty(item + "." + material + ".type");
+					float weight = Utils.castToFloat(armourProperties.getProperty(item + "." + material + ".weight"));
+					String price = armourProperties.getProperty(item + "." + material + ".price");
+					Price price_obj = new Price(price);
+					
+					ArmourItem ai = new ArmourItem(type, weight,price_obj,category, material,skillMods,bonusBo);
+					Cache.armourItems.put(getKey(material + "_" + item), ai);
+				}
+			}
+			
+		} catch (FileNotFoundException e) {
+			System.out.println("Error, The file does not exist");
+		} catch (IOException e) {
+			System.out.println("Error, Reading the file has not been possible");
+		}
+	}
 
 	/**
 	 * Lee un archivo de propiedades desde una ruta especifica y se imprime en
@@ -46,6 +166,7 @@ public class ReadProperties {
 
 			for(String weapon : weapons){
 				
+				int [] skillMods = new int[Skill.SKILLS_TOTAL_NUMBER];
 				String name = weaponProperties.getProperty("weapon." + weapon + ".name");
 				
 				/** Obtenemos los parametros definidos en el archivo */
@@ -126,7 +247,7 @@ public class ReadProperties {
 				WeaponItem wi = new WeaponItem(type,category,main_critical,second_critical,botch,range
 						,weight,specialMod1,specialMod1AppliedTo,specialMod2,specialMod2AppliedTo
 						,reloadAssaults,malusNoReload,price_obj,usedTwoHanded,botchTwoHanded,
-						botch_critical,bonus2H);
+						botch_critical,bonus2H,skillMods);
 				
 				wi.setTypeMod1(typeMod1);
 				wi.conversionTypeMod(1,typeMod1AppliedTo);
@@ -134,7 +255,7 @@ public class ReadProperties {
 				wi.conversionTypeMod(2,typeMod2AppliedTo);
 				/*--------------------------------------*/
 				
-				Cache.weaponItems.put(getWeaponKey(weapon), wi);
+				Cache.weaponItems.put(getKey(weapon), wi);
 
 
 			}
@@ -181,66 +302,159 @@ public class ReadProperties {
 		return critical;
 	}
 	
-	private static Integer getWeaponKey(String weaponType){
+	private static Integer getKey(String type){
 		
-		if(weaponType.equalsIgnoreCase("BROADSWORD")){
+		/*WEAPONS*/
+		if(type.equalsIgnoreCase("BROADSWORD")){
 			return WeaponItem.BROADSWORD;
-		}else if(weaponType.equalsIgnoreCase("DAGGER")){
+		}else if(type.equalsIgnoreCase("DAGGER")){
 			return WeaponItem.DAGGER;
-		}else if(weaponType.equalsIgnoreCase("AXE")){
+		}else if(type.equalsIgnoreCase("AXE")){
 			return WeaponItem.AXE;
-		}else if(weaponType.equalsIgnoreCase("SCIMITAR")){
+		}else if(type.equalsIgnoreCase("SCIMITAR")){
 			return WeaponItem.SCIMITAR;
-		}else if(weaponType.equalsIgnoreCase("SHORTSWORD")){
+		}else if(type.equalsIgnoreCase("SHORTSWORD")){
 			return WeaponItem.SHORTSWORD;
-		}else if(weaponType.equalsIgnoreCase("CLUB")){
+		}else if(type.equalsIgnoreCase("CLUB")){
 			return WeaponItem.CLUB;
-		}else if(weaponType.equalsIgnoreCase("MACE")){
+		}else if(type.equalsIgnoreCase("MACE")){
 			return WeaponItem.MACE;
-		}else if(weaponType.equalsIgnoreCase("MORNINGSTAR")){
+		}else if(type.equalsIgnoreCase("MORNINGSTAR")){
 			return WeaponItem.MORNINGSTAR;
-		}else if(weaponType.equalsIgnoreCase("NET")){
+		}else if(type.equalsIgnoreCase("NET")){
 			return WeaponItem.NET;
-		}else if(weaponType.equalsIgnoreCase("WARHAMMER")){
+		}else if(type.equalsIgnoreCase("WARHAMMER")){
 			return WeaponItem.WARHAMMER;
-		}else if(weaponType.equalsIgnoreCase("WHIP")){
+		}else if(type.equalsIgnoreCase("WHIP")){
 			return WeaponItem.WHIP;
-		}else if(weaponType.equalsIgnoreCase("JAVELIN")){
+		}else if(type.equalsIgnoreCase("JAVELIN")){
 			return WeaponItem.JAVELIN;
-		}else if(weaponType.equalsIgnoreCase("SPEAR")){
+		}else if(type.equalsIgnoreCase("SPEAR")){
 			return WeaponItem.SPEAR;
-		}else if(weaponType.equalsIgnoreCase("LANCE")){
+		}else if(type.equalsIgnoreCase("LANCE")){
 			return WeaponItem.LANCE;
-		}else if(weaponType.equalsIgnoreCase("HALBERD")){
+		}else if(type.equalsIgnoreCase("HALBERD")){
 			return WeaponItem.HALBERD;
-		}else if(weaponType.equalsIgnoreCase("BATTLEAXE")){
+		}else if(type.equalsIgnoreCase("BATTLEAXE")){
 			return WeaponItem.BATTLEAXE;
-		}else if(weaponType.equalsIgnoreCase("FLAIL")){
+		}else if(type.equalsIgnoreCase("FLAIL")){
 			return WeaponItem.FLAIL;
-		}else if(weaponType.equalsIgnoreCase("STAFF")){
+		}else if(type.equalsIgnoreCase("STAFF")){
 			return WeaponItem.STAFF;
-		}else if(weaponType.equalsIgnoreCase("GREATSWORD")){
+		}else if(type.equalsIgnoreCase("GREATSWORD")){
 			return WeaponItem.GREATSWORD;
-		}else if(weaponType.equalsIgnoreCase("BOLAS")){
+		}else if(type.equalsIgnoreCase("BOLAS")){
 			return WeaponItem.BOLAS;
-		}else if(weaponType.equalsIgnoreCase("COMPOSITEBOW")){
+		}else if(type.equalsIgnoreCase("COMPOSITEBOW")){
 			return WeaponItem.COMPOSITEBOW;
-		}else if(weaponType.equalsIgnoreCase("SHORTBOW")){
+		}else if(type.equalsIgnoreCase("SHORTBOW")){
 			return WeaponItem.SHORTBOW;
-		}else if(weaponType.equalsIgnoreCase("LONGBOW")){
+		}else if(type.equalsIgnoreCase("LONGBOW")){
 			return WeaponItem.LONGBOW;
-		}else if(weaponType.equalsIgnoreCase("CROSSBOW")){
+		}else if(type.equalsIgnoreCase("CROSSBOW")){
 			return WeaponItem.CROSSBOW;
-		}else if(weaponType.equalsIgnoreCase("SLING")){
+		}else if(type.equalsIgnoreCase("SLING")){
 			return WeaponItem.SLING;
-		}else if(weaponType.equalsIgnoreCase("BASTARDSWORD")){
+		}else if(type.equalsIgnoreCase("BASTARDSWORD")){
 			return WeaponItem.BASTARDSWORD;
-		}else if(weaponType.equalsIgnoreCase("DOUBLEAXE")){
+		}else if(type.equalsIgnoreCase("DOUBLEAXE")){
 			return WeaponItem.DOUBLEAXE;
 		}
+		/*ARMOURS*/
+		else if(type.equalsIgnoreCase("SOFT_LEATHER")){
+			return ArmourItem.SOFT_LEATHER;
+		}else if(type.equalsIgnoreCase("RIGID_LEATHER")){
+			return ArmourItem.RIGID_LEATHER;
+		}else if(type.equalsIgnoreCase("CHAIN")){
+			return ArmourItem.CHAIN;
+		}else if(type.equalsIgnoreCase("PLATE")){
+			return ArmourItem.PLATE;
+		/*SHIELDS*/	
+		}else if(type.equalsIgnoreCase("GREAT_SHIELD")){
+			return ArmourItem.GREAT_SHIELD;
+		}else if(type.equalsIgnoreCase("MEDIUM_SHIELD")){
+			return ArmourItem.MEDIUM_SHIELD;
+		}else if(type.equalsIgnoreCase("SMALL_SHIELD")){
+			return ArmourItem.SMALL_SHIELD;
+		}
+		/*GEAR*/
+		else if(type.equalsIgnoreCase("LEATHER_HELMET")){
+			return ArmourItem.LEATHER_HELMET;
+		}else if(type.equalsIgnoreCase("METAL_HELMET")){
+			return ArmourItem.METAL_HELMET;
+		}else if(type.equalsIgnoreCase("LEATHER_BRACERS")){
+			return ArmourItem.LEATHER_BRACERS;
+		}else if(type.equalsIgnoreCase("METAL_BRACERS")){
+			return ArmourItem.METAL_BRACERS;
+		}else if(type.equalsIgnoreCase("LEATHER_GREAVES")){
+			return ArmourItem.LEATHER_GREAVERS;
+		}else if(type.equalsIgnoreCase("METAL_GREAVES")){
+			return ArmourItem.METAL_GREAVERS;
+		}
+		
+
 		return null;
 
 	}
 	
+	private static void resetDefaults() {
+		/*ESCUDOS*/
+		
+		try{
+			Cache.armourItems.remove(ArmourItem.GREAT_SHIELD);
+			Cache.armourItems.remove(ArmourItem.MEDIUM_SHIELD);
+			Cache.armourItems.remove(ArmourItem.SMALL_SHIELD);
+			
+			/** Creamos un Objeto de tipo Properties */
+			Properties resetProperties = new Properties();
+	
+			/** Cargamos el archivo desde la ruta especificada */
+			resetProperties.load(new FileInputStream(
+					"src/properties/armour.properties"));
+			
+			String [] shields = {"great"};
+			for(String shield : shields){
+				
+				int [] skillMods = new int[Skill.SKILLS_TOTAL_NUMBER];
+				int category = Item.SHIELD;
+				String type = resetProperties.getProperty("shield." + shield + ".type");
+				float weight = Utils.castToFloat(resetProperties.getProperty("shield." + shield + ".weight"));
+				String material = resetProperties.getProperty("shield." + shield + ".material");
+				String price = resetProperties.getProperty("shield." + shield + ".price.default");
+				Price price_obj = new Price(price);
+
+				int BD = Utils.castToInt(resetProperties.getProperty("shield." + shield + ".BD.default"));
+				int BO = Utils.castToInt(resetProperties.getProperty("shield." + shield + ".BO.default"));
+					
+				skillMods[Skill.BD] = skillMods[Skill.BD] + BD;
+				skillMods[Skill.EDGED] = skillMods[Skill.EDGED] + BO;
+				skillMods[Skill.CONCUSSION] = skillMods[Skill.CONCUSSION] + BO;
+				skillMods[Skill.TWO_HANDED] = skillMods[Skill.TWO_HANDED] + BO;
+				skillMods[Skill.THROWN] = skillMods[Skill.THROWN] + BO;
+				skillMods[Skill.PROJECTILE] = skillMods[Skill.PROJECTILE] + BO;
+				skillMods[Skill.POLEARM] = skillMods[Skill.POLEARM] + BO;
+				
+				ArmourItem ai = new ArmourItem(type, weight,price_obj,category, material, skillMods, BO );
+	
+				
+				Cache.armourItems.put(getKey(shield+"_shield"), ai);
+			}
+	
+		} catch (FileNotFoundException e) {
+			System.out.println("Error, The file does not exist");
+		} catch (IOException e) {
+			System.out.println("Error, Reading the file has not been possible");
+		}
+		
+		
+	}
+
+	private static void print(Map<Integer, Item> items) {
+		
+		for(Map.Entry<Integer, Item> entry: items.entrySet()){
+			Item item = entry.getValue();
+			System.out.println(item.toString());
+		}
+	}
 
 }

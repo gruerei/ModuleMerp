@@ -435,6 +435,8 @@ public class Skill {
 			//Si el item es un Arma de Filo, Aumentamos Sus Bonos al bono por objetos
 			if(item instanceof WeaponItem){
 				WeaponItem wi = (WeaponItem)item;
+				//Si la categoria del arma coincide con la Skill evaluada en curso
+				/**No está terminado, hay que darle una vuelta más a esto*/
 				if(wi.getCategory() == this.name){
 					if(wi.getSpecialMod1()>0 && wi.getSpecialMod1AppliedTo() == null){
 						//Here, it's added any special/magical modified to the particular Skill
@@ -459,38 +461,48 @@ public class Skill {
 			
 			
 			/*Si el item es un casco reducimos la PERCEPCION en 5*/
-			if(this.name == PERCEPTION &&  item instanceof ArmourItem){
+			/*if(this.name == PERCEPTION &&  item instanceof ArmourItem){
 				ArmourItem ai = (ArmourItem)item;
 				if(ai.getCategory() == Item.HELMET){
 					sumModifObjects = sumModifObjects - 5;
 				}
-			}
+			}*/
 			
 			/*Si el item son grebas reducimos las MM en 5*/
-			if(this.category == MOVEMENT_MANEUVERS &&  item instanceof ArmourItem){
+			/*if(this.category == MOVEMENT_MANEUVERS &&  item instanceof ArmourItem){
 				ArmourItem ai = (ArmourItem)item;
 				if(ai.getCategory() == Item.GREAVES){
 					sumModifObjects = sumModifObjects - 5;
 				}
-			}
+			}*/
 			
 			/*Si el item son brazales reducimos las Habilidades de Armas en 5*/
-			if(this.category == WEAPON &&  item instanceof ArmourItem){
+			/*if(this.category == WEAPON &&  item instanceof ArmourItem){
 				ArmourItem ai = (ArmourItem)item;
 				if(ai.getCategory() == Item.BRACERS){
 					sumModifObjects = sumModifObjects - 5;
 				}
-			}
+			}*/
 			
 			/*Si el item es un escudo aumentamos la BD en 25*/
-			if(this.category == BD &&  item instanceof ArmourItem){
+			/*if(this.category == BD &&  item instanceof ArmourItem){
 				ArmourItem ai = (ArmourItem)item;
 				if(ai.getCategory() == Item.SHIELD){
-					sumModifObjects = sumModifObjects + ai.getBD() + ai.getBonusArmourMagic1() + ai.getBonusArmourMagic2();
+					sumModifObjects = sumModifObjects + ai.getSkillMods()[Skill.BD];
+					
+					if(ai.getBonusMagic1()> 0 && ai.getBonusMagic1AppliedTo() == null){
+						sumModifObjects = sumModifObjects + ai.getBonusMagic1();
+					}
+					
+					if(ai.getBonusMagic2()> 0 && ai.getBonusMagic2AppliedTo() == null){
+						sumModifObjects = sumModifObjects + ai.getBonusMagic2();
+					}
 				}
-			}
+			}*/
 			
-			sumModifObjects = sumModifObjects + item.getSkillMods()[this.name];
+			if(item.getSkillMods()[this.name] != 0){
+				sumModifObjects = sumModifObjects + item.getSkillMods()[this.name];
+			}
 			/*Bonificacion especial armaduras*/
 			
 		}

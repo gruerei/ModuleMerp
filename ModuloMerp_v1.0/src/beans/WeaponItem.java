@@ -72,9 +72,9 @@ public class WeaponItem extends Item implements Cloneable{
 			float range, float weight, int typeMod1, Integer [] typeMod1Applied, int typeMod2,
 			Integer [] typeMod2Applied, int specialMod1, String [] specialMod1Applied, int specialMod2,
 			String [] specialMod2Applied, int reloadAssaults, int malusNoReload, Price price_obj
-			,boolean usedTwoHanded,Botch twoHandedBotch, Critical twoHandedCritical,int twoHandedMod) {
+			,boolean usedTwoHanded,Botch twoHandedBotch, Critical twoHandedCritical,int twoHandedMod, int [] skillMods) {
 		
-		super(type,weight,price_obj);
+		super(type,weight,price_obj,skillMods);
 		
 		this.category = category;
 		this.mainCritical = main_critical;
@@ -105,9 +105,9 @@ public class WeaponItem extends Item implements Cloneable{
 	public WeaponItem(String type, int category, Critical main_critical, Critical second_critical, Botch botch,
 			float range, float weight, int specialMod1, String [] specialMod1Applied, int specialMod2,
 			String [] specialMod2Applied, int reloadAssaults, int malusNoReload, Price price_obj
-			,boolean usedTwoHanded,Botch twoHandedBotch, Critical twoHandedCritical,int twoHandedMod) {
+			,boolean usedTwoHanded,Botch twoHandedBotch, Critical twoHandedCritical,int twoHandedMod, int [] skillMods) {
 		
-		super(type,weight,price_obj);
+		super(type,weight,price_obj,skillMods);
 		
 		this.category = category;
 		this.mainCritical = main_critical;
@@ -269,11 +269,11 @@ public class WeaponItem extends Item implements Cloneable{
 	@Override
 	public String toString() {
 		
-		StringBuffer sb = new StringBuffer("\n\n").append(type).append(" - ").append(Tables.getSkillCategoryTable()[category][0])
+		StringBuffer sb = new StringBuffer("\n\n").append(name == null ? "" : name+ " - ").append(type).append(" - ").append(Tables.getSkillCategoryTable()[category][0])
 										.append("\nCritico 1º:").append(mainCritical.toString()).append("\t2º:").append(secondCritical.toString())
 										.append("\nPifia: ").append(botch.getMin()).append(" - ").append(botch.getMax())
 										.append(" Crit. Taken: ").append((botch.getCriticalTaken() == null) ? "NO" : botch.getCriticalTaken().getCriticalMaxGravity())
-										.append("\nRange: ").append(range).append(" Weight: ").append(weight)
+										.append("\nRange: ").append(range).append(" Weight: ").append(weight).append(" kg.")
 										.append("\nType Mod1: ").append(typeMod1).append(" Applied To: ").append(Utils.printTable(typeMod1AppliedTo))
 										.append("\nType Mod2: ").append(typeMod2).append(" Applied To: ").append(Utils.printTable(typeMod2AppliedTo))
 										.append("\nSpecial Mod1: ").append(specialMod1).append(" Applied To: ").append(Utils.printTable(specialMod1AppliedTo))
@@ -351,12 +351,13 @@ public class WeaponItem extends Item implements Cloneable{
 		
 	}
 	
+	@Override
 	public WeaponItem clone(){
 		WeaponItem clon = new WeaponItem(this.type, this.category, this.mainCritical, this.secondCritical,
 				this.botch, this.range, this.weight, this.typeMod1, this.typeMod1AppliedTo, this.typeMod2,
 				this.typeMod2AppliedTo, this.specialMod1, this.specialMod1AppliedTo, this.specialMod2,
 				this.specialMod2AppliedTo, this.reloadAssaults, this.malusNotReload, this.price,
-				this.usedTwoHanded,this.twoHandedBotch, this.twoHandedCritical,this.twoHandedMod);
+				this.usedTwoHanded,this.twoHandedBotch, this.twoHandedCritical,this.twoHandedMod, this.skillMods);
 		return clon;
 	}
 	

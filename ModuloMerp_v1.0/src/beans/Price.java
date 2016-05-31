@@ -81,7 +81,7 @@ public class Price {
 
 	@Override
 	public String toString() {
-		return "Price [pc=" + pc + ", gc=" + gc + ", sc=" + sc + ", bc=" + bc + ", cc=" + cc + ", tc=" + tc + "]";
+		return " [pc=" + pc + ", gc=" + gc + ", sc=" + sc + ", bc=" + bc + ", cc=" + cc + ", tc=" + tc + "]";
 	}
 	
 	

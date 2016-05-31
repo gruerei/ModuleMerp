@@ -1,63 +1,57 @@
 package beans;
 
-public class ArmourItem extends Item{
+import utils.Utils;
+
+public class ArmourItem extends Item implements Cloneable{
+	
+	public static final int SOFT_LEATHER = 1;
+	public static final int RIGID_LEATHER = 2;
+	public static final int CHAIN = 3;
+	public static final int PLATE = 4;
+	
+	public static final int GREAT_SHIELD = 5;
+	public static final int MEDIUM_SHIELD = 6;
+	public static final int SMALL_SHIELD = 7;
+	
+	public static final int LEATHER_HELMET = 8;
+	public static final int METAL_HELMET = 9;
+	
+	public static final int LEATHER_BRACERS = 10;
+	public static final int METAL_BRACERS = 11;
+	
+	public static final int LEATHER_GREAVERS = 12;
+	public static final int METAL_GREAVERS = 13;
+	
+	public static final int BIG = 1;
+	public static final int MEDIUM = 2;
+	public static final int SMALL = 3;
+	
+	private int category;//Armour, Shield, Helmet, Bracers, Greaves
+	private String material;//Cuero, Madera, Metal
+	private int bonusMagic1;//Normalmente bonus a BD
+	private String [] bonusMagic1AppliedTo;
+	private int bonusMagic2;
+	private String [] bonusMagic2AppliedTo;
+	private int bonusBO;
 	
 	
-	public int BD;//Bonus defensivo
-	public int category;//Armour, Shield, Helmet, Bracers, Greaves
-	public int material;//Cuero, Madera, Metal
-	public int bonusArmourMagic1;//Normalmente bonus a BD
-	public int bonusArmourMagic1AppliedTo;
-	public int bonusArmourMagic2;
-	public int bonusArmourMagic2AppliedTo;
-	
-	
-	public ArmourItem(String type, float weight, Price price) {
-		super(type, weight, price);
+	public ArmourItem(String type, float weight, Price price, int category, String material, int[] skillMods, int BO) {
+		
+		super(type, weight, price , skillMods);
+		
+		this.category = category;
+		this.material = material;
+		this.bonusBO = BO;
 	}
 	
-	public int getBD() {
-		return BD;
-	}
-	public void setBD(int bD) {
-		BD = bD;
-	}
-	
-	public int getMaterial() {
+
+	public String getMaterial() {
 		return material;
 	}
-	public void setMaterial(int material) {
+	public void setMaterial(String material) {
 		this.material = material;
 	}
 
-	public int getBonusArmourMagic1() {
-		return bonusArmourMagic1;
-	}
-	public void setBonusArmourMagic1(int bonusArmourMagic1) {
-		this.bonusArmourMagic1 = bonusArmourMagic1;
-	}
-	public int getBonusArmourMagic1AppliedTo() {
-		return bonusArmourMagic1AppliedTo;
-	}
-	public void setBonusArmourMagic1AppliedTo(int bonusArmourMagic1AppliedTo) {
-		this.bonusArmourMagic1AppliedTo = bonusArmourMagic1AppliedTo;
-	}
-	public int getBonusArmourMagic2() {
-		return bonusArmourMagic2;
-	}
-	public void setBonusWeaponMagic2(int bonusArmourMagic2) {
-		this.bonusArmourMagic2 = bonusArmourMagic2;
-	}
-	public int getBonusArmourMagic2AppliedTo() {
-		return bonusArmourMagic2AppliedTo;
-	}
-	public void setBonusArmourMagic2AppliedTo(int bonusArmourMagic2AppliedTo) {
-		this.bonusArmourMagic2AppliedTo = bonusArmourMagic2AppliedTo;
-	}
-	
-	public void setBonusArmourMagic2(int bonusArmourMagic2) {
-		this.bonusArmourMagic2 = bonusArmourMagic2;
-	}
 	public int getCategory() {
 		return category;
 	}
@@ -65,7 +59,69 @@ public class ArmourItem extends Item{
 		this.category = category;
 	}
 
+	public int getBonusMagic1() {
+		return bonusMagic1;
+	}
+
+	public void setBonusMagic1(int bonusMagic1) {
+		this.bonusMagic1 = bonusMagic1;
+	}
+
+	public int getBonusMagic2() {
+		return bonusMagic2;
+	}
+
+	public void setBonusMagic2(int bonusMagic2) {
+		this.bonusMagic2 = bonusMagic2;
+	}
+
+	public String[] getBonusMagic1AppliedTo() {
+		return bonusMagic1AppliedTo;
+	}
+
+	public void setBonusMagic1AppliedTo(String[] bonusMagic1AppliedTo) {
+		this.bonusMagic1AppliedTo = bonusMagic1AppliedTo;
+	}
+
+	public String[] getBonusMagic2AppliedTo() {
+		return bonusMagic2AppliedTo;
+	}
+
+	public void setBonusMagic2AppliedTo(String[] bonusMagic2AppliedTo) {
+		this.bonusMagic2AppliedTo = bonusMagic2AppliedTo;
+	}
 	
+
+	public int getBonusBO() {
+		return bonusBO;
+	}
+
+
+	public void setBonusBO(int bonusBO) {
+		this.bonusBO = bonusBO;
+	}
+
+
+	@Override
+	public Item clone() {
+		ArmourItem clone = new ArmourItem(this.type, this.weight, this.price, this.category, this.material, this.skillMods, this.bonusBO);
+		return clone;
+	}
+	
+
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer("\n\n").append(name == null ? "" : name + " - ").append(type).append(" - ").append(Tables.getItem_categories()[category])
+				.append("\nBD: ").append(getSkillMods()[Skill.BD]).append(" BO: ").append(bonusBO)
+				.append(" Weight: ").append(weight).append(" kg. Material: ").append(material)
+				.append("\nMagic Mod1: ").append(bonusMagic1).append(" Applied To: ").append(Utils.printTable(bonusMagic1AppliedTo))
+				.append("\nMagic Mod2: ").append(bonusMagic2).append(" Applied To: ").append(Utils.printTable(bonusMagic2AppliedTo))
+				.append("\nPrice: ").append(super.price.toString());
+				;
+		
+		return sb.toString();
+	}
+
 	
 	
 }

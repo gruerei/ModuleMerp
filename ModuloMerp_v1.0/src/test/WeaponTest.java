@@ -15,8 +15,8 @@ public class WeaponTest {
 	@Before
     public void setUp() {
 		ReadProperties.readWeaponFile();
-		scimitarHighQuality = Cache.weaponItems.get(WeaponItem.SCIMITAR);
-		scimitar2 = Cache.weaponItems.get(WeaponItem.SCIMITAR).clone();
+		scimitarHighQuality = (WeaponItem) Cache.weaponItems.get(WeaponItem.SCIMITAR);
+		scimitar2 = (WeaponItem) Cache.weaponItems.get(WeaponItem.SCIMITAR).clone();
 		scimitarHighQuality.setSpecialMod1(10);
     }
 
@@ -32,7 +32,7 @@ public class WeaponTest {
 
 	@Test
 	public void testWeaponClone() {
-		Assert.assertEquals(scimitarHighQuality.getSpecialMod1(),  scimitar2.getSpecialMod1());
+		Assert.assertNotEquals(scimitarHighQuality.getSpecialMod1(),  scimitar2.getSpecialMod1());
 	}
 
 

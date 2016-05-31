@@ -67,8 +67,8 @@ public class Attribute {
 
 	//Normalmente la Apariencia se beneficia del carisma,
 	//aquí será al revés, La apariencia beneficia al carisma/presencia.
-	public static void changeRuleCharismaBeneficiedByAppearance(){
-		charismaBeneficiedByAppearance  = true;
+	public static void changeRuleCharismaBeneficiedByAppearance(boolean value){
+		charismaBeneficiedByAppearance  = value;
 	}
 
 
@@ -81,6 +81,9 @@ public class Attribute {
 		this.modifTotal = this.modifAtt + raceModif;
 	}
 
+	public void setModifTotal(int modif) {
+		this.modifTotal = modif;
+	}
 
 	public int getModifTotal() {
 		return modifTotal;

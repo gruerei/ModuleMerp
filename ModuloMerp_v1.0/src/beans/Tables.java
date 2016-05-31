@@ -200,7 +200,18 @@ public class Tables {
 	private static String[] magic_realms_descrip_table = {"ESSENCE","CHANNELING","MAGICIAN","BARD","ANIMIST","RANGER"};
 	private static String[] skill_categories = {"MOVEMENT_MANEUVERS","WEAPONS","GENERAL","SUBTERFUGE","MAGIC",
 			"OTHERS","SECONDARY","SECONDARY_ART", "SECONDARY_ATL", "SECONDARY_WRK", "SECONDARY_INFL", "SECONDARY_KNOW", "SECONDARY_MART_ART"};	
+	private static String[] item_categories = {"","WEAPON_1","WEAPON_2","ARMOUR","SHIELD","HELMET","BRACERS","GREAVES","RING_1","RING_2","AMULET","OTHER1","OTHER2","OTHER3"};	
+
+	private static String[] material_categories = {"LEATHER","METAL"};
 	
+	
+	public static String[] getMaterial_categories() {
+		return material_categories;
+	}
+
+	public static String[] getItem_categories(){
+		return item_categories;
+	}
 	
 	public static String[][] getSkillCategoryTable() {
 		return skill_category_table;

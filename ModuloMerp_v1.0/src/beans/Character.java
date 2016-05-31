@@ -153,9 +153,15 @@ public class Character {
 		intuition.calculModifTotal(race.getModIntuition());
 		
 		/** Regla Nueva: Al carisma le sumo el bono de Apariencia*/
-		if(Attribute.isCharismaBeneficiedByAppearance())
+		if(Attribute.isCharismaBeneficiedByAppearance()){
+			appear.setModifTotal(race.getModCharisma());
 			charis.setModifAtt(charis.getModifAtt() + appear.getModifAtt());
-		
+			
+		}else{
+			/*Por defecto*/
+			appear.setModifTotal(0);
+		}
+
 		charis.calculModifTotal(race.getModCharisma());
 		
 		this.getAttributes().put(Attribute.STRENTGTH, strength);
@@ -184,10 +190,23 @@ public class Character {
 		this.totalBD = this.skills.get(Skill.BD).getModifTotal();
 		ArmourItem shield = (ArmourItem)this.equippedGear.get(Item.SHIELD);
 		
-		if(shield != null)
-			this.noShieldBD = totalBD - shield.getBD() - shield.getBonusArmourMagic1() - shield.getBonusArmourMagic2();
-		else
+		//Calculo de la BD que se tendría sin escudo (por si te pillan desprevenido o por la
+		//espalda) en caso de llevar escudo
+		if(shield != null){
+			this.noShieldBD = totalBD - shield.getSkillMods()[Skill.BD];
+			
+			if(shield.getBonusMagic1()> 0 && shield.getBonusMagic1AppliedTo() == null){
+				this.noShieldBD = this.noShieldBD - shield.getBonusMagic1();
+			}
+			
+			if(shield.getBonusMagic2()> 0 && shield.getBonusMagic2AppliedTo() == null){
+				this.noShieldBD = this.noShieldBD - shield.getBonusMagic2();
+			}
+			
+		}else{
+			//Si no se lleva escudo, es la BD total sin mas calculos
 			this.noShieldBD = totalBD;
+		}
 		
 		/*Calcula Resistance Rolls*/
 		this.setResistanceRolls(calculResistanceRolls());
@@ -659,10 +678,17 @@ public class Character {
 		ResistanceRoll poison = getResistanceRolls().get(ResistanceRoll.POISON);
 		ResistanceRoll disease = getResistanceRolls().get(ResistanceRoll.DISEASE);
 		
-		StringBuffer ssb = new StringBuffer();
+		StringBuffer sbDomain = new StringBuffer();
 		for(int i=0 ; i<getMAGICAL_DOMAIN().size();i++){
 			String magicRealm = Tables.getMagicRealmsDescripTable()[getMAGICAL_DOMAIN().get(i)];
-			ssb.append(magicRealm).append(" ");
+			sbDomain.append(magicRealm).append(" ");
+		}
+		
+		StringBuffer sbGear = new StringBuffer();
+		for (Map.Entry<Integer, Item> entry : this.getEquippedGear().entrySet()) {
+			//String key = entry.getKey();
+			Item item = entry.getValue();
+			sbGear.append(item.toString()).append("\n");
 		}
 		
 		StringBuffer sb = new StringBuffer();
@@ -670,14 +696,15 @@ public class Character {
 			.append("\nPlayer: \t\t").append(getPlayer())
 			.append("\nRace/Culture: \t\t").append(getRace().getName()).append(" ").append(getRace().getCulture())
 			.append("\nProfession: \t\t").append(getProfession().getName())
-			.append("\nMagic Realm: \t\t").append(ssb.toString())
+			.append("\nMagic Realm: \t\t").append(sbDomain.toString())
 			
 			.append("\n\nLevel: \t\t\t").append(getLevel())
 			.append("\nPX: \t\t\t").append(getPX())
 			.append("\nPP: \t\t\t").append(getPP())
 			
-			.append("\n\n------------------------------------------------------------------------------------------")
-			.append("\n\nAttributes\t\tValue\tNormal\tRacial\t Total")
+			
+			.append("\n\n---------------------------------------ATTRIBUTES---------------------------------------------------")
+			.append("\n\n\t\t\tBase\tAttrib.\tRacial\t Total")
 			.append("\nStrength: \t\t").append(str.getValue()).append("\t")
 			.append(str.getModifAtt()).append("\t ").append(getRace().getModStrength()).append("\t ").append(str.getModifTotal())
 			.append("\nAgility: \t\t").append(agi.getValue()).append("\t")
@@ -687,11 +714,28 @@ public class Character {
 			.append("\nIntelligence: \t\t").append(inte.getValue()).append("\t")
 			.append(inte.getModifAtt()).append("\t ").append(getRace().getModIntelligence()).append("\t ").append(inte.getModifTotal())
 			.append("\nIntuition: \t\t").append(intui.getValue()).append("\t")
-			.append(intui.getModifAtt()).append("\t ").append(getRace().getModIntuition()).append("\t ").append(intui.getModifTotal())
-			.append("\nCharisma: \t\t").append(charis.getValue()).append("\t")
-			.append(charis.getModifAtt()).append("\t ").append(getRace().getModCharisma()).append("\t ").append(charis.getModifTotal())
-			.append("\nAppearance: \t\t").append(appea.getValue()).append("\t")
-			.append(appea.getModifAtt())
+			.append(intui.getModifAtt()).append("\t ").append(getRace().getModIntuition()).append("\t ").append(intui.getModifTotal());
+			
+			if(!Attribute.isCharismaBeneficiedByAppearance()){
+				/*Por defecto*/
+				sb.append("\nCharisma: \t\t").append(charis.getValue()).append("\t")
+				.append(charis.getModifAtt()).append("\t ").append(getRace().getModCharisma()).append("\t ").append(charis.getModifTotal())
+				.append("\n\n\t\t\tNormal\tCharis\t Total")
+				.append("\nAppearance: \t\t").append(appea.getValue()).append("\t")
+				.append(charis.getModifTotal()).append("\t ")
+				.append(appea.getValue() + charis.getModifTotal());
+			}else{
+				/*Nueva*/
+				sb.append("\n\nAppearance: \t\t").append(appea.getValue()).append("\t")
+				.append(appea.getModifAtt()).append("\t ").append(" ").append("\t ").append(appea.getModifTotal())
+				.append("\n\t\t\tBase\tAtt+App\tRacial\t Total")
+				.append("\nCharisma: \t\t").append(charis.getValue()).append("\t")
+				.append(charis.getModifAtt()).append("\t ").append(getRace().getModCharisma()).append("\t ").append(charis.getModifTotal());
+			}
+			
+			
+			sb.append("\n\n------------------------------CARRIED GEAR---------------------------------------------------")
+			.append(sbGear)
 			
 			.append("\n\n------------------------------------------------------------------------------------------")
 			.append("\n\t\t\tAttrib.\tObjects\tSpecial\t Total")
