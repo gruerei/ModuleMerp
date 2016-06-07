@@ -10,6 +10,8 @@ public class ResistanceRoll {
 	public static final String CHANNELLING = "CHANNELLING";//CANALIZACION
 	public static final String POISON = "POISON";//VENENO
 	public static final String DISEASE = "DISEASE";//ENFERMEDAD
+	public static final String COLD = "COLD";//VENENO
+	public static final String FIRE = "FIRE";//ENFERMEDAD
 	
 	public Map<Integer, Item> equippedGear = new HashMap<Integer, Item>();
 	Map<String, Attribute> attributes = new HashMap<String, Attribute>();
@@ -36,6 +38,10 @@ public class ResistanceRoll {
 		}else if(getName().equals(POISON)){
 			bonusAttribute = attributes.get(Attribute.CONSTITUTION).getModifTotal();
 		}else if(getName().equals(DISEASE)){
+			bonusAttribute = attributes.get(Attribute.CONSTITUTION).getModifTotal();
+		}else if(getName().equals(COLD)){
+			bonusAttribute = attributes.get(Attribute.CONSTITUTION).getModifTotal();
+		}else if(getName().equals(FIRE)){
 			bonusAttribute = attributes.get(Attribute.CONSTITUTION).getModifTotal();
 		}
 	}
@@ -71,6 +77,12 @@ public class ResistanceRoll {
 		}else if(getName().equals(DISEASE)){
 			bonusObjects = totalGearResistances.get(DISEASE).intValue();
 			bonusSpecial = bonusSpecial + race.getModDisease();
+		}else if(getName().equals(COLD)){
+			bonusObjects = totalGearResistances.get(COLD).intValue();
+			bonusSpecial = bonusSpecial + race.getModCold();
+		}else if(getName().equals(FIRE)){
+			bonusObjects = totalGearResistances.get(FIRE).intValue();
+			bonusSpecial = bonusSpecial + race.getModFire();
 		}else{
 			//Habria que sacar un error
 			System.out.println("Resistance Roll Uknown");

@@ -193,6 +193,10 @@ public class Character {
 		this.totalBD = this.skills.get(Skill.BD).getModifTotal();
 		ArmourItem shield = (ArmourItem)this.equippedGear.get(Item.SHIELD);
 		
+		WeaponItem weapon = (WeaponItem)this.equippedGear.get(Item.WEAPON_1);
+		
+		weapon.setBO(this.skills.get(weapon.getCategory()).getModifTotal());
+		
 		//Calculo de la BD que se tendría sin escudo (por si te pillan desprevenido o por la
 		//espalda) en caso de llevar escudo
 		if(shield != null){
@@ -245,6 +249,8 @@ public class Character {
 		ResistanceRoll chanRR = new ResistanceRoll(ResistanceRoll.CHANNELLING, race, equippedGear, attributes);
 		ResistanceRoll poisonRR = new ResistanceRoll(ResistanceRoll.POISON, race, equippedGear, attributes);
 		ResistanceRoll diseaseRR = new ResistanceRoll(ResistanceRoll.DISEASE, race, equippedGear, attributes);
+		ResistanceRoll coldRR = new ResistanceRoll(ResistanceRoll.COLD, race, equippedGear, attributes);
+		ResistanceRoll fireRR = new ResistanceRoll(ResistanceRoll.FIRE, race, equippedGear, attributes);
 		
 		Map<String, Integer> totalGearResistances  = calculTotalGearResistances(equippedGear);
 		
@@ -252,11 +258,15 @@ public class Character {
 		chanRR.calculTotalBonus(totalGearResistances);
 		poisonRR.calculTotalBonus(totalGearResistances);
 		diseaseRR.calculTotalBonus(totalGearResistances);
+		coldRR.calculTotalBonus(totalGearResistances);
+		fireRR.calculTotalBonus(totalGearResistances);
 		
 		rRolls.put(ResistanceRoll.ESSENCE, essenceRR);
 		rRolls.put(ResistanceRoll.CHANNELLING, chanRR);
 		rRolls.put(ResistanceRoll.POISON,poisonRR);
 		rRolls.put(ResistanceRoll.DISEASE, diseaseRR);
+		rRolls.put(ResistanceRoll.COLD, coldRR);
+		rRolls.put(ResistanceRoll.FIRE, fireRR);
 		
 		return rRolls;
 	}
@@ -269,7 +279,7 @@ public class Character {
 		}
 		if(attribAcum < 20 ){
 			/*Notificar en el LOG de que el pj es debil*/
-			System.out.println("ATENCION: Este personaje tiene un bono por Atributos menor de 20. Se aconseja rehacer tiradas.");
+			System.out.println("ATENCION: Este personaje tiene un bono por Atributos menor de 20. Se aconseja rehacer tiradas.\n");
 		}
 		
 	}
@@ -620,7 +630,8 @@ public class Character {
 		int channelRes = 0;
 		int poisonRes = 0;
 		int diseaseRes = 0;
-		
+		int coldRes = 0;
+		int fireRes = 0;
 
 		for (Map.Entry<Integer, Item> entry : inUseGear.entrySet()) {
 			//String key = entry.getKey();
@@ -629,13 +640,16 @@ public class Character {
 			channelRes = channelRes + item.getModChanneling();
 			poisonRes = poisonRes + item.getModPoison();
 			diseaseRes = diseaseRes + item.getModDisease();
+			coldRes = coldRes + item.getModCold();
+			fireRes = fireRes + item.getModFire();
 		}
 		
 		totalGearResistances.put(ResistanceRoll.ESSENCE, essenceRes);
 		totalGearResistances.put(ResistanceRoll.CHANNELLING, channelRes);
 		totalGearResistances.put(ResistanceRoll.POISON, poisonRes);
 		totalGearResistances.put(ResistanceRoll.DISEASE, diseaseRes);
-		
+		totalGearResistances.put(ResistanceRoll.COLD, coldRes);
+		totalGearResistances.put(ResistanceRoll.FIRE, fireRes);
 		return totalGearResistances;
 
 	}
@@ -672,6 +686,8 @@ public class Character {
 		ResistanceRoll channel = getResistanceRolls().get(ResistanceRoll.CHANNELLING);
 		ResistanceRoll poison = getResistanceRolls().get(ResistanceRoll.POISON);
 		ResistanceRoll disease = getResistanceRolls().get(ResistanceRoll.DISEASE);
+		ResistanceRoll cold = getResistanceRolls().get(ResistanceRoll.COLD);
+		ResistanceRoll fire = getResistanceRolls().get(ResistanceRoll.FIRE);
 		
 		StringBuffer sbDomain = new StringBuffer();
 		for(int i=0 ; i<getMAGICAL_DOMAIN().size();i++){
@@ -687,7 +703,8 @@ public class Character {
 		}
 		
 		StringBuffer sb = new StringBuffer();
-		sb.append("Name: \t\t\t").append(getName())
+		sb.append("-------------------------------------------------------------------------------------------------")
+			.append("\nName: \t\t\t").append(getName())
 			.append("\nPlayer: \t\t").append(getPlayer())
 			.append("\nRace/Culture: \t\t").append(getRace().getName()).append(" ").append(getRace().getCulture())
 			.append("\nProfession: \t\t").append(getProfession().getName())
@@ -743,6 +760,10 @@ public class Character {
 			.append(poison.getBonusObjects()).append("\t ").append(poison.getBonusSpecial()).append("\t ").append(poison.getBonusTotal())
 			.append("\nRR Disease: \t\t").append(disease.getBonusAttribute()).append("\t")
 			.append(disease.getBonusObjects()).append("\t ").append(disease.getBonusSpecial()).append("\t ").append(disease.getBonusTotal())
+			.append("\nRR Cold: \t\t").append(cold.getBonusAttribute()).append("\t")
+			.append(cold.getBonusObjects()).append("\t ").append(cold.getBonusSpecial()).append("\t ").append(cold.getBonusTotal())
+			.append("\nRR Fire: \t\t").append(fire.getBonusAttribute()).append("\t")
+			.append(fire.getBonusObjects()).append("\t ").append(fire.getBonusSpecial()).append("\t ").append(fire.getBonusTotal())
 
 			.append("\n\n------------------------------------------------------------------------------------------")
 			.append("\n\nHabilidad.\t\tGrades\tBf.Grad\tBf.Att\tBf.Prof\tBf.Obj\tBf.Spec\tBf.Spec2\t Bf.Total")
@@ -768,6 +789,7 @@ public class Character {
 				sb.append("\n------------------------------------------------------------------------------------------")
 				  .append("\n").append(Tables.getSkillCategories()[newCategory]).append("\n");
 			}
+
 			sb.append("\n").append(Utils.padRight(sk.getDescription(), 20)).append("\t").append(sk.getGrades()).append("\t").append(sk.getModifGrades()).append("\t")
 				.append(sk.getModifAttributes()).append("\t").append(sk.getModifClass()).append("\t").append(sk.getModifObjects()).append("\t")
 				.append(sk.getModifSpecial()).append("\t").append(sk.getModifSpecial2()).append("\t\t ").append(sk.getModifTotal());
@@ -776,7 +798,8 @@ public class Character {
 		}
 		
 		System.out.println(sb.toString());
-		
+		System.out.println("\n------------------------------------------------------------------------------------------"
+				 + "\n------------------------------------------------------------------------------------------");
 	}
 
 	

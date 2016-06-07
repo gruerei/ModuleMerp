@@ -17,7 +17,8 @@ public class Race {
 	private int modChanneling;
 	private int modPoison;
 	private int modDisease;
-	
+	private int modFire;
+	private int modCold;
 	
 
 	public Race(String name, String culture) {
@@ -84,6 +85,8 @@ public class Race {
 		modChanneling=Tables.getTableValue("BT3",race,Tables.CHAN_BT3);
 		modPoison=Tables.getTableValue("BT3",race,Tables.POI_BT3);
 		modDisease=Tables.getTableValue("BT3",race,Tables.ILL_BT3);
+		modCold=Tables.getTableValue("BT3",race,Tables.COLD_BT3);
+		modFire=Tables.getTableValue("BT3",race,Tables.FIRE_BT3);
 		
 	}
 
@@ -136,9 +139,16 @@ public class Race {
 		return modPoison;
 	}
 
-
 	public int getModDisease() {
 		return modDisease;
+	}
+	
+	public int getModFire() {
+		return modFire;
+	}
+
+	public int getModCold() {
+		return modCold;
 	}
 
 	public String getCulture() {
@@ -148,6 +158,7 @@ public class Race {
 	public void setCulture(String culture) {
 		this.culture = culture;
 	}
+
 
 	
 	

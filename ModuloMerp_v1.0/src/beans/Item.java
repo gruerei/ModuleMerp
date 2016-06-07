@@ -1,6 +1,6 @@
 package beans;
 
-public class Item{
+public class Item implements Cloneable{
 
 
 	public static final int WEAPON_1 = 1;
@@ -27,6 +27,8 @@ public class Item{
 	private int modChanneling;
 	private int modPoison;
 	private int modDisease;
+	private int modCold;
+	private int modFire;
 	
 	protected int[] skillMods = new int[Skill.SKILLS_TOTAL_NUMBER];
 
@@ -108,7 +110,24 @@ public class Item{
 	public void setModDisease(int modDisease) {
 		this.modDisease = modDisease;
 	}
+	
+	public int getModCold() {
+		return modCold;
+	}
 
+	public void setModCold(int modCold) {
+		this.modCold = modCold;
+	}
+
+	public int getModFire() {
+		return modFire;
+	}
+
+	public void setModFire(int modFire) {
+		this.modFire = modFire;
+	}
+
+	
 	public int[] getSkillMods() {
 		return skillMods;
 	}
@@ -147,7 +166,7 @@ public class Item{
 	
 	@Override
 	public  Item clone(){
-		Item clon = new Item(this.type, this.weight, this.price, this.skillMods);
+		Item clon = new Item(this.type, this.weight, this.price, new int[Skill.SKILLS_TOTAL_NUMBER]);
 		return clon;
 	};
 

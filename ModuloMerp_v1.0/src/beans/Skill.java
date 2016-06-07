@@ -379,7 +379,7 @@ public class Skill {
 		if(this.name == NO_ARMOR || this.name == SOFT_LEATHER || this.name == RIGID_LEATHER
 				|| this.name == THROWN || this.name == PROJECTILE || this.name == CLIMB
 				|| this.name == SWIM || this.name == DIRECTED_SPELLS || this.name == ACROBACIES
-				||this.name == CONTORT || this.name == BD
+				|| this.name == CONTORT || this.name == BD
 				|| this.category == SECONDARY_ATL || this.category == SECONDARY_WRK){
 			this.modifAttributes = attributes.get(Attribute.AGILITY).getModifAtt() + race.getModAgility();
 		}
@@ -432,22 +432,21 @@ public class Skill {
 			//String key = entry.getKey();
 			Item item = entry.getValue();
 			
-			//Si el item es un Arma de Filo, Aumentamos Sus Bonos al bono por objetos
+			//Si el item es un Arma , Aumentamos Sus Bonos al bono por objetos
 			if(item instanceof WeaponItem){
 				WeaponItem wi = (WeaponItem)item;
 				//Si la categoria del arma coincide con la Skill evaluada en curso
 				/**No está terminado, hay que darle una vuelta más a esto*/
 				if(wi.getCategory() == this.name){
-					if(wi.getSpecialMod1()>0 && wi.getSpecialMod1AppliedTo() == null){
-						//Here, it's added any special/magical modified to the particular Skill
+					if(wi.getTypeMod1()!=0 && wi.getTypeMod1AppliedTo() == null){
+						//Here, it's added any weapon type modifier to the particular Skill
 						
 						//AppliedtoNull means to any  race, armor, situation, ... in particular, so it's for ALL Situations
 						//it is calculated here because it's the default situation (otherwise it'd be in the Combat Class)
-						sumModifObjects = sumModifObjects + wi.getSpecialMod1();
+						sumModifObjects = sumModifObjects + wi.getTypeMod1();
 					}
-					if(wi.getSpecialMod2()>0 && wi.getSpecialMod2AppliedTo() == null){
-						//Same if it has any second special/magical modifier
-						sumModifObjects = sumModifObjects + wi.getSpecialMod2();
+					if(wi.getTypeMod2()!=0 && wi.getTypeMod2AppliedTo() == null){
+						sumModifObjects = sumModifObjects + wi.getTypeMod2();
 					}
 					
 					/**TODO  Calculate the TypeWeaponModifier in the Combat

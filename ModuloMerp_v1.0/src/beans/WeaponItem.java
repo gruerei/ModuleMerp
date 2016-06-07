@@ -4,6 +4,14 @@ import utils.Utils;
 
 public class WeaponItem extends Item implements Cloneable{
 	
+	/**TODO Los casos donde un arma puede usarse de dos formas:
+	 * Por defecto se usará lo que viene en el .properties en su categoria
+	 * Bastard Sword and Double Axe : Por defecto (EDGED - 1 HAND)
+	 * DAGGER, AXE : Por defecto (EDGED - 1 HAND) 
+	 * 
+	 * Modificable en el Combate
+	 * */
+	
 	public static final int EDGED = 5;//Filo
 	public static final int CONCUSSION = 6;//Contundentes
 	public static final int TWO_HANDED = 7;//A dos manos
@@ -55,6 +63,7 @@ public class WeaponItem extends Item implements Cloneable{
 	private String [] specialMod1AppliedTo;
 	private int specialMod2;
 	private String [] specialMod2AppliedTo;
+	private int BO;
 	
 	//Armas a distancia
 	public int reloadAssaults;
@@ -95,10 +104,10 @@ public class WeaponItem extends Item implements Cloneable{
 		this.typeMod1AppliedTo = typeMod1Applied;
 		this.typeMod2AppliedTo = typeMod2Applied;
 		
-		if(specialMod1Applied != null && !specialMod1Applied[0].isEmpty())
+		if(specialMod1Applied != null && specialMod1Applied[0] != null && !specialMod1Applied[0].isEmpty())
 			this.specialMod1AppliedTo = specialMod1Applied;
 		
-		if(specialMod2Applied != null && !specialMod2Applied[0].isEmpty())
+		if(specialMod2Applied != null && specialMod2Applied[0] != null && !specialMod2Applied[0].isEmpty())
 			this.specialMod2AppliedTo = specialMod2Applied;
 	}
 	
@@ -266,10 +275,20 @@ public class WeaponItem extends Item implements Cloneable{
 	public void setTwoHandedMod(int twoHandedMod) {
 		this.twoHandedMod = twoHandedMod;
 	}
+	
+	public int getBO() {
+		return BO;
+	}
+
+	public void setBO(int bO) {
+		BO = bO;
+	}
+
 	@Override
 	public String toString() {
 		
 		StringBuffer sb = new StringBuffer("\n\n").append(name == null ? "" : name+ " - ").append(type).append(" - ").append(Tables.getSkillCategoryTable()[category][0])
+										.append("\nBO: " ).append(this.getBO())
 										.append("\nCritico 1º:").append(mainCritical.toString()).append("\t2º:").append(secondCritical.toString())
 										.append("\nPifia: ").append(botch.getMin()).append(" - ").append(botch.getMax())
 										.append(" Crit. Taken: ").append((botch.getCriticalTaken() == null) ? "NO" : botch.getCriticalTaken().getCriticalMaxGravity())
@@ -355,9 +374,9 @@ public class WeaponItem extends Item implements Cloneable{
 	public WeaponItem clone(){
 		WeaponItem clon = new WeaponItem(this.type, this.category, this.mainCritical, this.secondCritical,
 				this.botch, this.range, this.weight, this.typeMod1, this.typeMod1AppliedTo, this.typeMod2,
-				this.typeMod2AppliedTo, this.specialMod1, this.specialMod1AppliedTo, this.specialMod2,
-				this.specialMod2AppliedTo, this.reloadAssaults, this.malusNotReload, this.price,
-				this.usedTwoHanded,this.twoHandedBotch, this.twoHandedCritical,this.twoHandedMod, this.skillMods);
+				this.typeMod2AppliedTo, 0, new String[10], 0,new String[10],
+				this.reloadAssaults, this.malusNotReload, this.price,
+				this.usedTwoHanded,this.twoHandedBotch, this.twoHandedCritical,this.twoHandedMod, new int[Skill.SKILLS_TOTAL_NUMBER]);
 		return clon;
 	}
 	
