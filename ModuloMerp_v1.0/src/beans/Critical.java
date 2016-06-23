@@ -13,11 +13,19 @@ public class Critical {
 	public static final String CRITICAL_C = "C";
 	public static final String CRITICAL_D = "D";
 	public static final String CRITICAL_E = "E";
+	public static final String CRITICAL_T = "T";
 	
 	private int criticalType;
 	private String criticalGravity;
-	private String criticalMaxGravity = CRITICAL_E;
+	private String criticalMaxGravity;
+	
 
+	
+	public Critical(int criticalType, String criticalMaxGravity) {
+		this.criticalType = criticalType;
+		this.criticalMaxGravity = criticalMaxGravity;
+	}
+	
 	public int getCriticalType() {
 		return criticalType;
 	}
@@ -39,6 +47,9 @@ public class Critical {
 		this.criticalMaxGravity = criticalMaxGravity;
 	}
 	
+	
+
+
 	public String toString(){
 		
 		String ret = "";
@@ -77,4 +88,6 @@ public class Critical {
 		}
 		
 	}
+	
+
 }

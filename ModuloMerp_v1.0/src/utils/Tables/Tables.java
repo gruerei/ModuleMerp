@@ -1,4 +1,4 @@
-package beans;
+package utils.Tables;
 
 public class Tables {
 
@@ -93,6 +93,7 @@ public class Tables {
 	public static final int MARC_CGT4 = 8;
 	public static final int ADR_CGT4 = 9;
 	public static final int SEC_CGT4 = 10;
+	
 	
 	/**CGT4_TABLE : Development Points by Profession(Lvl Up Points) */
 	private static int[][] CGT4 =
@@ -206,6 +207,12 @@ public class Tables {
 
 	private static String[] material_categories = {"LEATHER","METAL"};
 	
+	private static String[] critical_type = {"","SLASH","PUNCTURE","CRUNCH","GRAPPLE","UNBALANCING"};
+	
+	
+	public static String[] getCritical_type() {
+		return critical_type ;
+	}
 	
 	public static String[] getMaterial_categories() {
 		return material_categories;
@@ -232,14 +239,17 @@ public class Tables {
 		return skill_categories;
 	}
 
-	public static int getTableValue(String table_name, int rowIdx, int colIdx){
-		int ret = 0;
+	public static String getTableValue(String table_name, int rowIdx, int colIdx){
+		String ret = "";
 		
 		if(table_name.equals("CGT5")){
-			ret = CGT5[rowIdx][colIdx];
+			ret = CGT5[rowIdx][colIdx] + "";
 		}else if(table_name.equals("BT3")){
-			ret = BT3[rowIdx][colIdx];
+			ret = BT3[rowIdx][colIdx] + "";
+		}else if(table_name.equals("AT1")){
+			ret = Tables_AT.AT1[rowIdx][colIdx] + "";
 		}
+		
 		
 		return ret;
 	}

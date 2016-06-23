@@ -2,6 +2,8 @@ package beans;
 
 import java.util.Map;
 
+import utils.Tables.Tables;
+
 public class Skill {
 	
 	//CATEGORIAS DE HABILIDADES

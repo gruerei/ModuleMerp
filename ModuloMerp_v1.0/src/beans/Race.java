@@ -1,5 +1,8 @@
 package beans;
 
+import utils.Utils;
+import utils.Tables.Tables;
+
 public class Race {
 	
 	private String name;
@@ -72,21 +75,21 @@ public class Race {
 			race = Tables.OLOG_HAI_BT3;
 		}
 		
-		modStrength=Tables.getTableValue("BT3",race,Tables.STR_BT3);
-		modAgility=Tables.getTableValue("BT3",race,Tables.AGI_BT3);
-		modConstitution=Tables.getTableValue("BT3",race,Tables.CON_BT3);
-		modIntelligence=Tables.getTableValue("BT3", race, Tables.INT_BT3);
-		modIntuition=Tables.getTableValue("BT3",race,Tables.I_BT3);
+		modStrength=Utils.castToInt(Tables.getTableValue("BT3",race,Tables.STR_BT3));
+		modAgility=Utils.castToInt(Tables.getTableValue("BT3",race,Tables.AGI_BT3));
+		modConstitution=Utils.castToInt(Tables.getTableValue("BT3",race,Tables.CON_BT3));
+		modIntelligence=Utils.castToInt(Tables.getTableValue("BT3", race, Tables.INT_BT3));
+		modIntuition=Utils.castToInt(Tables.getTableValue("BT3",race,Tables.I_BT3));
 		
-		modCharisma=Tables.getTableValue("BT3",race,Tables.CHAR_BT3);
-		modPresence=Tables.getTableValue("BT3",race,Tables.CHAR_BT3);
+		modCharisma=Utils.castToInt(Tables.getTableValue("BT3",race,Tables.CHAR_BT3));
+		modPresence=Utils.castToInt(Tables.getTableValue("BT3",race,Tables.CHAR_BT3));
 		
-		modEssence=Tables.getTableValue("BT3",race,Tables.ESE_BT3);
-		modChanneling=Tables.getTableValue("BT3",race,Tables.CHAN_BT3);
-		modPoison=Tables.getTableValue("BT3",race,Tables.POI_BT3);
-		modDisease=Tables.getTableValue("BT3",race,Tables.ILL_BT3);
-		modCold=Tables.getTableValue("BT3",race,Tables.COLD_BT3);
-		modFire=Tables.getTableValue("BT3",race,Tables.FIRE_BT3);
+		modEssence=Utils.castToInt(Tables.getTableValue("BT3",race,Tables.ESE_BT3));
+		modChanneling=Utils.castToInt(Tables.getTableValue("BT3",race,Tables.CHAN_BT3));
+		modPoison=Utils.castToInt(Tables.getTableValue("BT3",race,Tables.POI_BT3));
+		modDisease=Utils.castToInt(Tables.getTableValue("BT3",race,Tables.ILL_BT3));
+		modCold=Utils.castToInt(Tables.getTableValue("BT3",race,Tables.COLD_BT3));
+		modFire=Utils.castToInt(Tables.getTableValue("BT3",race,Tables.FIRE_BT3));
 		
 	}
 

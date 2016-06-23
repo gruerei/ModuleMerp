@@ -34,6 +34,7 @@ public class WeaponTest {
 	public void testWeaponClone() {
 		Assert.assertNotEquals(scimitarHighQuality.getSpecialMod1(),  scimitar2.getSpecialMod1());
 	}
+	
 
 
 }

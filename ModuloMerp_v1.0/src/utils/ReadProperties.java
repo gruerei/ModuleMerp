@@ -13,21 +13,24 @@ import beans.Item;
 import beans.Price;
 import beans.Skill;
 import beans.WeaponItem;
+import beans.combat.Combat;
 import cache.Cache;
 
 public class ReadProperties {
 
+	
 	public static void main(String arg[]) {
 
 		
 		//ReadProperties.readWeaponFile();
-		ReadProperties.readArmourFile();
+		//ReadProperties.readArmourFile();
+		ReadProperties.readCombatFile();
 		
 		//resetDefaults();
 		
-		//print(Cache.weaponItems);
-		print(Cache.armourItems);
-		
+		//print1(Cache.weaponItems);
+		//print1(Cache.armourItems);
+		print2(Cache.combatProperties);
 		
 	} 
 
@@ -138,6 +141,60 @@ public class ReadProperties {
 					Cache.armourItems.put(getKey(material + "_" + item), ai);
 				}
 			}
+			
+		} catch (FileNotFoundException e) {
+			System.out.println("Error, The file does not exist");
+		} catch (IOException e) {
+			System.out.println("Error, Reading the file has not been possible");
+		}
+	}
+	
+	public static void readCombatFile() {
+		try {
+		
+			/** Creamos un Objeto de tipo Properties */
+			Properties combatProperties = new Properties();
+	
+			/** Cargamos el archivo desde la ruta especificada */
+			combatProperties.load(new FileInputStream(
+				"src/properties/combat.properties"));
+			
+			String newVar = "";
+			boolean defaultRules = Utils.castToBoolean(combatProperties.getProperty("combat.rules.default"));
+			
+			if(!defaultRules)
+				newVar = "_new";
+			//
+			int flanked = Utils.castToInt(combatProperties.getProperty("combat.position.flanked"));
+			int attackedFromBehind = Utils.castToInt(combatProperties.getProperty("combat.position.attackedFromBehind"));
+			int offguarded = Utils.castToInt(combatProperties.getProperty("combat.position.offguarded"));
+			int stunned = Utils.castToInt(combatProperties.getProperty("combat.position.stunned"));
+			
+			int offguarded_flanked = Utils.castToInt(
+					combatProperties.getProperty("combat"+newVar+".position.offguarded_flanked"));
+			int offguarded_attackedFromBehind = Utils.castToInt(
+					combatProperties.getProperty("combat"+newVar+".position.offguarded_attackedFromBehind"));
+			int stunned_flanked = Utils.castToInt(
+					combatProperties.getProperty("combat"+newVar+".position.stunned_flanked"));
+			int stunned_attackedFromBehind = Utils.castToInt(
+					combatProperties.getProperty("combat"+newVar+".position.stunned_attackedFromBehind"));
+			int stunned_offguarded = Utils.castToInt(
+					combatProperties.getProperty("combat"+newVar+".position.stunned_offguarded"));
+			int stunned_offguarded_attackedFromBehind = Utils.castToInt(
+					combatProperties.getProperty("combat"+newVar+".position.stunned_offguarded_attackedFromBehind"));
+
+			
+			Cache.combatProperties.put(Combat.FLANKED, flanked);
+			Cache.combatProperties.put(Combat.ATTACKED_FROM_BEHIND, attackedFromBehind);
+			Cache.combatProperties.put(Combat.OFF_GUARDED, offguarded);
+			Cache.combatProperties.put(Combat.STUNNED, stunned);
+			
+			Cache.combatProperties.put(Combat.OFF_GUARDED_FLANKED, offguarded_flanked);
+			Cache.combatProperties.put(Combat.OFF_GUARDED_ATTACKED_FROM_BEHIND, offguarded_attackedFromBehind);
+			Cache.combatProperties.put(Combat.STUNNED_FLANKED, stunned_flanked);
+			Cache.combatProperties.put(Combat.STUNNED_ATTACKED_FROM_BEHIND, stunned_attackedFromBehind);
+			Cache.combatProperties.put(Combat.STUNNED_OFF_GUARDED, stunned_offguarded);
+			Cache.combatProperties.put(Combat.STUNNED_OFF_GUARDED_ATTACKED_FROM_BEHIND, stunned_offguarded_attackedFromBehind);
 			
 		} catch (FileNotFoundException e) {
 			System.out.println("Error, The file does not exist");
@@ -277,10 +334,9 @@ public class ReadProperties {
 			
 			if(!botchCriticaltaken_in.isEmpty()){
 
-				Critical botchCriticalTaken = new Critical();
+				
 				String[] botch_cri_array = botchCriticaltaken_in.split(Utils.PROPERTIES_SECONDARY_SEPARATOR);
-				botchCriticalTaken.setCriticalMaxGravity(botch_cri_array[1]);
-				botchCriticalTaken.setCriticalType(Critical.assesCriticalType(botch_cri_array[0]));
+				Critical botchCriticalTaken = new Critical(Critical.assesCriticalType(botch_cri_array[0]),botch_cri_array[1]);
 				botch.setCriticalTaken(botchCriticalTaken);
 			}
 		}
@@ -288,16 +344,22 @@ public class ReadProperties {
 	}
 	
 	private static Critical createCritical(String critical_in){
-		Critical critical = new Critical();
+		Critical critical = null;
 		
 		if(!critical_in.isEmpty()){
 			
 			String[] cri_array = critical_in.split(Utils.PROPERTIES_SECONDARY_SEPARATOR);
-			critical.setCriticalType(Critical.assesCriticalType(cri_array[0]));
+			int critType = Critical.assesCriticalType(cri_array[0]);
 			
+			String critMaxGravity = "";
 			if(cri_array.length > 1){
-				critical.setCriticalMaxGravity(cri_array[1]);
+				critMaxGravity = cri_array[1];
+			}else{
+				critMaxGravity = Critical.CRITICAL_E;
 			}
+			
+
+			critical = new Critical(critType,critMaxGravity);
 		}
 		return critical;
 	}
@@ -398,9 +460,10 @@ public class ReadProperties {
 	}
 	
 	private static void resetDefaults() {
-		/*ESCUDOS*/
+		
 		
 		try{
+			/*ESCUDOS*/
 			Cache.armourItems.remove(ArmourItem.GREAT_SHIELD);
 			Cache.armourItems.remove(ArmourItem.MEDIUM_SHIELD);
 			Cache.armourItems.remove(ArmourItem.SMALL_SHIELD);
@@ -449,11 +512,20 @@ public class ReadProperties {
 		
 	}
 
-	private static void print(Map<Integer, Item> items) {
+	private static void print1(Map<Integer, Item> items) {
 		
 		for(Map.Entry<Integer, Item> entry: items.entrySet()){
 			Item item = entry.getValue();
 			System.out.println(item.toString());
+		}
+	}
+	
+private static void print2(Map<String, Integer> proper) {
+		
+		for(Map.Entry<String, Integer> entry: proper.entrySet()){
+			String key = entry.getKey();
+			Integer value = entry.getValue();
+			System.out.println(key+": "+value);
 		}
 	}
 

@@ -1,6 +1,7 @@
 package beans;
 
 import utils.Utils;
+import utils.Tables.Tables;
 
 public class WeaponItem extends Item implements Cloneable{
 	
@@ -289,7 +290,7 @@ public class WeaponItem extends Item implements Cloneable{
 		
 		StringBuffer sb = new StringBuffer("\n\n").append(name == null ? "" : name+ " - ").append(type).append(" - ").append(Tables.getSkillCategoryTable()[category][0])
 										.append("\nBO: " ).append(this.getBO())
-										.append("\nCritico 1º:").append(mainCritical.toString()).append("\t2º:").append(secondCritical.toString())
+										.append("\nCritico 1º:").append(mainCritical.toString()).append("\t2º:").append(secondCritical != null ? secondCritical.toString() : "")
 										.append("\nPifia: ").append(botch.getMin()).append(" - ").append(botch.getMax())
 										.append(" Crit. Taken: ").append((botch.getCriticalTaken() == null) ? "NO" : botch.getCriticalTaken().getCriticalMaxGravity())
 										.append("\nRange: ").append(range).append(" Weight: ").append(weight).append(" kg.")

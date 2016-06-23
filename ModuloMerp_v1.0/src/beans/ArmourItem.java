@@ -1,6 +1,7 @@
 package beans;
 
 import utils.Utils;
+import utils.Tables.Tables;
 
 public class ArmourItem extends Item implements Cloneable{
 	

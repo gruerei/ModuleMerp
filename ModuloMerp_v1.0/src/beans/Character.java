@@ -9,65 +9,10 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import utils.Utils;
+import utils.Tables.Tables;
 
 public class Character {
-	public int id;
 	
-	/*Principales*/
-	public String name;
-	public String player;
-	public Race race;
-	public Profession profession;//Guerrero, Explorador, Montaraz, Bardo, etc
-	public int level;
-	public int PX = 10000;//Experiencia. Se empieza con 10.000 px de inicio
-	public int PP;//Puntos de poder
-	
-	public List<Integer> MAGICAL_DOMAIN = new ArrayList<Integer>();//CANALIZACION o ESENCIA
-	
-	/*Descripcion Personaje*/
-	public int gender;//Hombre/Mujer
-	public int age;
-	public int height;//centimetros
-	public int weight;//kilos
-	public String hair;
-	public String eyes;
-	public String physicalLook;
-	public String personality;
-	public String motivation;
-	public String alignment;//bueno, neutral, malo
-	public List<String> special;//para poner cualquier cosa adicional
-	public String origin;//Procedencia
-	public String family;//Clan,familia
-	public String religion;
-	public String gods;
-	
-	//ATRIBUTOS
-	/** Para equilibrar se podia aceptar como regla de la casa que para crear 
-	 * un personaje nuevo lo minimo sean dos 90s o su equivalente(bono total por attrib de +20)*/
-	Map<String, Attribute> attributes = new HashMap<String, Attribute>();
-	
-	//LENGUAJES
-	List<Language> languages = new ArrayList<Language>();
-	
-	//CARGA
-	public float loadlimit;
-	public float load;
-	
-	/*COMBATE*/
-	public Life life;//vida total
-	public int gradesLife;//vida obtenida a partir de las tiradas de dados
-	
-	public int offguardBD;//sin contar el bono por agilidad
-	public int totalBD;//BD con escudo
-	public int noShieldBD;//BD sin escudo
-	public int totalNoShield;//BD sin escudo
-	public int movSpeed;//Movimiento
-	public int loadPenal;//PenalizadorCarga
-	public int woundPenal;//PenalizadorHeridas
-	public int meleAttack;//Puntuacion Ataque Principal Melee
-	public int rangedAttack;//Puntuacion Ataque Principal a Distancia
-	
-
 	public static String WEAPON1_USED = "WEAPON1_USED";
 	public static String WEAPON2_USED = "WEAPON2_USED";
 	public static String SHIELD_USED= "SHIELD_USED";
@@ -79,19 +24,94 @@ public class Character {
 	public static String ARMOR_USED = "ARMOR_USED";//ARMADURA
 	public static String TALISMAN_USED = "TALISMAN_USED";//TALISMAN
 	
+	public static int RIGHT_HANDED = 1;
+	public static int LEFT_HANDED = 2;
+	public static int BOTH_HANDED = 3;
+	
+	private int id;
+	
+	/*Principales*/
+	private String name;
+	private String player;
+	private Race race;
+	private Profession profession;//Guerrero, Explorador, Montaraz, Bardo, etc
+	private int level;
+	private int PX = 10000;//Experiencia. Se empieza con 10.000 px de inicio
+	private int PP;//Puntos de poder
+	
+	private List<Integer> MAGICAL_DOMAIN = new ArrayList<Integer>();//CANALIZACION o ESENCIA
+	
+	/*Descripcion Personaje*/
+	private int gender;//Hombre/Mujer
+	private int age;
+	private int height;//centimetros
+	private int weight;//kilos
+	private String hair;
+	private String eyes;
+	private String physicalLook;
+	private String personality;
+	private String motivation;
+	private String alignment;//bueno, neutral, malo
+	private List<String> special;//para poner cualquier cosa adicional
+	private String origin;//Procedencia
+	private String family;//Clan,familia
+	private String religion;
+	private String gods;
+	
+	//ATRIBUTOS
+	/** Para equilibrar se podia aceptar como regla de la casa que para crear 
+	 * un personaje nuevo lo minimo sean dos 90s o su equivalente(bono total por attrib de +20)*/
+	private Map<String, Attribute> attributes = new HashMap<String, Attribute>();
+	
+	//LENGUAJES
+	private List<Language> languages = new ArrayList<Language>();
+	
+	//CARGA
+	private float loadlimit;
+	private float load;
+	
+	/*COMBATE*/
+	private Life life;//vida total
+	private int gradesLife;//vida obtenida a partir de las tiradas de dados
+	
+	private int offguardBD;//sin contar el bono por agilidad
+	private int totalBD;//BD con escudo
+	private int totalNoShield;//BD sin escudo
+	private int movSpeed;//Movimiento
+	private int loadPenal;//PenalizadorCarga
+	private int woundPenal;//PenalizadorHeridas
+	
+	private boolean flanked = false;
+	private boolean attackedFromBehind = false;
+	private boolean offGuarded = false;
+	private boolean stunned = false;
+	private boolean ableToParry = true;
+	private boolean ableToBlock = true;
+	private boolean isBigCreature = false;
+	
+	
+	private boolean leftArmDisabled = false;
+	private boolean rightArmDisabled = false;
+	private boolean leftLegDisabled = false;
+	private boolean rightLegDisabled = false;
+	
+	/*Derecho = 1, Zurdo = 2 o Ambos = 3*/
+	private int mainHandedUsed = RIGHT_HANDED;
+	
+
 	
 	/*INVENTARIO*/
-	List<Item> inventory = new ArrayList<Item>();
+	private List<Item> inventory = new ArrayList<Item>();
 	
 	/*EQUIPO EN USO*/
-	Map<Integer, Item> equippedGear = new HashMap<Integer, Item>();
+	private Map<Integer, Item> equippedGear = new HashMap<Integer, Item>();
 	
 	/*GEAR SKILL MODS*/
-	Map<Integer, Integer> totalGearSkillMods  = new HashMap<Integer, Integer>();
+	private Map<Integer, Integer> totalGearSkillMods  = new HashMap<Integer, Integer>();
 	
 	/*SKILLS */
-	int[] skillGrades = new int[Skill.SKILLS_TOTAL_NUMBER];
-	Map<Integer, Skill> skills  = new HashMap<Integer, Skill>();
+	private int[] skillGrades = new int[Skill.SKILLS_TOTAL_NUMBER];
+	private Map<Integer, Skill> skills  = new HashMap<Integer, Skill>();
 	
 	/*ASCENDANCY/HISTORICAL*/
 	/*1. NO PROFESSIONAL SKILL
@@ -114,14 +134,14 @@ public class Character {
 	 *6. MONEY*/
 	
 	/*RESISTANCES*/
-	Map<String, ResistanceRoll> resistanceRolls = new HashMap<String, ResistanceRoll>();
+	private Map<String, ResistanceRoll> resistanceRolls = new HashMap<String, ResistanceRoll>();
 	
 	public Character(String name, String player) {
 		this.name = name;
 		this.player = player;
 	}
 
-	
+			
 	public Character(String name, String player, int lvl, int PX, String raceIn, String cultureIn, String professionIn, Map<Integer, Item> equippedGear , int sTR, int aGI, int cON, int iNT, int i,
 			int cAR, int aP, int baseLife, String magicalDomainChoosen,int[] skillGrades ,int[][] specialSkillModif){
 
@@ -197,23 +217,6 @@ public class Character {
 		
 		weapon.setBO(this.skills.get(weapon.getCategory()).getModifTotal());
 		
-		//Calculo de la BD que se tendría sin escudo (por si te pillan desprevenido o por la
-		//espalda) en caso de llevar escudo
-		if(shield != null){
-			this.noShieldBD = totalBD - shield.getSkillMods()[Skill.BD];
-			
-			if(shield.getBonusMagic1()> 0 && shield.getBonusMagic1AppliedTo() == null){
-				this.noShieldBD = this.noShieldBD - shield.getBonusMagic1();
-			}
-			
-			if(shield.getBonusMagic2()> 0 && shield.getBonusMagic2AppliedTo() == null){
-				this.noShieldBD = this.noShieldBD - shield.getBonusMagic2();
-			}
-			
-		}else{
-			//Si no se lleva escudo, es la BD total sin mas calculos
-			this.noShieldBD = totalBD;
-		}
 		
 		/*Calcula Resistance Rolls*/
 		this.setResistanceRolls(calculResistanceRolls());
@@ -418,13 +421,6 @@ public class Character {
 		return woundPenal;
 	}
 
-	public int getMeleAttack() {
-		return meleAttack;
-	}
-
-	public int getRangedAttack() {
-		return rangedAttack;
-	}
 
 	public Map<Integer, Item> getEquippedGear() {
 		return equippedGear;
@@ -572,14 +568,6 @@ public class Character {
 		this.woundPenal = woundPenal;
 	}
 
-	public void setMeleAttack(int meleAttack) {
-		this.meleAttack = meleAttack;
-	}
-
-	public void setRangedAttack(int rangedAttack) {
-		this.rangedAttack = rangedAttack;
-	}
-
 
 	public Life getLife() {
 		return life;
@@ -619,6 +607,18 @@ public class Character {
 
 	public Map<String, ResistanceRoll> getResistanceRolls() {
 		return resistanceRolls;
+	}
+
+
+	
+	
+	public boolean isBigCreature() {
+		return isBigCreature;
+	}
+
+
+	public void setBigCreature(boolean isBigCreature) {
+		this.isBigCreature = isBigCreature;
 	}
 
 
@@ -671,6 +671,124 @@ public class Character {
 	public void addPx(int px){
 		this.PX = this.PX + px;
 	}
+	
+	
+
+	public boolean isFlanked() {
+		return flanked;
+	}
+
+
+	public void setFlanked(boolean flanked) {
+		this.flanked = flanked;
+	}
+
+
+	public boolean isAttackedFromBehind() {
+		return attackedFromBehind;
+	}
+
+
+	public void setAttackedFromBehind(boolean attackedFromBehind) {
+		this.attackedFromBehind = attackedFromBehind;
+	}
+
+
+	public boolean isOffGuarded() {
+		return offGuarded;
+	}
+
+
+	public void setOffGuarded(boolean offGuarded) {
+		this.offGuarded = offGuarded;
+	}
+
+
+	public boolean isStunned() {
+		return stunned;
+	}
+
+
+	public void setStunned(boolean stunned) {
+		this.stunned = stunned;
+	}
+
+	
+	public boolean isAbleToParry() {
+		return ableToParry;
+	}
+
+
+	public void setAbleToParry(boolean ableToParry) {
+		this.ableToParry = ableToParry;
+	}
+	
+	
+
+	public boolean isAbleToBlock() {
+		return ableToBlock;
+	}
+
+
+	public void setAbleToBlock(boolean ableToBlock) {
+		this.ableToBlock = ableToBlock;
+	}
+	
+	/*Romper el item (en un combate)*/
+	public void tearItem(int key){
+		equippedGear.remove(key);
+	}
+
+	
+	public boolean isLeftArmDisabled() {
+		return leftArmDisabled;
+	}
+
+
+	public void setLeftArmDisabled(boolean leftArmDisabled) {
+		this.leftArmDisabled = leftArmDisabled;
+	}
+
+
+	public boolean isRightArmDisabled() {
+		return rightArmDisabled;
+	}
+
+
+	public void setRightArmDisabled(boolean rightArmDisabled) {
+		this.rightArmDisabled = rightArmDisabled;
+	}
+
+
+	public boolean isLeftLegDisabled() {
+		return leftLegDisabled;
+	}
+
+
+	public void setLeftLegDisabled(boolean leftLegDisabled) {
+		this.leftLegDisabled = leftLegDisabled;
+	}
+
+
+	public boolean isRightLegDisabled() {
+		return rightLegDisabled;
+	}
+
+
+	public void setRightLegDisabled(boolean rightLegDisabled) {
+		this.rightLegDisabled = rightLegDisabled;
+	}
+
+
+	public int getMainHandedUsed() {
+		return mainHandedUsed;
+	}
+
+
+	public void setMainHandedUsed(int mainHandedUsed) {
+		this.mainHandedUsed = mainHandedUsed;
+	}
+
 
 	public void show() {
 		
@@ -714,6 +832,7 @@ public class Character {
 			.append("\nPX: \t\t\t").append(getPX())
 			.append("\nPP: \t\t\t").append(getPP())
 			.append("\nLife:\t\t\t").append(life.getCurrentLife()).append("/").append(life.getTotalLife())
+			.append("\nBD:\t\t\t").append(getTotalBD())
 			
 			
 			.append("\n\n---------------------------------------ATTRIBUTES---------------------------------------------------")
