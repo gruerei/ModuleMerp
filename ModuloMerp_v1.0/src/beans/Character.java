@@ -13,6 +13,7 @@ import utils.Tables.Tables;
 
 public class Character {
 	
+
 	public static String WEAPON1_USED = "WEAPON1_USED";
 	public static String WEAPON2_USED = "WEAPON2_USED";
 	public static String SHIELD_USED= "SHIELD_USED";
@@ -74,7 +75,6 @@ public class Character {
 	private Life life;//vida total
 	private int gradesLife;//vida obtenida a partir de las tiradas de dados
 	
-	private int offguardBD;//sin contar el bono por agilidad
 	private int totalBD;//BD con escudo
 	private int totalNoShield;//BD sin escudo
 	private int movSpeed;//Movimiento
@@ -84,7 +84,6 @@ public class Character {
 	private boolean flanked = false;
 	private boolean attackedFromBehind = false;
 	private boolean offGuarded = false;
-	private boolean stunned = false;
 	private boolean ableToParry = true;
 	private boolean ableToBlock = true;
 	private boolean isBigCreature = false;
@@ -97,8 +96,20 @@ public class Character {
 	
 	/*Derecho = 1, Zurdo = 2 o Ambos = 3*/
 	private int mainHandedUsed = RIGHT_HANDED;
+	private int parryBonusInUse = 0;
 	
-
+	/*ACTIVITY*/
+	private CombatStatus activity;
+	
+	/*KNOCKED OUT*/
+	private CombatStatus knockedOut;
+	
+	/*STUNNED*/
+	private CombatStatus stunned;
+	
+	/*DEAD*/
+	//private CombatStatus 
+	private CombatStatus dead;
 	
 	/*INVENTARIO*/
 	private List<Item> inventory = new ArrayList<Item>();
@@ -112,6 +123,8 @@ public class Character {
 	/*SKILLS */
 	private int[] skillGrades = new int[Skill.SKILLS_TOTAL_NUMBER];
 	private Map<Integer, Skill> skills  = new HashMap<Integer, Skill>();
+	
+	
 	
 	/*ASCENDANCY/HISTORICAL*/
 	/*1. NO PROFESSIONAL SKILL
@@ -133,9 +146,21 @@ public class Character {
 	 *   3. Others
 	 *6. MONEY*/
 	
+	
+
 	/*RESISTANCES*/
 	private Map<String, ResistanceRoll> resistanceRolls = new HashMap<String, ResistanceRoll>();
 	
+	public CombatStatus getActivity() {
+		return activity;
+	}
+
+
+	public void setActivity(CombatStatus activity) {
+		this.activity = activity;
+	}
+
+
 	public Character(String name, String player) {
 		this.name = name;
 		this.player = player;
@@ -212,6 +237,7 @@ public class Character {
 		
 		this.totalBD = this.skills.get(Skill.BD).getModifTotal();
 		ArmourItem shield = (ArmourItem)this.equippedGear.get(Item.SHIELD);
+		this.totalNoShield = totalBD - shield.getSkillMods()[Skill.BD];
 		
 		WeaponItem weapon = (WeaponItem)this.equippedGear.get(Item.WEAPON_1);
 		
@@ -397,10 +423,6 @@ public class Character {
 	}
 
 
-	public int getOffguardBD() {
-		return offguardBD;
-	}
-
 	public int getTotalBD() {
 		return totalBD;
 	}
@@ -543,10 +565,6 @@ public class Character {
 		this.load = load;
 	}
 
-
-	public void setOffguardBD(int offguardBD) {
-		this.offguardBD = offguardBD;
-	}
 
 	public void setTotalBD(int totalBD) {
 		this.totalBD = totalBD;
@@ -704,12 +722,12 @@ public class Character {
 	}
 
 
-	public boolean isStunned() {
+	public CombatStatus getStunned() {
 		return stunned;
 	}
 
 
-	public void setStunned(boolean stunned) {
+	public void setStunned(CombatStatus stunned) {
 		this.stunned = stunned;
 	}
 
@@ -790,6 +808,26 @@ public class Character {
 	}
 
 
+	public int getParryBonusInUse() {
+		return parryBonusInUse;
+	}
+
+
+	public void setParryBonusInUse(int parryBonusInUse) {
+		this.parryBonusInUse = parryBonusInUse;
+	}
+	
+
+	public CombatStatus getKnockedOut() {
+		return knockedOut;
+	}
+
+
+	public void setKnockedOut(CombatStatus knockedOut) {
+		this.knockedOut = knockedOut;
+	}
+
+
 	public void show() {
 		
 		Attribute str = getAttributes().get(Attribute.STRENTGTH);
@@ -820,6 +858,8 @@ public class Character {
 			sbGear.append(item.toString()).append("\n");
 		}
 		
+		String deadInfo = getDead() != null ? " (Dead)" : "";
+		
 		StringBuffer sb = new StringBuffer();
 		sb.append("-------------------------------------------------------------------------------------------------")
 			.append("\nName: \t\t\t").append(getName())
@@ -832,6 +872,7 @@ public class Character {
 			.append("\nPX: \t\t\t").append(getPX())
 			.append("\nPP: \t\t\t").append(getPP())
 			.append("\nLife:\t\t\t").append(life.getCurrentLife()).append("/").append(life.getTotalLife())
+			.append(deadInfo)
 			.append("\nBD:\t\t\t").append(getTotalBD())
 			
 			
@@ -885,7 +926,7 @@ public class Character {
 			.append(fire.getBonusObjects()).append("\t ").append(fire.getBonusSpecial()).append("\t ").append(fire.getBonusTotal())
 
 			.append("\n\n------------------------------------------------------------------------------------------")
-			.append("\n\nHabilidad.\t\tGrades\tBf.Grad\tBf.Att\tBf.Prof\tBf.Obj\tBf.Spec\tBf.Spec2\t Bf.Total")
+			.append("\n\nHabilidad.\t\tGrades\tBf.Grad\tBf.Att\tBf.Prof\tBf.Obj\tBf.Spec\tBf.Spec2\tBf.Activ\t Bf.Total")
 			.append("\nMOVEMENT_MANEUVERS\n");
 			
 		
@@ -909,9 +950,13 @@ public class Character {
 				  .append("\n").append(Tables.getSkillCategories()[newCategory]).append("\n");
 			}
 
+			int modifTotalSkill = sk.applyBonifActivityToTotal(this);
+
+			
 			sb.append("\n").append(Utils.padRight(sk.getDescription(), 20)).append("\t").append(sk.getGrades()).append("\t").append(sk.getModifGrades()).append("\t")
 				.append(sk.getModifAttributes()).append("\t").append(sk.getModifClass()).append("\t").append(sk.getModifObjects()).append("\t")
-				.append(sk.getModifSpecial()).append("\t").append(sk.getModifSpecial2()).append("\t\t ").append(sk.getModifTotal());
+				.append(sk.getModifSpecial()).append("\t").append(sk.getModifSpecial2()).append("\t\t").append(sk.getModifActivity())
+				.append("\t\t ").append(modifTotalSkill);
 		
 			prevCategory = newCategory;
 		}
@@ -920,8 +965,269 @@ public class Character {
 		System.out.println("\n------------------------------------------------------------------------------------------"
 				 + "\n------------------------------------------------------------------------------------------");
 	}
-
 	
+	
+	
+	public CombatStatus getDead() {
+		return dead;
+	}
+
+
+	public void setDead(CombatStatus dead) {
+		this.dead = dead;
+	}
+
+
+	public void showCombatStatus() {
+		
+		Attribute str = getAttributes().get(Attribute.STRENTGTH);
+		Attribute agi = getAttributes().get(Attribute.AGILITY);
+		Attribute cons = getAttributes().get(Attribute.CONSTITUTION);
+		Attribute inte = getAttributes().get(Attribute.INTELLIGENCE);
+		Attribute intui = getAttributes().get(Attribute.INTUITION);
+		Attribute charis = getAttributes().get(Attribute.CHARISMA);
+		Attribute appea = getAttributes().get(Attribute.APPEARANCE);
+		
+		ResistanceRoll essence = getResistanceRolls().get(ResistanceRoll.ESSENCE);
+		ResistanceRoll channel = getResistanceRolls().get(ResistanceRoll.CHANNELLING);
+		ResistanceRoll poison = getResistanceRolls().get(ResistanceRoll.POISON);
+		ResistanceRoll disease = getResistanceRolls().get(ResistanceRoll.DISEASE);
+		ResistanceRoll cold = getResistanceRolls().get(ResistanceRoll.COLD);
+		ResistanceRoll fire = getResistanceRolls().get(ResistanceRoll.FIRE);
+	
+		WeaponItem weapon = (WeaponItem) getEquippedGear().get(Item.WEAPON_1);
+		String weaponName = (weapon.getName() == null ? weapon.getType() : weapon.getName());
+		ArmourItem shield = (ArmourItem)getEquippedGear().get(Item.SHIELD);
+		ArmourItem armour = (ArmourItem)getEquippedGear().get(Item.ARMOUR);
+		ArmourItem helmet = (ArmourItem)getEquippedGear().get(Item.HELMET);
+		ArmourItem bracers = (ArmourItem)getEquippedGear().get(Item.BRACERS);
+		ArmourItem greaves = (ArmourItem)getEquippedGear().get(Item.GREAVES);
+		
+		int movSkillId = ArmourItem.getMovementSkillByArmour(armour.getType());
+		Skill skill = getSkills().get(movSkillId);
+		
+		
+		StringBuffer sb = new StringBuffer();
+		
+		sb.append("\n/******************************************************************************************************"
+				+ "\n*****************************************************************************************************/\n")
+		.append("\nName: \t\t\t").append(getName())
+		.append("\t\tPlayer: \t\t").append(getPlayer())
+		.append("\nRace/Culture: \t\t").append(getRace().getName()).append(" ").append(getRace().getCulture())
+		.append("\t\tProfession: \t\t").append(getProfession().getName());
+		
+		StringBuffer sbDomain = new StringBuffer();
+		for(int i=0 ; i<getMAGICAL_DOMAIN().size();i++){
+			String magicRealm = Tables.getMagicRealmsDescripTable()[getMAGICAL_DOMAIN().get(i)];
+			sbDomain.append(magicRealm).append(" ");
+		}
+	
+		
+		String modifActividad = getActivity() == null ? "" : " ("+ getActivity().getActivityModif()+" Modif. Activity)";
+		String activityInfo = getActivity() == null ? "" : "\nActivity Modif:\t\t"+
+		getActivity().getActivityModif() + "\t\tType: "+CombatStatus.activityType(getActivity().getType());
+		
+		String assaultsActivity = "";
+		if(getActivity() != null){
+			if(getActivity().getAssaultsLeft() > 0){
+				assaultsActivity = "\t\tAssaults Left: "+ getActivity().getAssaultsLeft();
+			}
+		}
+		
+		StringBuffer knockedOutInfo = getKnockedOut() != null ? 
+				new StringBuffer("\n").append(this.name).append(" can't fight: ").append(CombatStatus.knockedOutType(getKnockedOut().getType())).append(".")
+				: new StringBuffer("");
+				
+		if(getKnockedOut() != null && getKnockedOut().getType() == CombatStatus.KNOCKED_OUT_ASSAULTS){
+			knockedOutInfo.append(" ").append(getKnockedOut().getAssaultsLeft()).append(" assaults left.");
+		}
+		
+		StringBuffer stunInfo = null;
+		if(getStunned() != null){
+			stunInfo = new StringBuffer("\n").append(this.name).append(" is STUNNED (can't attack and 50% parriyng):")
+			.append("\t").append(getStunned().getAssaultsLeft()).append(" assaults left.");
+		}
+		
+		String deadInfo = getDead() != null && getDead().getAssaultsLeft() == 0 ? "\nATTENTION: DEAD CHARACTER" : "";
+		String assaultsToDieInfo = "";
+		if(getDead() != null && getDead().getAssaultsLeft() > 0){
+			assaultsToDieInfo = "\nATTENTION!! Assaults to die: "+getDead().getAssaultsLeft();
+		}
+		
+		sb.append("\nMagic Realm: \t\t").append(sbDomain.toString())
+		
+		.append("\n\nLevel: \t\t\t").append(getLevel())
+		.append("\nPX: \t\t\t").append(getPX())
+		.append("\nPP: \t\t\t").append(getPP())
+		
+		.append("\n\n..............COMBAT..............")
+		.append("\nLife:\t\t\t").append(life.getCurrentLife()).append("/").append(life.getTotalLife())
+		.append(knockedOutInfo)
+		.append(stunInfo)
+		.append(deadInfo).append(assaultsToDieInfo)
+		.append(activityInfo).append(assaultsActivity)
+		.append("\nBD:\t\t\t").append(getTotalBD()).append("\t\tBD no Shield:\t").append(getTotalNoShield())
+		.append("\nMovement:\t\t").append(skill.getModifTotal() + (getActivity() != null? getActivity().getActivityModif() : 0)).append(modifActividad)
+		
+		.append("\n\n..............GEAR..............")
+		.append("\nWeapon: ").append(weaponName).append(" ").append("\tBO: ")
+		.append(weapon == null ? "" : weapon.getBO() + (getActivity() != null? getActivity().getActivityModif() : 0)).append(modifActividad)
+		.append("\nArmour: ").append(armour == null ? "NO" : armour.getType())
+		.append("\nShield(10-25 BD): ").append(shield == null ? "NO" : shield.getType())
+		.append("\nHelmet(-5 Perc): ").append(helmet == null ? "NO" : helmet.getType())
+		.append("\nBracers(-5 BO): ").append(bracers == null ? "NO" : bracers.getType())
+		.append("\nGreaves(-5 MM): ").append(greaves == null ? "NO" : greaves.getType())
+		
+		.append("\n\n.............ATTR............")
+		.append("\n\t\t\tBase\tAttrib.\tRacial\t Total")
+		.append("\nStrength: \t\t").append(str.getValue()).append("\t")
+		.append(str.getModifAtt()).append("\t ").append(getRace().getModStrength()).append("\t ").append(str.getModifTotal())
+		.append("\nAgility: \t\t").append(agi.getValue()).append("\t")
+		.append(agi.getModifAtt()).append("\t ").append(getRace().getModAgility()).append("\t ").append(agi.getModifTotal())
+		.append("\nConstitution: \t\t").append(cons.getValue()).append("\t")
+		.append(cons.getModifAtt()).append("\t ").append(getRace().getModConstitution()).append("\t ").append(cons.getModifTotal())
+		.append("\nIntelligence: \t\t").append(inte.getValue()).append("\t")
+		.append(inte.getModifAtt()).append("\t ").append(getRace().getModIntelligence()).append("\t ").append(inte.getModifTotal())
+		.append("\nIntuition: \t\t").append(intui.getValue()).append("\t")
+		.append(intui.getModifAtt()).append("\t ").append(getRace().getModIntuition()).append("\t ").append(intui.getModifTotal());
+		
+		if(!Attribute.isCharismaBeneficiedByAppearance()){
+			/*Por defecto*/
+			sb.append("\nCharisma: \t\t").append(charis.getValue()).append("\t")
+			.append(charis.getModifAtt()).append("\t ").append(getRace().getModCharisma()).append("\t ").append(charis.getModifTotal())
+			.append("\n\t\t\tNormal\tCharis\t Total")
+			.append("\nAppearance: \t\t").append(appea.getValue()).append("\t")
+			.append(charis.getModifTotal()).append("\t ")
+			.append(appea.getValue() + charis.getModifTotal());
+		}else{
+			/*Nueva*/
+			sb.append("\nAppearance: \t\t").append(appea.getValue()).append("\t")
+			.append(appea.getModifAtt()).append("\t ").append(" ").append("\t ").append(appea.getModifTotal())
+			.append("\n\t\t\tBase\tAtt+App\tRacial\t Total")
+			.append("\nCharisma: \t\t").append(charis.getValue()).append("\t")
+			.append(charis.getModifAtt()).append("\t ").append(getRace().getModCharisma()).append("\t ").append(charis.getModifTotal());
+		}
+		
+		sb.append("\n\n......................TR............................")
+		.append("\n\t\t\tAttrib.\tObjects\tSpecial\t Total")
+		.append("\nTR Essence: \t\t").append(essence.getBonusAttribute()).append("\t")
+		.append(essence.getBonusObjects()).append("\t ").append(essence.getBonusSpecial()).append("\t ").append(essence.getBonusTotal())
+		.append("\nRR Channeling: \t\t").append(channel.getBonusAttribute()).append("\t")
+		.append(channel.getBonusObjects()).append("\t ").append(channel.getBonusSpecial()).append("\t ").append(channel.getBonusTotal())
+		.append("\nRR Poison: \t\t").append(poison.getBonusAttribute()).append("\t")
+		.append(poison.getBonusObjects()).append("\t ").append(poison.getBonusSpecial()).append("\t ").append(poison.getBonusTotal())
+		.append("\nRR Disease: \t\t").append(disease.getBonusAttribute()).append("\t")
+		.append(disease.getBonusObjects()).append("\t ").append(disease.getBonusSpecial()).append("\t ").append(disease.getBonusTotal())
+		.append("\nRR Cold: \t\t").append(cold.getBonusAttribute()).append("\t")
+		.append(cold.getBonusObjects()).append("\t ").append(cold.getBonusSpecial()).append("\t ").append(cold.getBonusTotal())
+		.append("\nRR Fire: \t\t").append(fire.getBonusAttribute()).append("\t")
+		.append(fire.getBonusObjects()).append("\t ").append(fire.getBonusSpecial()).append("\t ").append(fire.getBonusTotal());
+		
+		sb.append("\n\n/******************************************************************************************************"
+				+ "\n*****************************************************************************************************/\n");
+		
+		System.out.println(sb.toString());
+	}
+
+	/*Decrementar en uno los contadores de asalto. Si llegan a cero despenalizar*/
+	public void assaultDecrement(){
+		
+		if(getStunned() != null){
+			getStunned().setAssaultsLeft(getStunned().getAssaultsLeft() - 1);
+			System.out.println(name+" is Stunned for "+getStunned().getAssaultsLeft()+ " assaults.");
+			if(getStunned().getAssaultsLeft()==0){
+				System.out.println(name+" is not Stunned anymore.");
+				setStunned(null);
+			}
+		}
+		
+		if(getKnockedOut() != null){
+			if(getKnockedOut().getType() == 1){
+				getKnockedOut().setAssaultsLeft(getKnockedOut().getAssaultsLeft() - 1);
+				System.out.println(name+" is Knocked Out for "+getKnockedOut().getAssaultsLeft()+ " assaults.");
+				if(getKnockedOut().getAssaultsLeft()==0){
+					System.out.println(name+" is able to fight again.");
+					setKnockedOut(null);
+				}
+			}
+		}
+		
+		if(getActivity()!=null){
+			if(getActivity().getType() == 1){
+				getActivity().setAssaultsLeft(getActivity().getAssaultsLeft() - 1);
+				System.out.println(name+"'s Activity Modificator lasts for "+getActivity().getAssaultsLeft()+ " assaults.");
+				
+				if(getActivity().getAssaultsLeft() == 0){
+					System.out.println(name+ "'s Activity Modificator stops having an effect.");
+					setActivity(null);
+				}
+			}
+		}
+		if(getDead() != null && getDead().getAssaultsLeft() > 0){
+			getDead().setAssaultsLeft(getDead().getAssaultsLeft() - 1);
+
+			if(getDead().getAssaultsLeft() == 0){
+				System.out.println(
+						"\n..............................................................................."
+						+ "\n: ATTENTION: "+this.name + " has dead as consequence of assaults to dead got to zero :"
+						+ "\n···············································································");
+				death();
+			}
+		}
+		
+	}
+
+
+	public void lifePointsLost(int lifePointsCaused) {
+		
+		if(life.getCurrentLife()>=0 && (life.getCurrentLife() - lifePointsCaused)<0){
+			//Entra en inconsciencia y quedan 6 asaltos para muerte
+			fallUnconscious(CombatStatus.KNOCKED_OUT_LIFE_BELOW_ZERO);
+		}
+			
+		life.setCurrentLife(life.getCurrentLife() - lifePointsCaused);
+		System.out.println("Vida actual: "+life.getCurrentLife());
+		
+	}
+
+
+	public void fallUnconscious(int knockedOutType) {
+		
+		if(knockedOutType == CombatStatus.KNOCKED_OUT_LIFE_BELOW_ZERO){
+			CombatStatus knocked = new CombatStatus("KnockedOut Life-below-zero",CombatStatus.KNOCKED_OUT_LIFE_BELOW_ZERO); 
+			knocked.setType(CombatStatus.KNOCKED_OUT_LIFE_BELOW_ZERO);
+			setKnockedOut(knocked);
+			
+			CombatStatus dead = new CombatStatus("Dead", 0);
+			dead.setAssaultsLeft(CombatStatus.ASSAULTS_TO_DIE);
+			setDead(dead);
+			System.out.println(getName()+" ha caido inconsciente debido a la acumulación "
+					+ "de heridas sufridas.");
+		}
+		
+	}
+
+
+
+
+	public void death() {
+		if(getLife().getCurrentLife() >=0){
+			getLife().setCurrentLife(-1);
+		}
+		
+		//if(getDead() != null && getDead().getAssaultsLeft() > 0)
+		//	getDead().setAssaultsLeft(0);
+		
+		if(getKnockedOut() != null){
+			setKnockedOut(null);
+		}
+		
+		
+		dead = new CombatStatus("Dead", 0);
+	}
+
+
+
 	
 	
 	/*Recorre el equipo en uso y obtiene y suman los bonos a habilidades de los objetos equipados*/

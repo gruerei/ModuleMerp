@@ -16,6 +16,7 @@ import utils.Tables.Tables;
 
 public class Utils {
 
+	
 	public static final String PROPERTIES_MAIN_SEPARATOR = ",";
 	public static final String PROPERTIES_SECONDARY_SEPARATOR = "-";
 	private static Scanner scanner = null;
@@ -143,7 +144,7 @@ public class Utils {
 			/*Dos formas de hacer lo mismo (¿Quitar la primera o dejarla para cosas especiales(ver)?)*/
 			//scimitarHighQuality.setSpecialMod1(10);
 			broadSworHighQuality.getSkillMods()[Skill.EDGED] = 10;
-			broadSworHighQuality.setName("Silver BroadSword");
+			broadSworHighQuality.setName("Silver Broadsword");
 			equippedGear.put(Item.WEAPON_1, broadSworHighQuality);
 			
 			equippedGear.put(Item.ARMOUR, Cache.armourItems.get(ArmourItem.RIGID_LEATHER).clone());
@@ -166,10 +167,17 @@ public class Utils {
 			
 			specialSkillModi[Skill.TRACK][Skill.SPECIAL1] = 10; specialSkillModi[Skill.PERCEPTION][Skill.SPECIAL1] = 10;
 			
+			
 			character = new Character(name, player, lvl, PX, raceIn, cultureIn, professionIn, equippedGear
 					,str, agi, con, inte, i, car, ap, life, magicalDomainChoosen, skillGrades ,specialSkillModi);
 			
-			System.out.println(" Creado Personaje Galadhil ");
+			/*Aqui habria que leer y aplicar la actividad(y modifs de tipos parecidos que no son intrinsicos a la creacion
+			 * del personaje)*/
+			/*Si actividad es diferente de 0*/
+			//character.setActivityModif(-10);
+			//character.setActivityAssaultsLeft(2);
+			
+			System.out.println("Creado Personaje Galadhil ");
 		}
 		
 		if(sheetNumber == 2){
@@ -198,6 +206,9 @@ public class Utils {
 			
 			equippedGear.put(Item.ARMOUR, Cache.armourItems.get(ArmourItem.SOFT_LEATHER).clone());
 			equippedGear.put(Item.SHIELD, Cache.armourItems.get(ArmourItem.SMALL_SHIELD).clone());
+			//equippedGear.put(Item.BRACERS, Cache.armourItems.get(ArmourItem.LEATHER_BRACERS).clone());
+			//equippedGear.put(Item.GREAVES, Cache.armourItems.get(ArmourItem.LEATHER_GREAVERS).clone());
+			//equippedGear.put(Item.HELMET, Cache.armourItems.get(ArmourItem.LEATHER_HELMET).clone());
 			
 			int[] skillGrades = new int[Skill.SKILLS_TOTAL_NUMBER];
 			int[][] specialSkillModi = new int[Skill.SKILLS_TOTAL_NUMBER][2];
@@ -213,7 +224,9 @@ public class Utils {
 			character = new Character(name, player, lvl, PX, raceIn, cultureIn, professionIn, equippedGear
 					,str, agi, con, inte, i, car, ap, life, magicalDomainChoosen, skillGrades ,specialSkillModi);
 			
-			System.out.println(" Creado PNJ Orco ");
+			//character.setActivityModif(-5);
+			
+			System.out.println("Creado PNJ Orco ");
 		}
 		
 		return character;

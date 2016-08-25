@@ -99,6 +99,7 @@ public class Skill {
 	private int modifObjects;
 	private int modifSpecial;
 	private int modifSpecial2;
+	private int modifActivity;
 	private int modifTotal;
 	
 	/*RULES*/
@@ -185,6 +186,14 @@ public class Skill {
 
 	public void setModifSpecial2(int modifSpecial2) {
 		this.modifSpecial2 = modifSpecial2;
+	}
+	
+	public int getModifActivity() {
+		return modifActivity;
+	}
+
+	public void setModifActivity(int activity) {
+		this.modifActivity = activity;
 	}
 
 	public int getModifTotal() {
@@ -539,6 +548,8 @@ public class Skill {
 
 	}
 	
+
+	
 	
 	public static void changeRuleImproveTracker(boolean value){
 		ruleTrackerImproved = value;
@@ -555,6 +566,25 @@ public class Skill {
 		modifTotal = modifGrades + modifAttributes + modifClass + modifObjects + modifSpecial + modifSpecial2;
 		
 	}
+
+
+	public int applyBonifActivityToTotal(Character ch) {
+	
+		int ret = getModifTotal();
+		
+		if(ch.getActivity().getActivityModif() != 0){
+			if(getName() != Skill.BODY_DEVELOPMENT && getName() != Skill.BD){
+					ret = ret +  ch.getActivity().getActivityModif();
+					this.setModifActivity(ch.getActivity().getActivityModif());
+			}
+		}	
+		
+		return ret;
+		
+	}
+
+
+
 	
 	
 }

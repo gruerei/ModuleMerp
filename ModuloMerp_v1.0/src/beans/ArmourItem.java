@@ -2,9 +2,11 @@ package beans;
 
 import utils.Utils;
 import utils.Tables.Tables;
+import utils.Tables.Tables_AT;
 
 public class ArmourItem extends Item implements Cloneable{
 	
+	public static final int NO_ARMOUR = 0;
 	public static final int SOFT_LEATHER = 1;
 	public static final int RIGID_LEATHER = 2;
 	public static final int CHAIN = 3;
@@ -123,6 +125,23 @@ public class ArmourItem extends Item implements Cloneable{
 		return sb.toString();
 	}
 
+	
+	public static int getMovementSkillByArmour(String armourType){
+		int ret = 0;
+		
+		if(armourType == null){
+			ret = Skill.NO_ARMOR;
+		}else if(armourType.equalsIgnoreCase("SOFT LEATHER")){
+			ret = Skill.SOFT_LEATHER;
+		}else if(armourType.equalsIgnoreCase("RIGID LEATHER")){
+			ret = Skill.RIGID_LEATHER;
+		}else if(armourType.equalsIgnoreCase("CHAIN")){
+			ret = Skill.CHAIN;
+		}else if(armourType.equalsIgnoreCase("PLATE")){
+			ret = Skill.PLATE;
+		}
+		return ret;
+	}
 	
 	
 }

@@ -61,15 +61,20 @@ public class AttackOutcome {
 				id_row = checkRow("AT1",rollCalculation);
 				tableOutcome = Tables.getTableValue("AT1", id_row, enemyArmourType);
 			}else if(attack.getCategory() == Attack.CONCUSSION){
-				tableOutcome = Tables.getTableValue("AT2", rollCalculation, enemyArmourType);
+				id_row = checkRow("AT2",rollCalculation);
+				tableOutcome = Tables.getTableValue("AT2", id_row, enemyArmourType);
 			}else if(attack.getCategory() == Attack.TWO_HANDED){
-				tableOutcome = Tables.getTableValue("AT3", rollCalculation, enemyArmourType);
+				id_row = checkRow("AT3",rollCalculation);
+				tableOutcome = Tables.getTableValue("AT3", id_row, enemyArmourType);
 			}else if(attack.getCategory() == Attack.PROJECTILE){
-				tableOutcome = Tables.getTableValue("AT4", rollCalculation, enemyArmourType);
+				id_row = checkRow("AT4",rollCalculation);
+				tableOutcome = Tables.getTableValue("AT4", id_row, enemyArmourType);
 			}else if(attack.getCategory() == Attack.CLAWS_BITE){
-				tableOutcome = Tables.getTableValue("AT5", rollCalculation, enemyArmourType);
+				id_row = checkRow("AT5",rollCalculation);
+				tableOutcome = Tables.getTableValue("AT5", id_row, enemyArmourType);
 			}else if(attack.getCategory() == Attack.GRIP_UNBALANCE){
-				tableOutcome = Tables.getTableValue("AT6", rollCalculation, enemyArmourType);
+				id_row = checkRow("AT6",rollCalculation);
+				tableOutcome = Tables.getTableValue("AT6", id_row, enemyArmourType);
 			}
 
 			
@@ -83,7 +88,12 @@ public class AttackOutcome {
 		
 		String[] tableOutcomeSplit = tableOutcome.split("-");
 		lifePointsCaused = Utils.castToInt(tableOutcomeSplit[0]);
-		String tableCrit = tableOutcomeSplit[1];
+		attack.getEnemy().lifePointsLost(lifePointsCaused);
+		
+		String tableCrit = "";
+		if(tableOutcome.contains("-")){
+			tableCrit = tableOutcomeSplit[1];
+		}
 		
 		if(lifePointsCaused > 0){
 			System.out.println("Impacto!! -> El golpe aplica "+lifePointsCaused+" puntos de vida." );
@@ -93,7 +103,7 @@ public class AttackOutcome {
 		}
 		
 		
-		if(tableCrit != null){
+		if(!tableCrit.isEmpty()){
 			
 			WeaponItem weapon = attack.getWeapon();
 			/*TODO : Gestionar criticos no relacionado con armas*/
@@ -102,8 +112,10 @@ public class AttackOutcome {
 				
 				mainCriticalOutcome = new CriticalOutcome();
 				mainCriticalOutcome.criticalAssess(tableCrit, attack, weapon.getMainCritical());
-				/*Añadir al total los daños causados del 2º CRIT*/
-				//lifePointsCaused = lifePointsCaused + mainCritical.getLifePointsLost();
+				/*Añadir al total los daños causados del 1º CRIT*/
+				
+				attack.getEnemy().lifePointsLost(mainCriticalOutcome.getCritLifePoints());
+				
 				//assaultsStunned = assaultsStunned + mainCritical.getAssaultsStunned();*/
 			}
 			
@@ -112,10 +124,10 @@ public class AttackOutcome {
 						+ " de tipo " + Tables.getCritical_type()[weapon.getSecondCritical().getCriticalType()] );
 				
 				secondCriticalOutcome = new CriticalOutcome();
-				mainCriticalOutcome.criticalAssess(tableCrit, attack, weapon.getSecondCritical());
+				secondCriticalOutcome.criticalAssess(tableCrit, attack, weapon.getSecondCritical());
 
 				/*Añadir al total los daños causados del 2º CRIT*/
-				//lifePointsCaused = lifePointsCaused + secondCritical.getLifePointsLost();
+				attack.getEnemy().lifePointsLost(secondCriticalOutcome.getCritLifePoints());
 				//assaultsStunned = assaultsStunned + secondCritical.getAssaultsStunned();*/
 				
 			}
@@ -204,6 +216,57 @@ public class AttackOutcome {
 				rowId = 21;
 			}else if(rollCalculation >145){
 				rowId = 22;
+			}
+		}else if(table.equals("AT2")){
+		
+			if(rollCalculation <= 8){
+				rowId = 0;
+			}else if(rollCalculation >8 && rollCalculation <= 35){
+				rowId = 1;
+			}else if(rollCalculation >35 && rollCalculation <= 40){
+				rowId = 2;
+			}else if(rollCalculation >40 && rollCalculation <= 45){
+				rowId = 3;
+			}else if(rollCalculation >45 && rollCalculation <= 50){
+				rowId = 4;
+			}else if(rollCalculation >50 && rollCalculation <= 55){
+				rowId = 5;
+			}else if(rollCalculation >55 && rollCalculation <= 60){
+				rowId = 6;
+			}else if(rollCalculation >60 && rollCalculation <= 65){
+				rowId = 7;
+			}else if(rollCalculation >65 && rollCalculation <= 70){
+				rowId = 8;
+			}else if(rollCalculation >70 && rollCalculation <= 75){
+				rowId = 9;
+			}else if(rollCalculation >75 && rollCalculation <= 80){
+				rowId = 10;
+			}else if(rollCalculation >80 && rollCalculation <= 85){
+				rowId = 11;
+			}else if(rollCalculation >85 && rollCalculation <= 90){
+				rowId = 12;
+			}else if(rollCalculation >90 && rollCalculation <= 95){
+				rowId = 13;
+			}else if(rollCalculation >95 && rollCalculation <= 100){
+				rowId = 14;
+			}else if(rollCalculation >100 && rollCalculation <= 105){
+				rowId = 15;
+			}else if(rollCalculation >105 && rollCalculation <= 110){
+				rowId = 16;
+			}else if(rollCalculation >115 && rollCalculation <= 120){
+				rowId = 17;
+			}else if(rollCalculation >120 && rollCalculation <= 125){
+				rowId = 18;
+			}else if(rollCalculation >125 && rollCalculation <= 130){
+				rowId = 19;
+			}else if(rollCalculation >130 && rollCalculation <= 135){
+				rowId = 20;
+			}else if(rollCalculation >135 && rollCalculation <= 140){
+				rowId = 21;
+			}else if(rollCalculation >140 && rollCalculation <= 145){
+				rowId = 22;
+			}else if(rollCalculation >145){
+				rowId = 23;
 			}
 		}
 		

@@ -242,14 +242,18 @@ public class Tables {
 	public static String getTableValue(String table_name, int rowIdx, int colIdx){
 		String ret = "";
 		
+		if(table_name.contains("AT"))
+			System.out.println("Consultando Tabla de Ataque "+table_name);
+		
 		if(table_name.equals("CGT5")){
 			ret = CGT5[rowIdx][colIdx] + "";
 		}else if(table_name.equals("BT3")){
 			ret = BT3[rowIdx][colIdx] + "";
 		}else if(table_name.equals("AT1")){
 			ret = Tables_AT.AT1[rowIdx][colIdx] + "";
+		}else if(table_name.equals("AT2")){
+			ret = Tables_AT.AT2[rowIdx][colIdx] + "";
 		}
-		
 		
 		return ret;
 	}

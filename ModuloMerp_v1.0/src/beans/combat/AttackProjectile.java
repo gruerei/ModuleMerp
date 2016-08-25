@@ -9,7 +9,6 @@ public class AttackProjectile extends Attack {
 	public AttackProjectile(Character actor, int diceRoll, Character enemy, int parryBonus
 			,int otherBonus, String otherBonusDescription, int attackCategory) {
 		super(actor, diceRoll, enemy, parryBonus, otherBonus, otherBonusDescription, attackCategory);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

@@ -10,8 +10,8 @@ public class CriticalOutcome {
 
 	private String critGravity;
 	private int critLifePoints;
-	private String critLifePointsPerAssault;
-	private String critMalusActivity;
+	private int critLifePointsPerAssault;
+	private int[] critMalusActivity;
 	private String critAssaultsStunned;
 	private String critTearItem;
 	private String critCauseBodyDisability;
@@ -35,16 +35,16 @@ public class CriticalOutcome {
 	public void setCritLifePoints(int critLifePoints) {
 		this.critLifePoints = critLifePoints;
 	}
-	public String getCritLifePointsPerAssault() {
+	public int getCritLifePointsPerAssault() {
 		return critLifePointsPerAssault;
 	}
-	public void setCritLifePointsPerAssault(String critLifePointsPerAssault) {
+	public void setCritLifePointsPerAssault(int critLifePointsPerAssault) {
 		this.critLifePointsPerAssault = critLifePointsPerAssault;
 	}
-	public String getCritMalusActivity() {
+	public int[] getCritMalusActivity() {
 		return critMalusActivity;
 	}
-	public void setCritMalusActivity(String critMalusActivity) {
+	public void setCritMalusActivity(int[] critMalusActivity) {
 		this.critMalusActivity = critMalusActivity;
 	}
 	public String getCritAssaultsStunned() {
@@ -111,19 +111,55 @@ public class CriticalOutcome {
 						+ " El critico se calculará como critico "+critGravity);
 			}
 			
-			/*TODO: Tirada de critico1*/
+			int critRoll;
+			boolean inputOk;
+			/*
+			do{
+				try{
+					System.out.print("Introduzca el valor de la tirada de critico: ");
+					critRoll = Utils.castToInt(Utils.readFromInputLine());
+					inputOk = true;
+				}catch(NumberFormatException e){
+					System.out.println("Valor introducido incorrecto. Debe introducir un valor numerico.");
+					inputOk = false;
+				}
+			}while(inputOk == false);*/
 			
 			//int critRoll = Utils.castToInt(Utils.readFromInputLine());
-			int critRoll = 50;
+			critRoll = 50;
 			System.out.println("Tirada de Critico: "+critRoll);
+			critRoll = critRoll + modifyRollByCritGravity(critGravity);
+			System.out.println("Critico Modificado : "+critRoll);
 			String[] critOutcome = Tables_Crit.getTableValue(critType, critRoll);
 			
 			fillOutcome(critOutcome, attack.getEnemy());
 			
-			//lifePointsCaused = lifePointsCaused + mainCritical.getLifePointsLost();
-			//assaultsStunned = assaultsStunned + mainCritical.getAssaultsStunned();
 					
 		}
+	
+	private int modifyRollByCritGravity(String critGravity2) {
+		int roll = 0;
+		if(critGravity2.equals(Critical.CRITICAL_A)){
+			System.out.println("Critico A : -20");
+			return -20;
+		}else if(critGravity2.equals(Critical.CRITICAL_B)){
+			System.out.println("Critico B : -10");
+			return -10;
+		}else if(critGravity2.equals(Critical.CRITICAL_C)){
+			System.out.println("Critico C : 0");
+			return 0;
+		}else if(critGravity2.equals(Critical.CRITICAL_D)){
+			System.out.println("Critico D : +10");
+			return 10;
+		}else if(critGravity2.equals(Critical.CRITICAL_E)){
+			System.out.println("Critico E : +20");
+			return 20;
+		}else if(critGravity2.equals(Critical.CRITICAL_T)){
+			System.out.println("Critico T : -50");
+			return -50;
+		}
+		return roll;
+	}
 	
 	private String assessGravity(String tableRoll, String weaponCritMaxGravity) {
 		if(tableRoll.equals("T") || weaponCritMaxGravity.equals("T")){
@@ -140,18 +176,22 @@ public class CriticalOutcome {
 	private void fillOutcome(String[] critOutcome, Character enemy) {
 
 		setCritItemProtection(Utils.castToInt(critOutcome[Tables_Crit.COL_ITEM_PROTECTION]));
-		
-		String critLifePoints = critOutcome[Tables_Crit.COL_LIFE_POINTS];
-		
+
 		critDescription = critOutcome[Tables_Crit.COL_DESCRIPTION];
 		System.out.println(critDescription);
 		
-		int calculLPcaus = calculLifePointsCaused(critLifePoints,enemy);
-		setCritLifePoints(calculLPcaus);
+		String critLifePoints = critOutcome[Tables_Crit.COL_LIFE_POINTS];
+		int calculLP = calculOutcomeByProtection(critLifePoints,enemy);
+		setCritLifePoints(calculLP);
 		
-	
 		String critLifePointsPerAssault = critOutcome[Tables_Crit.COL_LIFE_POINTS_PER_ASSAULT];
+		int calculLifePointsPerAssault = calculOutcomeByProtection(critLifePointsPerAssault,enemy);
+		setCritLifePointsPerAssault(calculLifePointsPerAssault);
+		
 		String critMalusActivity = critOutcome[Tables_Crit.COL_MALUS_ACTIVITY];
+		int[] calculMalusActivity = calculActivity(critMalusActivity);
+		setCritMalusActivity(calculMalusActivity);
+		
 		String critAssaultsStunned = critOutcome[Tables_Crit.COL_STUNNED_ASSAULTS];
 		String critTearItem = critOutcome[Tables_Crit.COL_TEAR_ITEM];
 		String critCauseBodyDisability = critOutcome[Tables_Crit.COL_CAUSE_BODY_DISABILITY];
@@ -161,29 +201,57 @@ public class CriticalOutcome {
 		
 	}
 
-	private int calculLifePointsCaused(String critLifePointsIn, Character enemy) {
-		int lpCaused = 0;
-		if(critLifePointsIn.contains("NP")){
-			String[] split = critLifePointsIn.split("-");
-			String lifePointsNoProtection = split[0].replace("NP", "");
-			String lifePointsWithProtection = split[1];
+	private int[] calculActivity(String valueIn) {
+		int[] valueRetourned = new int[2];
+		
+		if( valueIn.contains("-")){
+			String[] split = valueIn.split("-");
+			valueRetourned[0] = Utils.castToInt(split[0]);
+			
+			if(split[1].equals("H")){
+				valueRetourned[1] = 999;
+			}else if(split[1].contains("A")){
+				valueRetourned[1] =  Utils.castToInt(split[1].replace("A",""));
+			}else{
+				valueRetourned[0] = 0;
+				valueRetourned[1] = 0;
+			}
+			
+		}else{
+			valueRetourned[0] = 0;
+			valueRetourned[1] = 0;
+		}
+		
+		return valueRetourned;
+	}
+	private int calculOutcomeByProtection(String valueIn, Character enemy) {
+		int valueRetourned = 0;
+		
+		if(valueIn.contains("NP")){
+			String[] split = valueIn.split("-");
+			String valueInNoProtection = split[0].replace("NP", "");
+			String valueInWithProtection = split[1];
 			
 			int critItemProtection = getCritItemProtection();
 			
 			if(critItemProtection > 0){
 				if(enemy.getEquippedGear().get(critItemProtection) == null){
-					lpCaused = Utils.castToInt(lifePointsNoProtection);
+					valueRetourned = Utils.castToInt(valueInNoProtection);
 					System.out.println("Enemy does not carry "+ Tables.getItem_categories()[critItemProtection] +" protection");
 				}else{
-					lpCaused = Utils.castToInt(lifePointsWithProtection);
+					valueRetourned = Utils.castToInt(valueInWithProtection);
 					System.out.println("Enemy carries protection");
 				}
 			}
 		}else{
-			lpCaused= Utils.castToInt(critLifePointsIn);
+			valueRetourned= Utils.castToInt(valueIn);
 		}
-		return lpCaused;
+			
+		
+		return valueRetourned;
 	}
-	
+		
+
+		
 	
 }

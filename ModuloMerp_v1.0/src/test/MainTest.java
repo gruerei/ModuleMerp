@@ -24,22 +24,24 @@ public class MainTest {
 
 		//Fixed configurations from property files
 		Utils.initConfigurations();
+		Attribute.changeRuleCharismaBeneficiedByAppearance(false);
 		
 		Map<String, Character> pjs = new HashMap<String, Character>();
 		Map<String, Character> pnjs = new HashMap<String, Character>();
 		
-		Attribute.changeRuleCharismaBeneficiedByAppearance(false);
 		
 		Character Galadhil = Utils.readCharSheet(1);
+		//int activityMalus = -20, activityMalusType = 3, activityMalusAssaults = 0;
+		//Galadhil.applyActivityMalusToSkills(activityMalus,activityMalusType,activityMalusAssaults);
 		//Galadhil.getLife().lifePointsLost(10);
 		pjs.put(Galadhil.getName(), Galadhil);
-		//Galadhil.show();
+		Galadhil.show();
 		
-		Character OrcALvL1 =  Utils.readCharSheet(2);
-		pnjs.put(OrcALvL1.getName(), OrcALvL1);
+		//Character OrcALvL1 =  Utils.readCharSheet(2);
+		//pnjs.put(OrcALvL1.getName(), OrcALvL1);
 		//OrcALvL1.show();
 		
-		menu(pjs,pnjs);
+		//menu(pjs,pnjs);
 
 	}
 

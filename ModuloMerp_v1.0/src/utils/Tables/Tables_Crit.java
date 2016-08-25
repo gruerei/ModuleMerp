@@ -128,20 +128,25 @@ public class Tables_Crit {
 		Method method;
 		String tableMethod = "";
 		String[] crit_row = null;
-		
+		String critTable = "";
 		try {
 			
 			if(critType.equals("SLASH")){
 				tableMethod = "getCT2";
+				critTable = "CT2";
 			}else if(critType.equals("PUNCTURE")){
 				
 			}else if(critType.equals("CRUNCH")){
 				tableMethod = "getCT1";
+				critTable = "CT1";
 			}else if(critType.equals("GRAPPLE")){
 				
 			}else if(critType.equals("UNBALANCING")){
 				
 			}
+			
+
+			System.out.println("Consultando Tabla de Critico "+critType+" : "+critTable);
 			method = Tables_Crit.class.getDeclaredMethod(tableMethod);
 			String[][] table = (String[][]) method.invoke(null);
 			crit_row = table[checkCritRow(critRoll)];
