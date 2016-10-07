@@ -572,7 +572,7 @@ public class Skill {
 	
 		int ret = getModifTotal();
 		
-		if(ch.getActivity().getActivityModif() != 0){
+		if(ch.getActivity()!= null && ch.getActivity().getActivityModif() != 0){
 			if(getName() != Skill.BODY_DEVELOPMENT && getName() != Skill.BD){
 					ret = ret +  ch.getActivity().getActivityModif();
 					this.setModifActivity(ch.getActivity().getActivityModif());
