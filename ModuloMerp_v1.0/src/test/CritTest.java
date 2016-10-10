@@ -25,7 +25,7 @@ public class CritTest {
 	static Character Galadhil = null;
 	static Character OrcALvL1 = null;
 	
-	@BeforeClass
+	@BeforeClass 
     public static void setUpBeforeClass() {
 			Utils.initConfigurations();
 			Galadhil = Utils.readCharSheet(1);
