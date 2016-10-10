@@ -33,7 +33,6 @@ public class MainTest {
 		
 		
 		Character Galadhil = Utils.readCharSheet(1);
-		//int activityMalus = -20, activityMalusType = 3, activityMalusAssaults = 0;
 		//Galadhil.applyActivityMalusToSkills(activityMalus,activityMalusType,activityMalusAssaults);
 		//Galadhil.getLife().lifePointsLost(10);
 		pjs.put(Galadhil.getName(), Galadhil);
