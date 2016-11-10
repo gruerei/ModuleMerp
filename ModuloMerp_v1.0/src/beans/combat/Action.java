@@ -17,6 +17,7 @@ public class Action implements Comparable<Action>{
 	public static final int OPORTUNITY_INICIATIVE = 0;
 	
 	protected Character actor;
+	protected Character target;
 	protected int type;
 	protected int iniciative;
 	protected String description;
@@ -33,6 +34,18 @@ public class Action implements Comparable<Action>{
 	public void setActor(Character actor) {
 		this.actor = actor;
 	}
+
+	
+	
+	public Character getTarget() {
+		return target;
+	}
+
+
+	public void setTarget(Character target) {
+		this.target = target;
+	}
+
 
 	public int getType() {
 		return type;

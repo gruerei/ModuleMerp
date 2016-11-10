@@ -111,9 +111,9 @@ public class CriticalOutcome {
 						+ " El critico se calculará como critico "+critGravity);
 			}
 			
-			int critRoll;
+			int critRoll = 0;
 			boolean inputOk;
-			/*
+			
 			do{
 				try{
 					System.out.print("Introduzca el valor de la tirada de critico: ");
@@ -123,10 +123,10 @@ public class CriticalOutcome {
 					System.out.println("Valor introducido incorrecto. Debe introducir un valor numerico.");
 					inputOk = false;
 				}
-			}while(inputOk == false);*/
+			}while(inputOk == false);
 			
 			//int critRoll = Utils.castToInt(Utils.readFromInputLine());
-			critRoll = 50;
+			//critRoll = 50;
 			System.out.println("Tirada de Critico: "+critRoll);
 			critRoll = critRoll + modifyRollByCritGravity(critGravity);
 			System.out.println("Critico Modificado : "+critRoll);
@@ -181,11 +181,11 @@ public class CriticalOutcome {
 		System.out.println(critDescription);
 		
 		String critLifePoints = critOutcome[Tables_Crit.COL_LIFE_POINTS];
-		int calculLP = calculOutcomeByProtection(critLifePoints,enemy);
+		int calculLP = calculOutcomeByProtection(critLifePoints,enemy,Tables_Crit.COL_LIFE_POINTS);
 		setCritLifePoints(calculLP);
 		
 		String critLifePointsPerAssault = critOutcome[Tables_Crit.COL_LIFE_POINTS_PER_ASSAULT];
-		int calculLifePointsPerAssault = calculOutcomeByProtection(critLifePointsPerAssault,enemy);
+		int calculLifePointsPerAssault = calculOutcomeByProtection(critLifePointsPerAssault,enemy,Tables_Crit.COL_LIFE_POINTS_PER_ASSAULT);
 		setCritLifePointsPerAssault(calculLifePointsPerAssault);
 		
 		String critMalusActivity = critOutcome[Tables_Crit.COL_MALUS_ACTIVITY];
@@ -224,20 +224,24 @@ public class CriticalOutcome {
 		
 		return valueRetourned;
 	}
-	private int calculOutcomeByProtection(String valueIn, Character enemy) {
+	private int calculOutcomeByProtection(String valueIn, Character enemy, int effectApplied) {
 		int valueRetourned = 0;
 		
 		if(valueIn.contains("NP")){
 			String[] split = valueIn.split("-");
 			String valueInNoProtection = split[0].replace("NP", "");
-			String valueInWithProtection = split[1];
+			
+			String valueInWithProtection = "";
+			if(split.length > 1)
+				valueInWithProtection = split[1];
 			
 			int critItemProtection = getCritItemProtection();
 			
 			if(critItemProtection > 0){
 				if(enemy.getEquippedGear().get(critItemProtection) == null){
 					valueRetourned = Utils.castToInt(valueInNoProtection);
-					System.out.println("Enemy does not carry "+ Tables.getItem_categories()[critItemProtection] +" protection");
+					System.out.println("Enemy does not carry "+ Tables.getItem_categories()[critItemProtection] +" protection. "
+					+ Tables_Crit.CRIT_EFFECTS[effectApplied] +" APPLIED.");
 				}else{
 					valueRetourned = Utils.castToInt(valueInWithProtection);
 					System.out.println("Enemy carries protection");

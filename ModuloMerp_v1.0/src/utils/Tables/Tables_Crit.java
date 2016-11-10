@@ -17,6 +17,21 @@ public class Tables_Crit {
 	public static int COL_ITEM_PROTECTION= 9;
 	public static int COL_DESCRIPTION= 10;
 
+	public static String[] CRIT_EFFECTS = 
+		{
+				"ADDITIONAL LIFE POINTS LOST",
+				"LIFE POINTS LOST PER ASSAULT",
+				"ACTIVITY BONUS",
+				"ASSAULTS STUNNED",
+				"TEAR ITEM",
+				"BODY DISABILITY",
+				"CAUSE DEATH",
+				"CAUSA UNCONSCIOUSSNESS",
+				"ASSAULTS TO DEATH",
+				"ITEM PROTECTION",
+				"DESCRIPTION",
+		};
+	
 	/*CT1 ROWS							     		LIFE		ASSAUL	ACTIV	ASSAUL	ITEM	CAUSE	CAUSE	CAUSE	ASSAUL	ITEM	ADDITIONAL*/
 	/*       							     		POINTS		LIFEPT	MALUS	STUNN	TEAR	BDYDIS	DEAD	UNCON	DEATH	PROTEC	DESCRIPTION*/
 	private static String[] CT1_ROWS_MINUS49_05 = 	{"0",		"0",	"0",	"0",	"0",	"0",	"0",	"0",	"0",	"0",	"Poco dominio. No hay daño extra. +0."};

@@ -1042,7 +1042,7 @@ public class Character {
 			knockedOutInfo.append(" ").append(getKnockedOut().getAssaultsLeft()).append(" assaults left.");
 		}
 		
-		StringBuffer stunInfo = null;
+		StringBuffer stunInfo = new StringBuffer("");
 		if(getStunned() != null){
 			stunInfo = new StringBuffer("\n").append(this.name).append(" is STUNNED (can't attack and 50% parriyng):")
 			.append("\t").append(getStunned().getAssaultsLeft()).append(" assaults left.");
@@ -1184,9 +1184,9 @@ public class Character {
 			//Entra en inconsciencia y quedan 6 asaltos para muerte
 			fallUnconscious(CombatStatus.KNOCKED_OUT_LIFE_BELOW_ZERO);
 		}
-			
+
+		System.out.println(this.getName()+" : Los puntos de vida bajan de "+life.getCurrentLife() +" a "+(life.getCurrentLife() - lifePointsCaused));	
 		life.setCurrentLife(life.getCurrentLife() - lifePointsCaused);
-		System.out.println("Vida actual: "+life.getCurrentLife());
 		
 	}
 

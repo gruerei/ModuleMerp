@@ -2,6 +2,7 @@ package beans.combat;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -64,62 +65,123 @@ public class Combat {
 
 	public void start() {
 		
-		boolean assaultFinished = false;
-
+		boolean combatFinished = false;
+		
+	
 		/*Loop By Assault*/
 		do{
-			System.out.println("\n"
-					+ "***********************************************************************"
-					+ "\n****************** STEP 1 : STATE ACTIONS  **********************"
-					+ "\n*********************************************************************");
-			
 			Assault asalto = new Assault();
+			assaults.add(asalto);
 			
-			/*Loop By Character List*/
-			for (Map.Entry<String, Character> entry : pjs.entrySet()) {
-				//String key = entry.getKey();
-				Character character = entry.getValue();
-				System.out.println(character.getName() + "\nSTATE ACTION:\t1.RANGED\t2.MELEEE\t3.MOVE/MANE\t4. OPORTUNITY");
-				String entradaTeclado = Utils.readFromInputLine();
-				Action action = actionSelected(character,entradaTeclado);
-				/*Meter en la lista acciones pjs*/
-				asalto.getActions().add(action);
-			}
-			
-			/*Loop By PNJ List*/
-			for (Map.Entry<String, Character> entry : pnjs.entrySet()) {
-				//String key = entry.getKey();
-				Character pnj = entry.getValue();
-				System.out.println("\n"+ pnj.getName() + "\nSTATE ACTION:\t1.RANGED\t2.MELEEE\t3.MOVE/MANE\t4. OPORTUNITY");
-				String entradaTeclado = Utils.readFromInputLine();
-				Action action = actionSelected(pnj,entradaTeclado);
-				/*Meter en la lista acciones pnjs*/
-				asalto.getActions().add(action);
-			}
-			
+			/*** 1º DECLARAR ACCIONES: DISTANCIA, MELEE, MOVIMIENTO/MANIOBRAS y OPORTUNIDAD***/
+			stateActions(asalto);
 
 			/*Mix of Pjs and Pnjs and Sortering by Actions and Movement*/
 			Collections.sort(asalto.getActions());			
+			
 			System.out.println(asalto.getActions().toString());
 			
-
-			/*Loop By Character List Sortered*/
-			System.out.println("\n"
-					+ "***********************************************************************"
-					+ "\n****************** FASE 2 : RESOLVE ACTION BY CHARACTER  **********************"
-					+ "\n*********************************************************************");
+			resolveActions(asalto);
 			
 
 			String entradaTeclado = "";
 			do{
-				System.out.println("¿End Assaults Y/N ?");
+				System.out.println("¿End Combat Y/N ?");
 				entradaTeclado = Utils.readFromInputLine();
 				if(entradaTeclado.equals("Y")){
-					assaultFinished = true;
+					combatFinished = true;
 				}
-			}while(!entradaTeclado.equals("Y") && !entradaTeclado.equals("N"));
+			}while(!entradaTeclado.equalsIgnoreCase("Y") && !entradaTeclado.equalsIgnoreCase("N"));
 			
-		}while(!assaultFinished);
+		}while(!combatFinished);
+		
+		/*	*/
+	}
+
+	private void resolveActions(Assault asalto) {
+
+		int diceRoll = 0;
+		
+		System.out.println("\n"
+				+ "***********************************************************************"
+				+ "\n****************** FASE 2 : RESOLVE ACTION BY CHARACTER  **********************"
+				+ "\n*********************************************************************");
+		
+		/*Loop By Character List Sortered*/
+		
+		for(int i = 0; i < asalto.getActions().size(); i++){
+			Action action = asalto.getActions().get(i);
+			if(action.getType() == Action.RANGED){
+				
+			}
+			else if(action.getType() == Action.MELEEE){
+				do{
+					try{
+						System.out.println("****TIRADA DE DADOS****** RESULTADO: ");
+						diceRoll = Utils.castToInt(Utils.readFromInputLine());
+					}catch(NumberFormatException e){
+						diceRoll = 0;
+					}
+					
+				}while(diceRoll == 0);
+				
+				/*TODO Formulario entrada interactiva combate : Seleccionable por jugador/Dm*/
+				int parryBonus = 0;action.getTarget().setParryBonusInUse(0);
+				int otherBonus = 0;
+				String otherBonusDescription = "";
+				int attackCategory = Attack.EDGED;
+				
+				Attack attack = new AttackMelee(action.getActor(), diceRoll, action.getTarget(), parryBonus, otherBonus, otherBonusDescription, attackCategory);
+				attack.setIniciative(action.getIniciative());
+				attack.setType(action.getType());
+				attack.setDescription(action.getDescription());
+				/*Reemplazar en asalto el action por el attack que contiene mas info*/
+				asalto.getActions().set(i, attack);
+				System.out.println("");
+			
+			}
+			else if(action.getType() == Action.MOVE_MANE){
+				
+			}
+			else if(action.getType() == Action.OPORTUNITY){
+				
+			}
+		}
+
+	
+		
+	}
+
+	private void stateActions(Assault asalto) {
+		
+		System.out.println("\n"
+				+ "***********************************************************************"
+				+ "\n****************** STEP 1 : STATE ACTIONS  **********************"
+				+ "\n*********************************************************************");
+		
+		
+		/*Loop By Character List*/
+		for (Map.Entry<String, Character> entry : pjs.entrySet()) {
+			//String key = entry.getKey();
+			Character character = entry.getValue();
+			System.out.println(character.getName() + "\nSTATE ACTION:\t1.RANGED\t2.MELEEE\t3.MOVE/MANE\t4. OPORTUNITY");
+			String entradaTeclado = Utils.readFromInputLine();
+			Action action = actionSelected(character,entradaTeclado);
+			/*Meter en la lista acciones pjs*/
+			asalto.getActions().add(action);
+		}
+		
+		/*Loop By PNJ List*/
+		for (Map.Entry<String, Character> entry : pnjs.entrySet()) {
+			//String key = entry.getKey();
+			Character pnj = entry.getValue();
+			System.out.println("\n"+ pnj.getName() + "\nSTATE ACTION:\t1.RANGED\t2.MELEEE\t3.MOVE/MANE\t4. OPORTUNITY");
+			String entradaTeclado = Utils.readFromInputLine();
+			Action action = actionSelected(pnj,entradaTeclado);
+			/*Meter en la lista acciones pnjs*/
+			asalto.getActions().add(action);
+		}
+		
 	}
 
 	private Action actionSelected(Character character, String entradaTeclado) {
@@ -135,12 +197,14 @@ public class Combat {
 			action.setIniciative(Action.RANGED_INICIATIVE + mov.getModifTotal());
 			action.setType(Action.RANGED);
 			Character enemy = selectEnemy(character);
+			action.setTarget(enemy);
 			action.setDescription(character.getName() + " selected RANGED Attack/Spell against "+enemy.getName());
 			break;
 		case "2":
 			action.setIniciative(Action.MELEE_INICIATIVE + mov.getModifTotal());
 			action.setType(Action.MELEEE);
 			Character enemy2 = selectEnemy(character);
+			action.setTarget(enemy2);
 			action.setDescription(character.getName() + " selected MELEE Attack against "+enemy2.getName());
 			break;
 		case "3":

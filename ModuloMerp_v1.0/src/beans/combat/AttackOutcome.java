@@ -85,15 +85,10 @@ public class AttackOutcome {
 		}
 		
 		this.tableAttackRoll = tableOutcome;
+		System.out.println("Resultado obtenido: "+tableOutcome);
 		
 		String[] tableOutcomeSplit = tableOutcome.split("-");
 		lifePointsCaused = Utils.castToInt(tableOutcomeSplit[0]);
-		attack.getEnemy().lifePointsLost(lifePointsCaused);
-		
-		String tableCrit = "";
-		if(tableOutcome.contains("-")){
-			tableCrit = tableOutcomeSplit[1];
-		}
 		
 		if(lifePointsCaused > 0){
 			System.out.println("Impacto!! -> El golpe aplica "+lifePointsCaused+" puntos de vida." );
@@ -102,6 +97,12 @@ public class AttackOutcome {
 			System.out.println("El golpe no se consigue dañar al objetivo");
 		}
 		
+		attack.getEnemy().lifePointsLost(lifePointsCaused);
+		
+		String tableCrit = "";
+		if(tableOutcome.contains("-")){
+			tableCrit = tableOutcomeSplit[1];
+		}
 		
 		if(!tableCrit.isEmpty()){
 			

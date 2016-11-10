@@ -73,13 +73,17 @@ public class AttackMelee extends Attack {
 				otherBonus = otherBonus + Cache.combatProperties.get(Combat.OFF_GUARDED);
 			}
 			
+			int bonusAct = 0;
+			if(actor.getActivity() != null){
+				bonusAct = actor.getActivity().getActivityModif();
+			}
 			
 			rollCalculation = diceRoll + weapon.getBO() - actor.getParryBonusInUse() -  enemy.getTotalBD()
-					- super.parryBonus + otherBonus + actor.getActivity().getActivityModif();
+					- super.parryBonus + otherBonus + bonusAct;
 			
 			System.out.println(diceRoll + " Roll + "+ weapon.getBO() +" BO - " + actor.getParryBonusInUse() + " BO used to parry - " +
 			enemyTotalBD + " BD " +enemy.getName() + " - " +super.parryBonus+ " Enemy Parry " 
-					+ (actor.getActivity().getActivityModif() != 0 ? actor.getActivity().getActivityModif() + " Modif. Actividad "  : "" ) + "= " +rollCalculation);
+					+ (bonusAct != 0 ? bonusAct + " Modif. Actividad "  : "" ) + "= " +rollCalculation);
 			outcome = new AttackOutcome(rollCalculation, this);
 		}
 		
