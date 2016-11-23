@@ -73,7 +73,7 @@ public class Combat {
 			Assault asalto = new Assault();
 			assaults.add(asalto);
 			
-			/*** 1º DECLARAR ACCIONES: DISTANCIA, MELEE, MOVIMIENTO/MANIOBRAS y OPORTUNIDAD***/
+			/*** 1º DECLARAR ACCIONES: DISTANCIA, MELEE, MOVIMIENTO/MANIOBRAS y OPORTUNIDAD, HUIDA***/
 			stateActions(asalto);
 
 			/*Mix of Pjs and Pnjs and Sortering by Actions and Movement*/
@@ -95,7 +95,10 @@ public class Combat {
 			
 		}while(!combatFinished);
 		
-		/*	*/
+		/* TODO: Dar info del combate	*/
+		this.assaults.size();
+		/*descriptivo pnjs*/
+		/*descriptivo pjs*/
 	}
 
 	private void resolveActions(Assault asalto) {
@@ -146,6 +149,40 @@ public class Combat {
 			else if(action.getType() == Action.OPORTUNITY){
 				
 			}
+			else if(action.getType() == Action.ESCAPE){
+				
+				String actorName = action.getActor().getName();
+				String pj_pnj = "";
+				
+				if(this.pjs.containsKey(actorName)){
+					pj_pnj = "PJ";
+					
+				}else if(this.pnjs.containsKey(actorName)){
+					pj_pnj = "PNJ";
+					
+				}
+				
+				System.out.println(pj_pnj +": Is " + actorName +" able to Run Away? Y/N");
+				
+				String entradaTeclado = "";
+				do{
+					entradaTeclado = Utils.readFromInputLine();
+				}while(!entradaTeclado.equalsIgnoreCase("Y") && !entradaTeclado.equalsIgnoreCase("N"));
+				
+				if(entradaTeclado.equalsIgnoreCase("Y")){
+					if(pj_pnj.equals("PJ")){
+						this.pjs.remove(actorName);
+						Cache.removeFromCacheList("pj",actorName);
+					}else if(pj_pnj.equals("PNJ")){
+						this.pnjs.remove(actorName);
+						Cache.removeFromCacheList("pnj",actorName);
+					}
+					System.out.println(pj_pnj +": "+ actorName +" has fled.");
+				}else{
+					System.out.println(pj_pnj +": "+ actorName +" couldn't escape.");
+				}
+				
+			}
 		}
 
 	
@@ -164,7 +201,7 @@ public class Combat {
 		for (Map.Entry<String, Character> entry : pjs.entrySet()) {
 			//String key = entry.getKey();
 			Character character = entry.getValue();
-			System.out.println(character.getName() + "\nSTATE ACTION:\t1.RANGED\t2.MELEEE\t3.MOVE/MANE\t4. OPORTUNITY");
+			System.out.println(character.getName() + "\nSTATE ACTION:\t1.RANGED\t2.MELEEE\t3.MOVE/MANE\t4. OPORTUNITY\t5.HUIDA EXITOSA");
 			String entradaTeclado = Utils.readFromInputLine();
 			Action action = actionSelected(character,entradaTeclado);
 			/*Meter en la lista acciones pjs*/
@@ -175,7 +212,7 @@ public class Combat {
 		for (Map.Entry<String, Character> entry : pnjs.entrySet()) {
 			//String key = entry.getKey();
 			Character pnj = entry.getValue();
-			System.out.println("\n"+ pnj.getName() + "\nSTATE ACTION:\t1.RANGED\t2.MELEEE\t3.MOVE/MANE\t4. OPORTUNITY");
+			System.out.println("\n"+ pnj.getName() + "\nSTATE ACTION:\t1.RANGED\t2.MELEEE\t3.MOVE/MANE\t4. OPORTUNITY\t5.HUIDA EXITOSA");
 			String entradaTeclado = Utils.readFromInputLine();
 			Action action = actionSelected(pnj,entradaTeclado);
 			/*Meter en la lista acciones pnjs*/
@@ -216,6 +253,11 @@ public class Combat {
 			action.setIniciative(Action.OPORTUNITY_INICIATIVE + mov.getModifTotal());
 			action.setType(Action.OPORTUNITY);
 			action.setDescription(character.getName() + " is in Oportunity Action");
+			break;
+		case "5":
+			action.setIniciative(Action.MOVE_MANE_INICIATIVE + mov.getModifTotal());
+			action.setType(Action.ESCAPE);
+			action.setDescription(character.getName() + " will Flee in the next Action");
 			break;
 		default:
 			System.out.println(" NONE");

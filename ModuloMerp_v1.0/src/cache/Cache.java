@@ -17,4 +17,13 @@ public class Cache {
 	public static Map<String, Integer>  combatProperties = new HashMap<String, Integer>();
 	public static List<String> pjsCombatList = new ArrayList<String>();
 	public static List<String> pnjsCombatList = new ArrayList<String>();
+	
+	public static void removeFromCacheList(String combatantList,String combatantName){
+		if(combatantList.equals("pj")){
+			pjsCombatList.remove(combatantName);
+		}else if(combatantList.equals("pnj")){
+			pnjsCombatList.remove(combatantName);
+		}
+	}
+	
 }

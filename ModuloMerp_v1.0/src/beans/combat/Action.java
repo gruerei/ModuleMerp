@@ -9,7 +9,7 @@ public class Action implements Comparable<Action>{
 	public static final int MELEEE = 2;
 	public static final int MOVE_MANE = 3;
 	public static final int OPORTUNITY = 4;
-	
+	public static final int ESCAPE = 5;
 	
 	public static final int RANGED_INICIATIVE = 900;
 	public static final int MELEE_INICIATIVE = 700;

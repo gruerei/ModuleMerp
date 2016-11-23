@@ -7,6 +7,7 @@ import beans.Item;
 import beans.Skill;
 import beans.WeaponItem;
 import cache.Cache;
+import utils.Utils;
 
 public class AttackMelee extends Attack {
 
@@ -30,8 +31,14 @@ public class AttackMelee extends Attack {
 		//flanked: Segun sitio del escudo, no se cuenta BD
 		
 		if(diceRoll <= weapon.getBotch().getMax()){
-			//PIFIA
-			new BotchOutcome(this);
+			/*TODO: PIFIA*/
+			System.out.println("PIFIA con "+weapon.getName());
+
+			
+			BotchOutcome bo = new BotchOutcome();
+			bo.botchAssess(this.getActor());
+			
+
 		}else{
 			
 			int enemyTotalBD = enemy.getTotalBD();
