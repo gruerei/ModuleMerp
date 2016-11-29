@@ -80,11 +80,11 @@ public class Tables_Crit {
 			CT1_ROWS_120
 		};
 	
-	/*CT2 SLASH - ROWS							    LIFE		ASSAUL	ACTIV	ASSAUL	ITEM	CAUSE	CAUSE	CAUSE	ASSAUL	ITEM	ADDLP	ASSLP	DEAD	ADDITIONAL*/
-	/*       							     		POINTS		LIFEPT	MALUS	STUNN	TEAR	BDYDIS	DEAD	UNCON	DEATH	PROTEC	NOPROT	NOPROT	NOPROT	DESCRIPTION*/
+	/*CT2 SLASH - ROWS							    LIFE		ASSAUL	ACTIV	ASSAUL	ITEM	CAUSE	CAUSE	CAUSE	ASSAUL	ITEM	ADDITIONAL*/
+	/*       							     		POINTS		LIFEPT	MALUS	STUNN	TEAR	BDYDIS	DEAD	UNCON	DEATH	PROTEC	DESCRIPTION*/
 	private static String[] CT2_ROWS_MINUS49_05 = 	{"0",		"0",	"0",	"0",	"0",	"0",	"0",	"0",	"0",	"0",	"Un golpe debil que no produce daño extra. +0."};
 	private static String[] CT2_ROWS_06_20 = 		{"0",		"1",	"0",	"0",	"0",	"0",	"0",	"0",	"0",	"0",	"Herida leve en la pantorilla. 1 Punto de vida por asalto."};
-	private static String[] CT2_ROWS_21_35 = 		{"NP8-5",	"NP2",	"0",	"0",	"0",	"0",	"0",	"0",	"0",	"7",	"Golpe en la parte superior de la pierna. -5 PV. Si no se llevan grebas 3PV y +2PV por asalto."};
+	private static String[] CT2_ROWS_21_35 = 		{"NP8-5",	"NP2",	"0",	"0",	"0",	"0",	"0",	"0",	"0",	"7",	"Golpe en la parte superior de la pierna. -5 PV. Si no se llevan grebas 3PV y +2 PV por asalto."};
 	private static String[] CT2_ROWS_36_50 = 		{"3",		"1",	"5-H",	"0",	"0",	"0",	"0",	"0",	"0",	"0",	"Herida leve en el pecho. -3 PV. 1 PV por asalto. -5 a la actividad."};
 	private static String[] CT2_ROWS_51_65 = 		{"4",		"2",	"0",	"1",	"0",	"0",	"0",	"0",	"0",	"0",	"Herida leve en el antebrazo -4 PV. 2 PV por asalto. Aturdido durante 1 asalto."};
 	private static String[] CT2_ROWS_66_79 = 		{"6",		"1",	"10-H",	"2",	"0",	"0",	"0",	"0",	"0",	"0",	"Herida menos grave en el muslo. -6 PV. 1 PV por asalto. - 10 a la actividad. Aturdido durante 2 asaltos."};

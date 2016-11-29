@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+
 import beans.Character;
 import beans.CombatStatus;
 import beans.combat.Attack;
@@ -35,7 +36,8 @@ public class CritTest {
 	
 	@Test
 	public void testStunned() {
-		Galadhil.setStunned(new CombatStatus("Stunned", 0));;
+	
+		Galadhil.setStunned(new CombatStatus(CombatStatus.STUNNED, 0));;
 		Galadhil.getStunned().setAssaultsLeft(2);
 		Galadhil.showCombatStatus();
 		
@@ -46,7 +48,8 @@ public class CritTest {
 	
 	@Test
 	public void testUnconscious() {
-		Galadhil.setKnockedOut(new CombatStatus("KnockedOut Assaults", CombatStatus.KNOCKED_OUT_ASSAULTS));;
+
+		Galadhil.setKnockedOut(new CombatStatus(CombatStatus.KNOCKED_OUT, CombatStatus.KNOCKED_OUT_ASSAULTS));;
 		Galadhil.getKnockedOut().setAssaultsLeft(2);
 		Galadhil.showCombatStatus();
 		
@@ -66,7 +69,8 @@ public class CritTest {
 	
 	@Test
 	public void testActivityAssaults() {
-		CombatStatus activ = new CombatStatus("Activity Malus Assaults",CombatStatus.ACTIVITY_ASSAULTS);
+		
+		CombatStatus activ = new CombatStatus(CombatStatus.ACTIVITY,CombatStatus.ACTIVITY_ASSAULTS);
 		OrcALvL1.setActivity(activ);
 		OrcALvL1.getActivity().setActivityModif(-10);
 		OrcALvL1.getActivity().setAssaultsLeft(2);

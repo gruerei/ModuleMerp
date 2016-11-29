@@ -12,7 +12,7 @@ public class CriticalOutcome {
 	private int critLifePoints;
 	private int critLifePointsPerAssault;
 	private int[] critMalusActivity;
-	private String critAssaultsStunned;
+	private int critAssaultsStunned;
 	private String critTearItem;
 	private String critCauseBodyDisability;
 	private String critCauseDeath;
@@ -47,10 +47,10 @@ public class CriticalOutcome {
 	public void setCritMalusActivity(int[] critMalusActivity) {
 		this.critMalusActivity = critMalusActivity;
 	}
-	public String getCritAssaultsStunned() {
+	public int getCritAssaultsStunned() {
 		return critAssaultsStunned;
 	}
-	public void setCritAssaultsStunned(String critAssaultsStunned) {
+	public void setCritAssaultsStunned(int critAssaultsStunned) {
 		this.critAssaultsStunned = critAssaultsStunned;
 	}
 	public String getCritTearItem() {
@@ -132,7 +132,7 @@ public class CriticalOutcome {
 			System.out.println("Critico Modificado : "+critRoll);
 			String[] critOutcome = Tables_Crit.getTableValue(critType, critRoll);
 			
-			fillOutcome(critOutcome, attack.getEnemy());
+			fillOutcome(critOutcome, attack.getEnemy(), attack.getActor());
 			
 					
 		}
@@ -173,12 +173,12 @@ public class CriticalOutcome {
 		}
 	}
 	
-	private void fillOutcome(String[] critOutcome, Character enemy) {
+	private void fillOutcome(String[] critOutcome, Character enemy, Character actor) {
 
 		setCritItemProtection(Utils.castToInt(critOutcome[Tables_Crit.COL_ITEM_PROTECTION]));
 
 		critDescription = critOutcome[Tables_Crit.COL_DESCRIPTION];
-		System.out.println(critDescription);
+		System.out.println(actor.getName()+" : "+critDescription);
 		
 		String critLifePoints = critOutcome[Tables_Crit.COL_LIFE_POINTS];
 		int calculLP = calculOutcomeByProtection(critLifePoints,enemy,Tables_Crit.COL_LIFE_POINTS);
@@ -193,11 +193,14 @@ public class CriticalOutcome {
 		setCritMalusActivity(calculMalusActivity);
 		
 		String critAssaultsStunned = critOutcome[Tables_Crit.COL_STUNNED_ASSAULTS];
+		setCritAssaultsStunned(Utils.castToInt(critAssaultsStunned));
+		
 		String critTearItem = critOutcome[Tables_Crit.COL_TEAR_ITEM];
 		String critCauseBodyDisability = critOutcome[Tables_Crit.COL_CAUSE_BODY_DISABILITY];
 		String critCauseDeath = critOutcome[Tables_Crit.COL_CAUSE_DEATH];
 		String critCauseUnconsc = critOutcome[Tables_Crit.COL_CAUSE_UNCONSCIOUSSNESS];
 		String critAssaultsToDeath = critOutcome[Tables_Crit.COL_ASSAULTS_TO_DEATH];
+		
 		
 	}
 
@@ -207,7 +210,7 @@ public class CriticalOutcome {
 		if( valueIn.contains("-")){
 			String[] split = valueIn.split("-");
 			valueRetourned[0] = Utils.castToInt(split[0]);
-			
+			/*El tipo de Malus a la Actividad(H - Heridas / A - Asaltos)*/
 			if(split[1].equals("H")){
 				valueRetourned[1] = 999;
 			}else if(split[1].contains("A")){
@@ -224,6 +227,7 @@ public class CriticalOutcome {
 		
 		return valueRetourned;
 	}
+	
 	private int calculOutcomeByProtection(String valueIn, Character enemy, int effectApplied) {
 		int valueRetourned = 0;
 		
@@ -255,7 +259,20 @@ public class CriticalOutcome {
 		return valueRetourned;
 	}
 		
-
+	/*TODO: Aplicar Efectos Critico*/
+	public void applyOutcome(Character target) {
+		//LIFE POINTS
+		if(getCritLifePoints() > 0)
+			target.lifePointsLost(getCritLifePoints());
 		
+		//LIFE POINTS PER ASSAULT
+		if(getCritLifePointsPerAssault() > 0)
+			target.addBleeding(getCritLifePointsPerAssault(), CombatStatus.BLEEDING_WOUND, 0);
+		
+		//ACTIVITY MALUS
+		
+		//ASSAULTS STUNNED
+		
+	}	
 	
 }

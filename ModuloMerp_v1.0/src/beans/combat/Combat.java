@@ -88,7 +88,7 @@ public class Combat {
 			do{
 				System.out.println("¿End Combat Y/N ?");
 				entradaTeclado = Utils.readFromInputLine();
-				if(entradaTeclado.equals("Y")){
+				if(entradaTeclado.equalsIgnoreCase("Y")){
 					combatFinished = true;
 				}
 			}while(!entradaTeclado.equalsIgnoreCase("Y") && !entradaTeclado.equalsIgnoreCase("N"));
@@ -120,6 +120,11 @@ public class Combat {
 			else if(action.getType() == Action.MELEEE){
 				do{
 					try{
+						String weaponName = action.getActor().getEquippedGear().get(Item.WEAPON_1).getName() == null ? 
+								action.getActor().getEquippedGear().get(Item.WEAPON_1).getType() :
+									action.getActor().getEquippedGear().get(Item.WEAPON_1).getName();
+								
+						System.out.println("\n"+action.getActor().getName() +" ataca a "+action.getTarget().getName()+" con "+ weaponName);
 						System.out.println("****TIRADA DE DADOS****** RESULTADO: ");
 						diceRoll = Utils.castToInt(Utils.readFromInputLine());
 					}catch(NumberFormatException e){

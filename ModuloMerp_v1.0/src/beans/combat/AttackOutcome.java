@@ -115,7 +115,7 @@ public class AttackOutcome {
 				mainCriticalOutcome.criticalAssess(tableCrit, attack, weapon.getMainCritical());
 				/*Añadir al total los daños causados del 1º CRIT*/
 				
-				attack.getEnemy().lifePointsLost(mainCriticalOutcome.getCritLifePoints());
+				mainCriticalOutcome.applyOutcome(attack.getEnemy());
 				
 				//assaultsStunned = assaultsStunned + mainCritical.getAssaultsStunned();*/
 			}
@@ -128,7 +128,7 @@ public class AttackOutcome {
 				secondCriticalOutcome.criticalAssess(tableCrit, attack, weapon.getSecondCritical());
 
 				/*Añadir al total los daños causados del 2º CRIT*/
-				attack.getEnemy().lifePointsLost(secondCriticalOutcome.getCritLifePoints());
+				secondCriticalOutcome.applyOutcome(attack.getEnemy());
 				//assaultsStunned = assaultsStunned + secondCritical.getAssaultsStunned();*/
 				
 			}
@@ -139,6 +139,7 @@ public class AttackOutcome {
 	}
 
 	
+
 	public String getTableAttackRoll() {
 		return tableAttackRoll;
 	}

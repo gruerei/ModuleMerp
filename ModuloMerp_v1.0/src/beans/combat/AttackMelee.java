@@ -8,6 +8,7 @@ import beans.Skill;
 import beans.WeaponItem;
 import cache.Cache;
 import utils.Utils;
+import utils.Tables.Tables;
 
 public class AttackMelee extends Attack {
 
@@ -16,8 +17,6 @@ public class AttackMelee extends Attack {
 	public AttackMelee(Character actor, int diceRoll, Character enemy, int parryBonus,
 			int otherBonus, String otherBonusDescription, int attackCategory) {
 		super(actor, diceRoll, enemy, parryBonus, otherBonus, otherBonusDescription,attackCategory);
-		String weaponName = actor.getEquippedGear().get(Item.WEAPON_1).getName() == null ? actor.getEquippedGear().get(Item.WEAPON_1).getType() : actor.getEquippedGear().get(Item.WEAPON_1).getName();
-		System.out.println("\n"+actor.getName() +" ataca a "+enemy.getName()+" con "+ weaponName);
 		resolveAttack();
 	}
 
@@ -32,12 +31,15 @@ public class AttackMelee extends Attack {
 		
 		if(diceRoll <= weapon.getBotch().getMax()){
 			/*TODO: PIFIA*/
-			System.out.println("PIFIA con "+weapon.getName());
+			if(weapon.getName() != null)
+				System.out.println("PIFIA con "+weapon.getName());
+			else
+				System.out.println("PIFIA con "+ weapon.getType());
 
 			
-			BotchOutcome bo = new BotchOutcome();
-			bo.botchAssess(this.getActor());
-			
+			BotchOutcome bo = new BotchOutcome(this);
+			bo.botchAssess(actor);
+			bo.applyOutcome(actor);
 
 		}else{
 			
@@ -95,5 +97,7 @@ public class AttackMelee extends Attack {
 		}
 		
 	}
+
+
 
 }

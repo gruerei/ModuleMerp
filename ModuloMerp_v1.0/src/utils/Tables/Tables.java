@@ -209,7 +209,8 @@ public class Tables {
 	
 	private static String[] critical_type = {"","SLASH","PUNCTURE","CRUNCH","GRAPPLE","UNBALANCING"};
 	
-	private static String[] botch_type = {"","SLASH","PUNCTURE","CRUNCH","GRAPPLE","UNBALANCING"};
+	private static String[] botch_type = {"","WEAPON","PROJECTILE","SPELL","MANEUVER"};
+
 	
 	public static String[] getBotch_type() {
 		return botch_type ;

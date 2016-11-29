@@ -3,6 +3,7 @@ package beans;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -14,6 +15,8 @@ import utils.Tables.Tables;
 public class Character {
 	
 
+	private static final int ASSAULTS_TO_DIE_LIFE_BELOW_ZERO = 6;
+	
 	public static String WEAPON1_USED = "WEAPON1_USED";
 	public static String WEAPON2_USED = "WEAPON2_USED";
 	public static String SHIELD_USED= "SHIELD_USED";
@@ -88,7 +91,7 @@ public class Character {
 	private boolean ableToBlock = true;
 	private boolean isBigCreature = false;
 	
-	
+	private boolean isDisabled = false;
 	private boolean leftArmDisabled = false;
 	private boolean rightArmDisabled = false;
 	private boolean leftLegDisabled = false;
@@ -110,6 +113,9 @@ public class Character {
 	/*DEAD*/
 	//private CombatStatus 
 	private CombatStatus dead;
+	
+	/*BLEEDING*/
+	private HashMap<Integer,CombatStatus> bleedingList;
 	
 	/*INVENTARIO*/
 	private List<Item> inventory = new ArrayList<Item>();
@@ -826,6 +832,29 @@ public class Character {
 	public void setKnockedOut(CombatStatus knockedOut) {
 		this.knockedOut = knockedOut;
 	}
+	
+	
+
+	public boolean isDisabled() {
+		return isDisabled;
+	}
+
+
+	public void setDisabled(boolean isDisabled) {
+		this.isDisabled = isDisabled;
+	}
+	
+	
+
+
+	public HashMap<Integer,CombatStatus> getBleedingList() {
+		return bleedingList;
+	}
+
+
+	public void setBleedingList(HashMap<Integer,CombatStatus> bleedingList) {
+		this.bleedingList = bleedingList;
+	}
 
 
 	public void show() {
@@ -1190,15 +1219,75 @@ public class Character {
 		
 	}
 
+	public void addBleeding(int lifePointsPerAssault, int type, int assaults) {
+		
+		
+		CombatStatus bleeding = new CombatStatus(CombatStatus.BLEEDING, type);
+		bleeding.setLifePointLostPerAssault(lifePointsPerAssault);
+		
+		String txt = "";
+		if(type == CombatStatus.BLEEDING_ASSAULTS){
+			bleeding.setAssaultsLeft(assaults);
+			txt = " durante "+assaults+" asaltos";
+		}else if(type == CombatStatus.BLEEDING_WOUND){
+			txt = " hasta que la herida sea tratada";
+		}
+		int key = getBleedingList().size()+1;
+		
+		getBleedingList().put(key, bleeding);
+		bleeding.setKey(key);
+		
+		System.out.println(this.getName() + " sufre de desangramiento(key "+bleeding.getKey()+") : "+lifePointsPerAssault+ " por asalto"+txt);
+			
+	}
+	
+	public void removeBleeding(int k){
+		CombatStatus cs = getBleedingList().get(k);
+		System.out.println("Desangrado(key "+k+")  de "+cs.getLifePointLostPerAssault()+" puntos de vida se para gracias a tratamiento de la herida");
+	}
+	
+	/*Recorre los desangrados aplicados y va aplicando sus efectos*/	
+	public void bleeds() {
+		
+		for (Map.Entry<Integer, CombatStatus> entry : bleedingList.entrySet()) {
+			//String key = entry.getKey();
+			CombatStatus cs = entry.getValue();
+			
+			String txt = "";
+			if(cs.getType() == CombatStatus.BLEEDING_ASSAULTS){
+				txt = " durante "+cs.getAssaultsLeft()+" ASALTOS";
+			}else if(cs.getType() == CombatStatus.BLEEDING_WOUND){
+				txt = " debido a heridas de gravedad";
+			}
+			
+			System.out.println(this.getName()+" se desangra a "+cs.getLifePointLostPerAssault()+" puntos de vida por asalto"+txt);
+			lifePointsLost(cs.getLifePointLostPerAssault());
+			
+			
+			if(cs.getType() == CombatStatus.BLEEDING_ASSAULTS){
+				cs.setAssaultsLeft(cs.getAssaultsLeft() - 1);
+				
+				if(cs.getAssaultsLeft() == 0){
+					System.out.println("Desangrado de "+cs.getLifePointLostPerAssault()+" puntos de vida se termina");
+					bleedingList.remove(cs.getKey());
+				}
+			}
+			
+		}
+
+	}
+	
 
 	public void fallUnconscious(int knockedOutType) {
 		
 		if(knockedOutType == CombatStatus.KNOCKED_OUT_LIFE_BELOW_ZERO){
-			CombatStatus knocked = new CombatStatus("KnockedOut Life-below-zero",CombatStatus.KNOCKED_OUT_LIFE_BELOW_ZERO); 
+			
+			CombatStatus knocked = new CombatStatus(CombatStatus.KNOCKED_OUT,CombatStatus.KNOCKED_OUT_LIFE_BELOW_ZERO); 
 			knocked.setType(CombatStatus.KNOCKED_OUT_LIFE_BELOW_ZERO);
 			setKnockedOut(knocked);
 			
-			CombatStatus dead = new CombatStatus("Dead", 0);
+			/*Porque solo mueres por heridas al sexto asalto despues de caer inconsciente (vida por debajo de cero)*/
+			CombatStatus dead = new CombatStatus("Dead", ASSAULTS_TO_DIE_LIFE_BELOW_ZERO);
 			dead.setAssaultsLeft(CombatStatus.ASSAULTS_TO_DIE);
 			setDead(dead);
 			System.out.println(getName()+" ha caido inconsciente debido a la acumulación "
@@ -1221,9 +1310,8 @@ public class Character {
 		if(getKnockedOut() != null){
 			setKnockedOut(null);
 		}
-		
-		
-		dead = new CombatStatus("Dead", 0);
+
+		dead = new CombatStatus(CombatStatus.DEAD, 0);
 	}
 
 
