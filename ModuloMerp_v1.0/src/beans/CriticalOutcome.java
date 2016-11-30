@@ -21,7 +21,7 @@ public class CriticalOutcome {
 	private int critItemProtection;
 	private String critDescription;
 	
-	
+	public static int critRollTest = 0;
 	
 	public String getCritGravity() {
 		return critGravity;
@@ -117,7 +117,9 @@ public class CriticalOutcome {
 			do{
 				try{
 					System.out.print("Introduzca el valor de la tirada de critico: ");
-					critRoll = Utils.castToInt(Utils.readFromInputLine());
+					critRoll = critRollTest;
+					//TODO: Descomentar critRoll
+					/*critRoll = Utils.castToInt(Utils.readFromInputLine());*/
 					inputOk = true;
 				}catch(NumberFormatException e){
 					System.out.println("Valor introducido incorrecto. Debe introducir un valor numerico.");
@@ -178,7 +180,7 @@ public class CriticalOutcome {
 		setCritItemProtection(Utils.castToInt(critOutcome[Tables_Crit.COL_ITEM_PROTECTION]));
 
 		critDescription = critOutcome[Tables_Crit.COL_DESCRIPTION];
-		System.out.println(actor.getName()+" : "+critDescription);
+		System.out.println(actor.getName()+" causa crítico : "+critDescription);
 		
 		String critLifePoints = critOutcome[Tables_Crit.COL_LIFE_POINTS];
 		int calculLP = calculOutcomeByProtection(critLifePoints,enemy,Tables_Crit.COL_LIFE_POINTS);
@@ -266,8 +268,10 @@ public class CriticalOutcome {
 			target.lifePointsLost(getCritLifePoints());
 		
 		//LIFE POINTS PER ASSAULT
-		if(getCritLifePointsPerAssault() > 0)
-			target.addBleeding(getCritLifePointsPerAssault(), CombatStatus.BLEEDING_WOUND, 0);
+		if(getCritLifePointsPerAssault() > 0){
+			CombatStatus cs = target.addBleeding(getCritLifePointsPerAssault(), CombatStatus.BLEEDING_WOUND, 0);
+			cs.setDescription(this.getCritDescription());
+		}
 		
 		//ACTIVITY MALUS
 		

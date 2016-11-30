@@ -97,6 +97,8 @@ public class Character {
 	private boolean leftLegDisabled = false;
 	private boolean rightLegDisabled = false;
 	
+	private boolean woundsStabilized = true;
+	
 	/*Derecho = 1, Zurdo = 2 o Ambos = 3*/
 	private int mainHandedUsed = RIGHT_HANDED;
 	private int parryBonusInUse = 0;
@@ -115,7 +117,7 @@ public class Character {
 	private CombatStatus dead;
 	
 	/*BLEEDING*/
-	private HashMap<Integer,CombatStatus> bleedingList;
+	private Map<Integer,CombatStatus> bleedingList = new HashMap<Integer,CombatStatus>();
 	
 	/*INVENTARIO*/
 	private List<Item> inventory = new ArrayList<Item>();
@@ -847,12 +849,12 @@ public class Character {
 	
 
 
-	public HashMap<Integer,CombatStatus> getBleedingList() {
+	public Map<Integer,CombatStatus> getBleedingList() {
 		return bleedingList;
 	}
 
 
-	public void setBleedingList(HashMap<Integer,CombatStatus> bleedingList) {
+	public void setBleedingList(Map<Integer,CombatStatus> bleedingList) {
 		this.bleedingList = bleedingList;
 	}
 
@@ -1192,7 +1194,7 @@ public class Character {
 				}
 			}
 		}
-		if(getDead() != null && getDead().getAssaultsLeft() > 0){
+		if(getDead() != null && getDead().getAssaultsLeft() > 0 && !woundsStabilized){
 			getDead().setAssaultsLeft(getDead().getAssaultsLeft() - 1);
 
 			if(getDead().getAssaultsLeft() == 0){
@@ -1206,20 +1208,40 @@ public class Character {
 		
 	}
 
+	public void restoreHealth(int lifePoints) {
+		System.out.println(this.getName()+" : Se recuperan "+lifePoints +" Puntos de Vida");
+		System.out.println(this.getName()+" : Puntos de Vida:  "+(life.getCurrentLife())+ " + "+lifePoints+" = "+(life.getCurrentLife() + lifePoints));	
+
+		
+		if(life.getCurrentLife()<=0 && (life.getCurrentLife() + lifePoints)>0){
+			//Recobra la consciencia
+			regainConsciousness(getKnockedOut());
+		}
+	}
 
 	public void lifePointsLost(int lifePointsCaused) {
 		
-		if(life.getCurrentLife()>=0 && (life.getCurrentLife() - lifePointsCaused)<0){
-			//Entra en inconsciencia y quedan 6 asaltos para muerte
-			fallUnconscious(CombatStatus.KNOCKED_OUT_LIFE_BELOW_ZERO);
+		System.out.println(this.getName()+" : Los puntos de vida bajan de "+life.getCurrentLife() +" a "+(life.getCurrentLife() - lifePointsCaused));	
+
+		
+		if(life.getCurrentLife()>=0 && (life.getCurrentLife() - lifePointsCaused)<=0){
+			if((life.getCurrentLife() - lifePointsCaused) == 0){
+				System.out.println(getName()+" está al borde de caer inconsciente. Las últimas fuerzas parecen abandonarte y el hecho de andar ya te parece un mundo (-60 a la actividad). Si fallas en una maniobra de movimiento (o realizas un ataque) pierdes 1 PV y caes inconsciente.");
+				CombatStatus activ = new CombatStatus(CombatStatus.ACTIVITY,CombatStatus.ACTIVITY_WOUND);
+				activ.setActivityModif(CombatStatus.ZERO_LIFE_ACTIVICTY_MODIF);
+				this.setActivity(activ);
+			}else{
+				//Entra en inconsciencia y quedan 6 asaltos para muerte si no se tratan las heridas
+				fallUnconscious(CombatStatus.KNOCKED_OUT_LIFE_BELOW_ZERO);
+				this.setActivity(null);
+			}
 		}
 
-		System.out.println(this.getName()+" : Los puntos de vida bajan de "+life.getCurrentLife() +" a "+(life.getCurrentLife() - lifePointsCaused));	
 		life.setCurrentLife(life.getCurrentLife() - lifePointsCaused);
 		
 	}
 
-	public void addBleeding(int lifePointsPerAssault, int type, int assaults) {
+	public CombatStatus addBleeding(int lifePointsPerAssault, int type, int assaults) {
 		
 		
 		CombatStatus bleeding = new CombatStatus(CombatStatus.BLEEDING, type);
@@ -1237,13 +1259,44 @@ public class Character {
 		getBleedingList().put(key, bleeding);
 		bleeding.setKey(key);
 		
-		System.out.println(this.getName() + " sufre de desangramiento(key "+bleeding.getKey()+") : "+lifePointsPerAssault+ " por asalto"+txt);
+		System.out.println(this.getName() + " sufre de desangramiento(key="+bleeding.getKey()+") : "+lifePointsPerAssault+ " PV por asalto"+txt);
 			
+		return bleeding;
 	}
 	
-	public void removeBleeding(int k){
+	/*Metodo para ser llamado desde el menu en caso de tratarse las heridas de un personaje en estado Inconsciente(Vida por debajo de Cero)*/
+	public void stabilizeWounds(){
+		woundsStabilized = true;
+		//setDead(dead);
+		System.out.println(getName()+" : Se tratan las heridas y se detiene el peligro de muerte inminente.");
+	}
+	
+	/**
+	 * @param k Bleeding Effect Key (several bleeding effects can be applied at the same time)
+	 * @param bandage_effect Being low, medium, high or complete
+	 */
+	public void applyBandageToBleeding(int k,int bandage_effect){
+		
 		CombatStatus cs = getBleedingList().get(k);
-		System.out.println("Desangrado(key "+k+")  de "+cs.getLifePointLostPerAssault()+" puntos de vida se para gracias a tratamiento de la herida");
+		
+		if(bandage_effect == CombatStatus.BANDAGE_EFFECT_TOTAL){
+			getBleedingList().remove(k);
+			System.out.println("Desangrado(key="+k+")  de "+cs.getLifePointLostPerAssault()+" PV se para gracias al excepcional tratamiento de la herida!!");
+			woundsStabilized = true;
+		}else{
+			System.out.println("Se aplica tratamiento de taponamiento a la herida (se deja de perder "+bandage_effect+" PV por asalto)");
+			if(cs.getLifePointLostPerAssault() - bandage_effect <= 0){
+				getBleedingList().remove(k);
+				System.out.println("Desangrado(key="+k+")  de "+cs.getLifePointLostPerAssault()+" PV se para gracias al entaponamiento completo de la herida");
+			}else{
+				System.out.println("Desangrado(key="+k+")  de "+cs.getLifePointLostPerAssault()+" PV se ralentiza a "+(cs.getLifePointLostPerAssault() - bandage_effect)+" PV por asalto");
+				cs.setLifePointLostPerAssault(cs.getLifePointLostPerAssault() - bandage_effect);
+			}
+			
+			
+		}
+
+	
 	}
 	
 	/*Recorre los desangrados aplicados y va aplicando sus efectos*/	
@@ -1257,10 +1310,10 @@ public class Character {
 			if(cs.getType() == CombatStatus.BLEEDING_ASSAULTS){
 				txt = " durante "+cs.getAssaultsLeft()+" ASALTOS";
 			}else if(cs.getType() == CombatStatus.BLEEDING_WOUND){
-				txt = " debido a heridas de gravedad";
+				txt = " debido a heridas abiertas";
 			}
 			
-			System.out.println(this.getName()+" se desangra a "+cs.getLifePointLostPerAssault()+" puntos de vida por asalto"+txt);
+			System.out.println(this.getName()+" se desangra a "+cs.getLifePointLostPerAssault()+" PV por asalto"+txt);
 			lifePointsLost(cs.getLifePointLostPerAssault());
 			
 			
@@ -1268,7 +1321,7 @@ public class Character {
 				cs.setAssaultsLeft(cs.getAssaultsLeft() - 1);
 				
 				if(cs.getAssaultsLeft() == 0){
-					System.out.println("Desangrado de "+cs.getLifePointLostPerAssault()+" puntos de vida se termina");
+					System.out.println("Desangrado de "+cs.getLifePointLostPerAssault()+" PV por asalto se termina");
 					bleedingList.remove(cs.getKey());
 				}
 			}
@@ -1276,6 +1329,7 @@ public class Character {
 		}
 
 	}
+	
 	
 
 	public void fallUnconscious(int knockedOutType) {
@@ -1292,7 +1346,20 @@ public class Character {
 			setDead(dead);
 			System.out.println(getName()+" ha caido inconsciente debido a la acumulación "
 					+ "de heridas sufridas.");
+			woundsStabilized = false;
 		}
+	}
+		
+		/*recobrar consciencia*/
+		public void regainConsciousness(CombatStatus knocked) {
+			
+			if(knocked.getType() == CombatStatus.KNOCKED_OUT_LIFE_BELOW_ZERO){
+				
+				setKnockedOut(null);
+				setDead(null);
+				System.out.println(getName()+" : ha recobrado la conciencia");
+			
+			}
 		
 	}
 

@@ -68,6 +68,25 @@ public class CritTest {
 	}
 	
 	@Test
+	public void testUnconsciousAndStabilizeWounds() {
+		Galadhil.lifePointsLost(51);
+		Galadhil.getDead().setAssaultsLeft(2);
+		Galadhil.assaultDecrement();
+		Galadhil.stabilizeWounds();
+		Galadhil.assaultDecrement();
+		assertEquals(Galadhil.getKnockedOut().getType(), CombatStatus.KNOCKED_OUT_LIFE_BELOW_ZERO);
+	}
+	
+	@Test
+	public void testRegainConscioussness() {
+		testUnconsciousAndStabilizeWounds();
+		Galadhil.restoreHealth(2);
+		assertEquals(Galadhil.getDead(), null);
+		assertEquals(Galadhil.getKnockedOut(), null);
+	}
+	
+	
+	@Test
 	public void testActivityAssaults() {
 		
 		CombatStatus activ = new CombatStatus(CombatStatus.ACTIVITY,CombatStatus.ACTIVITY_ASSAULTS);

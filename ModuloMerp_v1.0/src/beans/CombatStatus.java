@@ -27,6 +27,12 @@ public class CombatStatus {
 	private static final String [] KNOCKED_OUT_TYPES = {"","Temporal Effect","Being Crippled","Unconscious Critical-Strike","Unconscious Life-Below-Zero","Is in a Coma"};
 	private static final String [] BLEEDING_TYPES = {"","ASSAULTS","WOUNDS"};
 	
+	public static final int BANDAGE_EFFECT_LOW = 1;
+	public static final int BANDAGE_EFFECT_MEDIUM = 2;
+	public static final int BANDAGE_EFFECT_HIGH = 3;
+	public static final int BANDAGE_EFFECT_TOTAL = 4;
+	
+	public static final int ZERO_LIFE_ACTIVICTY_MODIF = -60;
 	
 	private String name;
 	private int type;
@@ -34,6 +40,7 @@ public class CombatStatus {
 	private int activityModif;
 	private int lifePointLostPerAssault;
 	private int key;
+	private String description;
 	
 	public CombatStatus(String name, int type) {
 		this.name = name;
@@ -71,6 +78,14 @@ public class CombatStatus {
 
 	public void setLifePointLostPerAssault(int lifePointLostPerAssault) {
 		this.lifePointLostPerAssault = lifePointLostPerAssault;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public static String activityType(int idx){
