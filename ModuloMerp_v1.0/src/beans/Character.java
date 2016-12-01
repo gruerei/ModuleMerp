@@ -103,8 +103,6 @@ public class Character {
 	private int mainHandedUsed = RIGHT_HANDED;
 	private int parryBonusInUse = 0;
 	
-	/*ACTIVITY*/
-	private CombatStatus activity;
 	
 	/*KNOCKED OUT*/
 	private CombatStatus knockedOut;
@@ -118,6 +116,9 @@ public class Character {
 	
 	/*BLEEDING*/
 	private Map<Integer,CombatStatus> bleedingList = new HashMap<Integer,CombatStatus>();
+	
+	/*ACTIVITY*/
+	private Map<Integer,CombatStatus> activityList = new HashMap<Integer,CombatStatus>();
 	
 	/*INVENTARIO*/
 	private List<Item> inventory = new ArrayList<Item>();
@@ -159,13 +160,13 @@ public class Character {
 	/*RESISTANCES*/
 	private Map<String, ResistanceRoll> resistanceRolls = new HashMap<String, ResistanceRoll>();
 	
-	public CombatStatus getActivity() {
-		return activity;
+	public Map<Integer, CombatStatus> getActivityList() {
+		return activityList;
 	}
 
 
-	public void setActivity(CombatStatus activity) {
-		this.activity = activity;
+	public void setActivity(Map<Integer, CombatStatus> activityList) {
+		this.activityList = activityList;
 	}
 
 
@@ -1054,14 +1055,22 @@ public class Character {
 		}
 	
 		
-		String modifActividad = getActivity() == null ? "" : " ("+ getActivity().getActivityModif()+" Modif. Activity)";
-		String activityInfo = getActivity() == null ? "" : "\nActivity Modif:\t\t"+
-		getActivity().getActivityModif() + "\t\tType: "+CombatStatus.activityType(getActivity().getType());
+		StringBuffer modifActividad = new StringBuffer();
+		StringBuffer assaultsActivity = new StringBuffer();
+		StringBuffer activityInfo = new StringBuffer();
+		int totalActivityModif = 0;
+		for (Map.Entry<Integer, CombatStatus> entry : getActivityList().entrySet()) {
+			//String key = entry.getKey();
+			CombatStatus activity = entry.getValue();
+
 		
-		String assaultsActivity = "";
-		if(getActivity() != null){
-			if(getActivity().getAssaultsLeft() > 0){
-				assaultsActivity = "\t\tAssaults Left: "+ getActivity().getAssaultsLeft();
+			modifActividad.append(" ("+ activity.getActivityModif()+" Modif. Activity)");
+			activityInfo.append("\nActivity Modif:\t\t").append(
+					activity.getActivityModif()).append("\t\tType: ").append(CombatStatus.activityType(activity.getType()));
+			
+			totalActivityModif = totalActivityModif + activity.getActivityModif();
+			if(activity.getAssaultsLeft() > 0){
+					assaultsActivity.append("\t\tAssaults Left: ").append(activity.getAssaultsLeft());
 			}
 		}
 		
@@ -1098,11 +1107,11 @@ public class Character {
 		.append(deadInfo).append(assaultsToDieInfo)
 		.append(activityInfo).append(assaultsActivity)
 		.append("\nBD:\t\t\t").append(getTotalBD()).append("\t\tBD no Shield:\t").append(getTotalNoShield())
-		.append("\nMovement:\t\t").append(skill.getModifTotal() + (getActivity() != null? getActivity().getActivityModif() : 0)).append(modifActividad)
+		.append("\nMovement:\t\t").append(skill.getModifTotal() + totalActivityModif).append(modifActividad)
 		
 		.append("\n\n..............GEAR..............")
 		.append("\nWeapon: ").append(weaponName).append(" ").append("\tBO: ")
-		.append(weapon == null ? "" : weapon.getBO() + (getActivity() != null? getActivity().getActivityModif() : 0)).append(modifActividad)
+		.append(weapon == null ? "" : weapon.getBO() + totalActivityModif).append(modifActividad)
 		.append("\nArmour: ").append(armour == null ? "NO" : armour.getType())
 		.append("\nShield(10-25 BD): ").append(shield == null ? "NO" : shield.getType())
 		.append("\nHelmet(-5 Perc): ").append(helmet == null ? "NO" : helmet.getType())
@@ -1183,14 +1192,21 @@ public class Character {
 			}
 		}
 		
-		if(getActivity()!=null){
-			if(getActivity().getType() == 1){
-				getActivity().setAssaultsLeft(getActivity().getAssaultsLeft() - 1);
-				System.out.println(name+"'s Activity Modificator lasts for "+getActivity().getAssaultsLeft()+ " assaults.");
-				
-				if(getActivity().getAssaultsLeft() == 0){
-					System.out.println(name+ "'s Activity Modificator stops having an effect.");
-					setActivity(null);
+		
+		
+		if(getActivityList().size() > 0){
+			for(int i=1; i<=getActivityList().size();i++){
+				CombatStatus activity = getActivityList().get(i);
+				//String key = entry.getKey();
+				if(activity.getType() == 1){
+					activity.setAssaultsLeft(activity.getAssaultsLeft() - 1);
+					System.out.println(name+"'s Activity Modificator lasts for "+activity.getAssaultsLeft()+ " assaults.");
+					
+					if(activity.getAssaultsLeft() == 0){
+						System.out.println(name+ "'s Activity Modificator stops having an effect.");
+						//setActivity(null);
+						getActivityList().remove(i);
+					}
 				}
 			}
 		}
@@ -1229,7 +1245,9 @@ public class Character {
 				System.out.println(getName()+" está al borde de caer inconsciente. Las últimas fuerzas parecen abandonarte y el hecho de andar ya te parece un mundo (-60 a la actividad). Si fallas en una maniobra de movimiento (o realizas un ataque) pierdes 1 PV y caes inconsciente.");
 				CombatStatus activ = new CombatStatus(CombatStatus.ACTIVITY,CombatStatus.ACTIVITY_WOUND);
 				activ.setActivityModif(CombatStatus.ZERO_LIFE_ACTIVICTY_MODIF);
-				this.setActivity(activ);
+				//this.setActivity(activ);
+				getActivityList().put(getActivityList().size(), activ);
+				
 			}else{
 				//Entra en inconsciencia y quedan 6 asaltos para muerte si no se tratan las heridas
 				fallUnconscious(CombatStatus.KNOCKED_OUT_LIFE_BELOW_ZERO);

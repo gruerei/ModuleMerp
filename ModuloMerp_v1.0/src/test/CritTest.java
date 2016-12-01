@@ -90,9 +90,12 @@ public class CritTest {
 	public void testActivityAssaults() {
 		
 		CombatStatus activ = new CombatStatus(CombatStatus.ACTIVITY,CombatStatus.ACTIVITY_ASSAULTS);
-		OrcALvL1.setActivity(activ);
-		OrcALvL1.getActivity().setActivityModif(-10);
-		OrcALvL1.getActivity().setAssaultsLeft(2);
+		//OrcALvL1.setActivity(activ);
+		//OrcALvL1.getActivity().setActivityModif(-10);
+		//OrcALvL1.getActivity().setAssaultsLeft(2);
+		activ.setActivityModif(-10);
+		activ.setAssaultsLeft(2);
+		OrcALvL1.getActivityList().put(OrcALvL1.getActivityList().size(), activ);
 				
 		OrcALvL1.showCombatStatus();
 		OrcALvL1.assaultDecrement();
@@ -142,7 +145,10 @@ public class CritTest {
 			int otherBonus = 0;
 			String otherBonusDescription = "";
 			int attackCategory = Attack.EDGED;
-			Galadhil.getActivity().setActivityModif(-10);
+			
+			CombatStatus activ = new CombatStatus(CombatStatus.ACTIVITY,CombatStatus.ACTIVITY_WOUND);
+			activ.setActivityModif(-10);
+			Galadhil.getActivityList().put(Galadhil.getActivityList().size(), activ);
 			
 			Attack attack = new AttackMelee(Galadhil , diceRoll, OrcALvL1 , parryBonus, otherBonus, otherBonusDescription, attackCategory);
 			assertEquals("12-B", attack.getOutcome().getTableAttackRoll());
@@ -180,7 +186,10 @@ public class CritTest {
 		int otherBonus = 0;
 		String otherBonusDescription = "";
 		int attackCategory = Attack.CONCUSSION;
-		OrcALvL1.getActivity().setActivityModif(-10);
+		
+		CombatStatus activ = new CombatStatus(CombatStatus.ACTIVITY,CombatStatus.ACTIVITY_WOUND);
+		activ.setActivityModif(-10);
+		Galadhil.getActivityList().put(Galadhil.getActivityList().size(), activ);
 		
 		Attack attack = new AttackMelee(OrcALvL1, diceRoll, Galadhil , parryBonus, otherBonus, otherBonusDescription, attackCategory);
 		assertEquals("4", attack.getOutcome().getTableAttackRoll());

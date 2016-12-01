@@ -571,14 +571,23 @@ public class Skill {
 	public int applyBonifActivityToTotal(Character ch) {
 	
 		int ret = getModifTotal();
+		int modifTotalActivity = 0;
 		
-		if(ch.getActivity()!= null && ch.getActivity().getActivityModif() != 0){
-			if(getName() != Skill.BODY_DEVELOPMENT && getName() != Skill.BD){
-					ret = ret +  ch.getActivity().getActivityModif();
-					this.setModifActivity(ch.getActivity().getActivityModif());
+		if(ch.getActivityList().size()>0){
+
+			for (Map.Entry<Integer, CombatStatus> entry : ch.getActivityList().entrySet()) {
+				//String key = entry.getKey();
+				CombatStatus activity = entry.getValue();
+				modifTotalActivity = modifTotalActivity +  activity.getActivityModif();
 			}
+			
 		}	
 		
+			if(getName() != Skill.BODY_DEVELOPMENT && getName() != Skill.BD){
+				ret = ret +  modifTotalActivity;
+				this.setModifActivity(modifTotalActivity);
+		}	
+			
 		return ret;
 		
 	}

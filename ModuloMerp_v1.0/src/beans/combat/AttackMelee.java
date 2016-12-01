@@ -1,8 +1,11 @@
 package beans.combat;
 
+import java.util.Map;
+
 import beans.ArmourItem;
 import beans.Attribute;
 import beans.Character;
+import beans.CombatStatus;
 import beans.Item;
 import beans.Skill;
 import beans.WeaponItem;
@@ -83,8 +86,11 @@ public class AttackMelee extends Attack {
 			}
 			
 			int bonusAct = 0;
-			if(actor.getActivity() != null){
-				bonusAct = actor.getActivity().getActivityModif();
+			if(actor.getActivityList().size() > 0){
+				for (Map.Entry<Integer, CombatStatus> entry : actor.getActivityList().entrySet()){
+					bonusAct = entry.getValue().getActivityModif();
+				}
+				
 			}
 			
 			rollCalculation = diceRoll + weapon.getBO() - actor.getParryBonusInUse() -  enemy.getTotalBD()

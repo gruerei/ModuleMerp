@@ -197,10 +197,15 @@ public class CriticalOutcome {
 		String critAssaultsStunned = critOutcome[Tables_Crit.COL_STUNNED_ASSAULTS];
 		setCritAssaultsStunned(Utils.castToInt(critAssaultsStunned));
 		
+		@SuppressWarnings("unused")
 		String critTearItem = critOutcome[Tables_Crit.COL_TEAR_ITEM];
+		@SuppressWarnings("unused")
 		String critCauseBodyDisability = critOutcome[Tables_Crit.COL_CAUSE_BODY_DISABILITY];
+		@SuppressWarnings("unused")
 		String critCauseDeath = critOutcome[Tables_Crit.COL_CAUSE_DEATH];
+		@SuppressWarnings("unused")
 		String critCauseUnconsc = critOutcome[Tables_Crit.COL_CAUSE_UNCONSCIOUSSNESS];
+		@SuppressWarnings("unused")
 		String critAssaultsToDeath = critOutcome[Tables_Crit.COL_ASSAULTS_TO_DEATH];
 		
 		
@@ -209,8 +214,8 @@ public class CriticalOutcome {
 	private int[] calculActivity(String valueIn) {
 		int[] valueRetourned = new int[2];
 		
-		if( valueIn.contains("-")){
-			String[] split = valueIn.split("-");
+		if( valueIn.contains("_")){
+			String[] split = valueIn.split("_");
 			valueRetourned[0] = Utils.castToInt(split[0]);
 			/*El tipo de Malus a la Actividad(H - Heridas / A - Asaltos)*/
 			if(split[1].equals("H")){
@@ -274,6 +279,18 @@ public class CriticalOutcome {
 		}
 		
 		//ACTIVITY MALUS
+		CombatStatus cs = null;
+		if(getCritMalusActivity()[0] != 0){
+			if(critMalusActivity[1] == 999){
+				cs = new CombatStatus(CombatStatus.ACTIVITY, CombatStatus.ACTIVITY_WOUND); 
+			}else{
+				cs = new CombatStatus(CombatStatus.ACTIVITY, CombatStatus.ACTIVITY_ASSAULTS);
+				cs.setAssaultsLeft(critMalusActivity[1]);
+			}
+			cs.setActivityModif(critMalusActivity[0]);
+			cs.setDescription(this.getCritDescription());
+			target.getActivityList().put(target.getActivityList().size() + 1,cs);
+		}
 		
 		//ASSAULTS STUNNED
 		
