@@ -88,10 +88,11 @@ public class AttackMelee extends Attack {
 			int bonusAct = 0;
 			if(actor.getActivityList().size() > 0){
 				for (Map.Entry<Integer, CombatStatus> entry : actor.getActivityList().entrySet()){
-					bonusAct = entry.getValue().getActivityModif();
+					bonusAct = bonusAct + entry.getValue().getActivityModif();
 				}
 				
 			}
+			actor.setModifTotalActivity(bonusAct);
 			
 			rollCalculation = diceRoll + weapon.getBO() - actor.getParryBonusInUse() -  enemy.getTotalBD()
 					- super.parryBonus + otherBonus + bonusAct;

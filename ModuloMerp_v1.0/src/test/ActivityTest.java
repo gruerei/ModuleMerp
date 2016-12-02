@@ -49,6 +49,8 @@ public class ActivityTest {
 	
 	@Test
 	public void a1testApplyActivity1() {
+		System.out.println("\n"+Galadhil.getName() +" ataca a "+OrcALvL1.getName());
+		System.out.println("****TIRADA DE DADOS****** RESULTADO: "+diceRoll);
 		Attack attack = new AttackMelee(Galadhil, diceRoll, OrcALvL1, parryBonus, otherBonus, otherBonusDescription, attackCategory);
 		
 		CombatStatus cs = OrcALvL1.getActivityList().get(1);
@@ -64,6 +66,8 @@ public class ActivityTest {
 	public void a1testApplyActivity2() {
 
 		CriticalOutcome.critRollTest = 70;
+		System.out.println("\n"+Galadhil.getName() +" ataca a "+OrcALvL1.getName());
+		System.out.println("****TIRADA DE DADOS****** RESULTADO: "+diceRoll);
 		Attack attack = new AttackMelee(Galadhil, diceRoll, OrcALvL1, parryBonus, otherBonus, otherBonusDescription, attackCategory);
 		
 		CombatStatus cs = OrcALvL1.getActivityList().get(1);
@@ -81,6 +85,8 @@ public class ActivityTest {
 		diceRoll = 88;
 		CriticalOutcome.critRollTest = 50;
 		attackCategory = Attack.CONCUSSION;
+		System.out.println("\n"+ OrcALvL1.getName() +" ataca a "+Galadhil.getName());
+		System.out.println("****TIRADA DE DADOS****** RESULTADO: "+diceRoll);
 		Attack attack = new AttackMelee(OrcALvL1, diceRoll,Galadhil, parryBonus, otherBonus, otherBonusDescription, attackCategory);
 		CombatStatus cs = Galadhil.getActivityList().get(1);
 		assertEquals("Golpe en un costado. -4 PV, -40 a la actividad durante 1 asalto.",
@@ -98,66 +104,88 @@ public class ActivityTest {
 		diceRoll = 69;
 		CriticalOutcome.critRollTest = 50;
 		attackCategory = Attack.CONCUSSION;
+		System.out.println("\n"+Galadhil.getName() +" ataca a "+OrcALvL1.getName());
+		System.out.println("****TIRADA DE DADOS****** RESULTADO: "+diceRoll);
 		Attack attack = new AttackMelee(Galadhil, diceRoll, OrcALvL1 , parryBonus, otherBonus, otherBonusDescription, attackCategory);
 		assertEquals(OrcALvL1.getLife().getCurrentLife(), OrcALvL1.getLife().getTotalLife() - 3);
 		Galadhil.assaultDecrement();
 		assertEquals(Galadhil.getActivityList().size(),0);
+		System.out.println("\n"+Galadhil.getName() +" ataca a "+OrcALvL1.getName());
+		System.out.println("****TIRADA DE DADOS****** RESULTADO: "+diceRoll);
 		attack = new AttackMelee(Galadhil, diceRoll, OrcALvL1 , parryBonus, otherBonus, otherBonusDescription, attackCategory);
 		assertEquals(OrcALvL1.getLife().getCurrentLife(), OrcALvL1.getLife().getTotalLife() - 3 - 12 - 3);
 	}
 	
 	@Test
-	public void b1testMultipleBleeding() {
-		orcLife = OrcALvL1.getLife().getTotalLife();
-		OrcALvL1.getLife().setCurrentLife(OrcALvL1.getLife().getTotalLife());
+	public void b2testMultipleActivity() {
 		
-		diceRoll = 78;
-		parryBonus = 0;
-		otherBonus = 0;
-		otherBonusDescription = "";
-		attackCategory = Attack.EDGED;
+		a1testApplyActivity3();
+		diceRoll = 84;
+		CriticalOutcome.critRollTest = 40;
 		
+
 		/*----------ATAQUE 1 / BLEEDING 1---------*/
-		CriticalOutcome.critRollTest = 61;
-		System.out.println("\n"+Galadhil.getName() +" ataca a "+OrcALvL1.getName());
+		System.out.println("\n"+ OrcALvL1.getName() +" ataca a "+Galadhil.getName());
 		System.out.println("****TIRADA DE DADOS****** RESULTADO: "+diceRoll);
-		
-		Attack attack = new AttackMelee(Galadhil, diceRoll, OrcALvL1, parryBonus, otherBonus, otherBonusDescription, attackCategory);
-		orcLife = orcLife - 17;
+		Attack attack = new AttackMelee(OrcALvL1, diceRoll,Galadhil, parryBonus, otherBonus, otherBonusDescription, attackCategory);
 				
-		CombatStatus cs = OrcALvL1.getBleedingList().get(1);
-		assertEquals("Herida leve en el antebrazo -4 PV. 2 PV por asalto. Aturdido durante 1 asalto.",
+		CombatStatus cs = Galadhil.getActivityList().get(2);
+		assertEquals("Fractura leve en las costillas. -5 PV. -5 a la actividad.",
 				cs.getDescription());
-		orcLife = orcLife - 4; 
 		
-		/*----------ATAQUE 2 / BLEEDING 2---------*/
-		CriticalOutcome.critRollTest = 76;
-		diceRoll = 77;
+		
 		System.out.println("\n"+Galadhil.getName() +" ataca a "+OrcALvL1.getName());
 		System.out.println("****TIRADA DE DADOS****** RESULTADO: "+diceRoll);
-		
-		Attack attack2 = new AttackMelee(Galadhil, diceRoll, OrcALvL1, parryBonus, otherBonus, otherBonusDescription, attackCategory);
-		orcLife = orcLife - 17;
-		CombatStatus cs2 = OrcALvL1.getBleedingList().get(2);
-		assertEquals("Herida menos grave en el muslo. -6 PV. 1 PV por asalto. - 10 a la actividad. Aturdido durante 2 asaltos.",
-				cs2.getDescription());
-		orcLife = orcLife - 6; 
-		
-		assertEquals(OrcALvL1.getLife().getCurrentLife(), orcLife);
-		OrcALvL1.bleeds();
-		assertEquals(OrcALvL1.getLife().getCurrentLife(), orcLife - 3);
+		attack = new AttackMelee(Galadhil, diceRoll, OrcALvL1 , parryBonus, otherBonus, otherBonusDescription, attackCategory);
+		assertEquals(Galadhil.getModifTotalActivity(),-45);
+
 	}
 	
 	@Test
-	public void b2testBleedingUnconsc() {
-		b1testMultipleBleeding();
-		OrcALvL1.bleeds();
-		assertEquals(OrcALvL1.getKnockedOut().getType(), CombatStatus.KNOCKED_OUT_LIFE_BELOW_ZERO);
-		OrcALvL1.bleeds();
+	public void b3testMultipleActivityDeath() {
+		b2testMultipleActivity();
+		
+		assertEquals(Galadhil.getActivityList().size(),2);
+		assertEquals(Galadhil.getModifTotalActivity(),-45);
+		Galadhil.death();
+		assertEquals(Galadhil.getActivityList().size(),0);
+		assertEquals(Galadhil.getModifTotalActivity(),0);
+	}
 
+	
+	@Test
+	public void b4testMultipleActivityAssaultDecrement() {
+		b2testMultipleActivity();
+		
+		Galadhil.assaultDecrement();
+		assertEquals(Galadhil.getActivityList().size(),1);
+		assertEquals(Galadhil.getModifTotalActivity(),-5);
 	}
 	
-
+	@Test
+	public void b5testMultipleActivityRestoreModifByKey() {
+		b2testMultipleActivity();
+		
+		Galadhil.restoreActivityModif(2);
+		assertEquals(Galadhil.getActivityList().size(),1);
+		assertEquals(Galadhil.getModifTotalActivity(),-40);
+		
+		Galadhil.restoreActivityModif(1);
+		assertEquals(Galadhil.getActivityList().size(),0);
+		assertEquals(Galadhil.getModifTotalActivity(),0);
+	}
 	
+	@Test
+	public void c1testMultipleActivityShowCombatStatus() {
+		b2testMultipleActivity();
+		Galadhil.showCombatStatus();
+	}
+	
+	@Test
+	public void c2testMultipleActivityShow() {
+		b2testMultipleActivity();
+		Galadhil.show();
+	}
+
 	
 }

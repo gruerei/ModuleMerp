@@ -119,6 +119,7 @@ public class Character {
 	
 	/*ACTIVITY*/
 	private Map<Integer,CombatStatus> activityList = new HashMap<Integer,CombatStatus>();
+	private int modifTotalActivity;
 	
 	/*INVENTARIO*/
 	private List<Item> inventory = new ArrayList<Item>();
@@ -165,7 +166,7 @@ public class Character {
 	}
 
 
-	public void setActivity(Map<Integer, CombatStatus> activityList) {
+	public void setActivityList(Map<Integer, CombatStatus> activityList) {
 		this.activityList = activityList;
 	}
 
@@ -648,6 +649,15 @@ public class Character {
 		this.isBigCreature = isBigCreature;
 	}
 
+	public int getModifTotalActivity() {
+		return modifTotalActivity;
+	}
+
+
+	public void setModifTotalActivity(int modifTotalActivity) {
+		this.modifTotalActivity = modifTotalActivity;
+	}
+
 
 	/*Recorre el equipo en uso y obtiene y suma el total de las resistencias de todos estos objetos*/
 	public Map<String, Integer> calculTotalGearResistances(Map<Integer, Item> inUseGear){
@@ -1058,17 +1068,15 @@ public class Character {
 		StringBuffer modifActividad = new StringBuffer();
 		StringBuffer assaultsActivity = new StringBuffer();
 		StringBuffer activityInfo = new StringBuffer();
-		int totalActivityModif = 0;
-		for (Map.Entry<Integer, CombatStatus> entry : getActivityList().entrySet()) {
-			//String key = entry.getKey();
-			CombatStatus activity = entry.getValue();
 
+		modifActividad.append(" ("+ getModifTotalActivity()+" Modif. Activity)");
+		activityInfo.append("\nActivity Modif:\t\t").append(
+				getModifTotalActivity());
 		
-			modifActividad.append(" ("+ activity.getActivityModif()+" Modif. Activity)");
-			activityInfo.append("\nActivity Modif:\t\t").append(
-					activity.getActivityModif()).append("\t\tType: ").append(CombatStatus.activityType(activity.getType()));
-			
-			totalActivityModif = totalActivityModif + activity.getActivityModif();
+		for (Map.Entry<Integer, CombatStatus> entry : getActivityList().entrySet()) {
+				//String key = entry.getKey();
+			CombatStatus activity = entry.getValue();
+			activityInfo.append("\t\tType: ").append(CombatStatus.activityType(activity.getType()));
 			if(activity.getAssaultsLeft() > 0){
 					assaultsActivity.append("\t\tAssaults Left: ").append(activity.getAssaultsLeft());
 			}
@@ -1107,11 +1115,11 @@ public class Character {
 		.append(deadInfo).append(assaultsToDieInfo)
 		.append(activityInfo).append(assaultsActivity)
 		.append("\nBD:\t\t\t").append(getTotalBD()).append("\t\tBD no Shield:\t").append(getTotalNoShield())
-		.append("\nMovement:\t\t").append(skill.getModifTotal() + totalActivityModif).append(modifActividad)
+		.append("\nMovement:\t\t").append(skill.getModifTotal() + getModifTotalActivity()).append(modifActividad)
 		
 		.append("\n\n..............GEAR..............")
 		.append("\nWeapon: ").append(weaponName).append(" ").append("\tBO: ")
-		.append(weapon == null ? "" : weapon.getBO() + totalActivityModif).append(modifActividad)
+		.append(weapon == null ? "" : weapon.getBO() + getModifTotalActivity()).append(modifActividad)
 		.append("\nArmour: ").append(armour == null ? "NO" : armour.getType())
 		.append("\nShield(10-25 BD): ").append(shield == null ? "NO" : shield.getType())
 		.append("\nHelmet(-5 Perc): ").append(helmet == null ? "NO" : helmet.getType())
@@ -1200,12 +1208,14 @@ public class Character {
 				//String key = entry.getKey();
 				if(activity.getType() == 1){
 					activity.setAssaultsLeft(activity.getAssaultsLeft() - 1);
-					System.out.println(name+"'s Activity Modificator lasts for "+activity.getAssaultsLeft()+ " assaults.");
+					System.out.println(name+"'s "+activity.getActivityModif()+" Activity Modificator(key="+i+") lasts for "+activity.getAssaultsLeft()+ " assaults.");
 					
 					if(activity.getAssaultsLeft() == 0){
-						System.out.println(name+ "'s Activity Modificator stops having an effect.");
+						System.out.println(name+ "'s "+activity.getActivityModif()+" Activity Modificator(key="+i+") stops having an effect.");
 						//setActivity(null);
+						modifTotalActivity = modifTotalActivity - activity.getActivityModif();
 						getActivityList().remove(i);
+						
 					}
 				}
 			}
@@ -1251,7 +1261,8 @@ public class Character {
 			}else{
 				//Entra en inconsciencia y quedan 6 asaltos para muerte si no se tratan las heridas
 				fallUnconscious(CombatStatus.KNOCKED_OUT_LIFE_BELOW_ZERO);
-				this.setActivity(null);
+				//this.setActivityList(new HashMap<Integer,CombatStatus>());
+				//getActivityList().keySet().removeAll(getActivityList().keySet());
 			}
 		}
 
@@ -1310,11 +1321,15 @@ public class Character {
 				System.out.println("Desangrado(key="+k+")  de "+cs.getLifePointLostPerAssault()+" PV se ralentiza a "+(cs.getLifePointLostPerAssault() - bandage_effect)+" PV por asalto");
 				cs.setLifePointLostPerAssault(cs.getLifePointLostPerAssault() - bandage_effect);
 			}
-			
-			
 		}
-
+	}
 	
+	public void restoreActivityModif(int k){
+		CombatStatus activity = getActivityList().get(k);
+		System.out.println(name+ "'s "+activity.getActivityModif()+" Activity Modificator(key="+k+") stops having an effect.");
+		//setActivity(null);
+		modifTotalActivity = modifTotalActivity - activity.getActivityModif();
+		getActivityList().remove(k);
 	}
 	
 	/*Recorre los desangrados aplicados y va aplicando sus efectos*/	
@@ -1395,7 +1410,11 @@ public class Character {
 		if(getKnockedOut() != null){
 			setKnockedOut(null);
 		}
-
+		//Eliminamos penalizadores de actividad
+		//setActivityList(new HashMap<Integer,CombatStatus>());
+		getActivityList().keySet().removeAll(getActivityList().keySet());
+		modifTotalActivity = 0;
+		
 		dead = new CombatStatus(CombatStatus.DEAD, 0);
 	}
 
