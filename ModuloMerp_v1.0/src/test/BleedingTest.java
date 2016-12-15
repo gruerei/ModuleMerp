@@ -79,33 +79,33 @@ public class BleedingTest {
 		orcLife = OrcALvL1.getLife().getTotalLife();
 		OrcALvL1.getLife().setCurrentLife(OrcALvL1.getLife().getTotalLife());
 		
-		diceRoll = 78;
+		diceRoll = 68;
 		parryBonus = 0;
 		otherBonus = 0;
 		otherBonusDescription = "";
 		attackCategory = Attack.EDGED;
 		
 		/*----------ATAQUE 1 / BLEEDING 1---------*/
-		CriticalOutcome.critRollTest = 61;
+		CriticalOutcome.critRollTest = 50;
 		System.out.println("\n"+Galadhil.getName() +" ataca a "+OrcALvL1.getName());
 		System.out.println("****TIRADA DE DADOS****** RESULTADO: "+diceRoll);
 		
 		Attack attack = new AttackMelee(Galadhil, diceRoll, OrcALvL1, parryBonus, otherBonus, otherBonusDescription, attackCategory);
-		orcLife = orcLife - 17;
+		orcLife = orcLife - 14;
 				
 		CombatStatus cs = OrcALvL1.getBleedingList().get(1);
-		assertEquals("Herida leve en el antebrazo -4 PV. 2 PV por asalto. Aturdido durante 1 asalto.",
+		assertEquals("Herida leve en el pecho. -3 PV. 1 PV por asalto. -5 a la actividad.",
 				cs.getDescription());
-		orcLife = orcLife - 4; 
+		orcLife = orcLife - 3; 
 		
 		/*----------ATAQUE 2 / BLEEDING 2---------*/
 		CriticalOutcome.critRollTest = 76;
-		diceRoll = 77;
+		diceRoll = 67;
 		System.out.println("\n"+Galadhil.getName() +" ataca a "+OrcALvL1.getName());
 		System.out.println("****TIRADA DE DADOS****** RESULTADO: "+diceRoll);
 		
 		Attack attack2 = new AttackMelee(Galadhil, diceRoll, OrcALvL1, parryBonus, otherBonus, otherBonusDescription, attackCategory);
-		orcLife = orcLife - 17;
+		orcLife = orcLife - 14;
 		CombatStatus cs2 = OrcALvL1.getBleedingList().get(2);
 		assertEquals("Herida menos grave en el muslo. -6 PV. 1 PV por asalto. - 10 a la actividad. Aturdido durante 2 asaltos.",
 				cs2.getDescription());
@@ -113,7 +113,8 @@ public class BleedingTest {
 		
 		assertEquals(OrcALvL1.getLife().getCurrentLife(), orcLife);
 		OrcALvL1.bleeds();
-		assertEquals(OrcALvL1.getLife().getCurrentLife(), orcLife - 3);
+		assertEquals(OrcALvL1.getLife().getCurrentLife(), orcLife - 2);
+		assertEquals(OrcALvL1.getTotalBleedingValue(), 2);
 	}
 	
 	@Test
@@ -129,12 +130,35 @@ public class BleedingTest {
 	public void b3testBleedingApplyBandage() {
 		b1testMultipleBleeding();
 		OrcALvL1.applyBandageToBleeding(1, CombatStatus.BANDAGE_EFFECT_MEDIUM);
+		assertEquals(OrcALvL1.getTotalBleedingValue(), 1);
 		OrcALvL1.bleeds();
 		OrcALvL1.applyBandageToBleeding(2, CombatStatus.BANDAGE_EFFECT_LOW);
 		OrcALvL1.bleeds();
 		assertEquals(OrcALvL1.getBleedingList().size(), 0);
+		assertEquals(OrcALvL1.getTotalBleedingValue(), 0);
 
 	}
 	
+	@Test
+	public void c2testMultipleActivityShow() {
+		b1testMultipleBleeding();
+		OrcALvL1.show();
+	}
+	
+	@Test
+	public void c3testMultipleActivityShowCombatStatus() {
+		b1testMultipleBleeding();
+		OrcALvL1.showCombatStatus();
+	}
+	
+	@Test
+	public void c4testMultipleActivityShow() {
+		OrcALvL1.show();
+	}
+	
+	@Test
+	public void c5testMultipleActivityShow() {
+		OrcALvL1.showCombatStatus();
+	}
 	
 }

@@ -187,14 +187,14 @@ public class Skill {
 	public void setModifSpecial2(int modifSpecial2) {
 		this.modifSpecial2 = modifSpecial2;
 	}
-	
+	/*
 	public int getModifActivity() {
 		return modifActivity;
 	}
 
 	public void setModifActivity(int activity) {
 		this.modifActivity = activity;
-	}
+	}*/
 
 	public int getModifTotal() {
 		return modifTotal;
@@ -585,7 +585,7 @@ public class Skill {
 		
 			if(getName() != Skill.BODY_DEVELOPMENT && getName() != Skill.BD){
 				ret = ret +  ch.getModifTotalActivity();
-				this.setModifActivity(ch.getModifTotalActivity());
+				//this.setModifActivity(ch.getModifTotalActivity());
 		}	
 			
 		return ret;

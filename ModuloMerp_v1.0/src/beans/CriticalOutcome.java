@@ -96,86 +96,51 @@ public class CriticalOutcome {
 		this.critDescription = critDescription;
 	}
 	
+
 	public void criticalAssess(String tableCrit, Attack attack, Critical critical) {
 
-			
-			String critType = Tables.getCritical_type()[critical.getCriticalType()];
-			System.out.println("GOLPE CRITICO !! Gravedad : "+tableCrit
-					+ " de tipo " + critType );
-			
-			String critGravity = assessGravity(tableCrit,critical.getCriticalMaxGravity());
-			setCritGravity(critGravity);
-			
-			if(!critGravity.equals(tableCrit)){
-				System.out.println("CRITICO "+tableCrit+" tiene un tope de "+critGravity+"."
-						+ " El critico se calculará como critico "+critGravity);
+		
+		String critType = Tables.getCritical_type()[critical.getCriticalType()];
+		System.out.println("GOLPE CRITICO !! Gravedad : "+tableCrit
+				+ " de tipo " + critType );
+		
+		String critGravity = Critical.assessGravity(tableCrit,critical.getCriticalMaxGravity());
+		setCritGravity(critGravity);
+		
+		if(!critGravity.equals(tableCrit)){
+			System.out.println("CRITICO "+tableCrit+" tiene un tope de "+critGravity+"."
+					+ " El critico se calculará como critico "+critGravity);
+		}
+		
+		int critRoll = 0;
+		boolean inputOk;
+		
+		do{
+			try{
+				System.out.print("Introduzca el valor de la tirada de critico: ");
+				critRoll = critRollTest;
+				//TODO: Descomentar critRoll
+				/*critRoll = Utils.castToInt(Utils.readFromInputLine());*/
+				inputOk = true;
+			}catch(NumberFormatException e){
+				System.out.println("Valor introducido incorrecto. Debe introducir un valor numerico.");
+				inputOk = false;
 			}
-			
-			int critRoll = 0;
-			boolean inputOk;
-			
-			do{
-				try{
-					System.out.print("Introduzca el valor de la tirada de critico: ");
-					critRoll = critRollTest;
-					//TODO: Descomentar critRoll
-					/*critRoll = Utils.castToInt(Utils.readFromInputLine());*/
-					inputOk = true;
-				}catch(NumberFormatException e){
-					System.out.println("Valor introducido incorrecto. Debe introducir un valor numerico.");
-					inputOk = false;
-				}
-			}while(inputOk == false);
-			
-			//int critRoll = Utils.castToInt(Utils.readFromInputLine());
-			//critRoll = 50;
-			System.out.println("Tirada de Critico: "+critRoll);
-			critRoll = critRoll + modifyRollByCritGravity(critGravity);
-			System.out.println("Critico Modificado : "+critRoll);
-			String[] critOutcome = Tables_Crit.getTableValue(critType, critRoll);
-			
-			fillOutcome(critOutcome, attack.getEnemy(), attack.getActor());
-			
-					
-		}
-	
-	private int modifyRollByCritGravity(String critGravity2) {
-		int roll = 0;
-		if(critGravity2.equals(Critical.CRITICAL_A)){
-			System.out.println("Critico A : -20");
-			return -20;
-		}else if(critGravity2.equals(Critical.CRITICAL_B)){
-			System.out.println("Critico B : -10");
-			return -10;
-		}else if(critGravity2.equals(Critical.CRITICAL_C)){
-			System.out.println("Critico C : 0");
-			return 0;
-		}else if(critGravity2.equals(Critical.CRITICAL_D)){
-			System.out.println("Critico D : +10");
-			return 10;
-		}else if(critGravity2.equals(Critical.CRITICAL_E)){
-			System.out.println("Critico E : +20");
-			return 20;
-		}else if(critGravity2.equals(Critical.CRITICAL_T)){
-			System.out.println("Critico T : -50");
-			return -50;
-		}
-		return roll;
+		}while(inputOk == false);
+		
+		//int critRoll = Utils.castToInt(Utils.readFromInputLine());
+		//critRoll = 50;
+		System.out.println("Tirada de Critico: "+critRoll);
+		critRoll = critRoll + Critical.modifyRollByCritGravity(critGravity);
+		System.out.println("Critico Modificado : "+critRoll);
+		String[] critOutcome = Tables_Crit.getTableValue(critType, critRoll);
+		
+		fillOutcome(critOutcome, attack.getEnemy(), attack.getActor());
+		
+				
 	}
 	
-	private String assessGravity(String tableRoll, String weaponCritMaxGravity) {
-		if(tableRoll.equals("T") || weaponCritMaxGravity.equals("T")){
-			return "T";
-		}else{
-			if(tableRoll.toUpperCase().compareTo(weaponCritMaxGravity.toUpperCase()) <= 0){
-				return tableRoll;
-			}else{
-				return weaponCritMaxGravity;
-			}
-		}
-	}
-	
-	private void fillOutcome(String[] critOutcome, Character enemy, Character actor) {
+	public void fillOutcome(String[] critOutcome, Character enemy, Character actor) {
 
 		setCritItemProtection(Utils.castToInt(critOutcome[Tables_Crit.COL_ITEM_PROTECTION]));
 
@@ -268,18 +233,19 @@ public class CriticalOutcome {
 		
 	/*TODO: Aplicar Efectos Critico*/
 	public void applyOutcome(Character target) {
+		CombatStatus cs = null;
+		
 		//LIFE POINTS
 		if(getCritLifePoints() > 0)
 			target.lifePointsLost(getCritLifePoints());
 		
 		//LIFE POINTS PER ASSAULT
 		if(getCritLifePointsPerAssault() > 0){
-			CombatStatus cs = target.addBleeding(getCritLifePointsPerAssault(), CombatStatus.BLEEDING_WOUND, 0);
+			cs = target.addBleeding(getCritLifePointsPerAssault(), CombatStatus.BLEEDING_WOUND, 0);
 			cs.setDescription(this.getCritDescription());
 		}
 		
 		//ACTIVITY MALUS
-		CombatStatus cs = null;
 		if(getCritMalusActivity()[0] != 0){
 			if(critMalusActivity[1] == 999){
 				cs = new CombatStatus(CombatStatus.ACTIVITY, CombatStatus.ACTIVITY_WOUND); 
@@ -290,10 +256,16 @@ public class CriticalOutcome {
 			cs.setActivityModif(critMalusActivity[0]);
 			cs.setDescription(this.getCritDescription());
 			target.getActivityList().put(target.getActivityList().size() + 1,cs);
+			target.setModifTotalActivity(target.getModifTotalActivity() + cs.getActivityModif());
 		}
 		
 		//ASSAULTS STUNNED
-		
+		if(getCritAssaultsStunned() > 0){
+			cs = new CombatStatus(CombatStatus.STUNNED, 0);
+			cs.setDescription(this.getCritDescription());
+			cs.setAssaultsLeft(getCritAssaultsStunned());
+			target.setStunned(cs);
+		}
 	}	
 	
 }

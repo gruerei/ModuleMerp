@@ -116,6 +116,7 @@ public class Character {
 	
 	/*BLEEDING*/
 	private Map<Integer,CombatStatus> bleedingList = new HashMap<Integer,CombatStatus>();
+	private int totalBleedingValue;
 	
 	/*ACTIVITY*/
 	private Map<Integer,CombatStatus> activityList = new HashMap<Integer,CombatStatus>();
@@ -857,7 +858,15 @@ public class Character {
 		this.isDisabled = isDisabled;
 	}
 	
-	
+
+	public int getTotalBleedingValue() {
+		return totalBleedingValue;
+	}
+
+
+	public void setTotalBleedingValue(int totalBleedingValue) {
+		this.totalBleedingValue = totalBleedingValue;
+	}
 
 
 	public Map<Integer,CombatStatus> getBleedingList() {
@@ -893,15 +902,43 @@ public class Character {
 			sbDomain.append(magicRealm).append(" ");
 		}
 		
+		String activityInfo = "";
+		StringBuffer modifActividad = new StringBuffer();
+		if(getModifTotalActivity() != 0){
+			activityInfo = printActivityModifDetails().toString();
+			modifActividad.append(" ("+ getModifTotalActivity()+" Modif. Activity)");
+		}
 		StringBuffer sbGear = new StringBuffer();
 		for (Map.Entry<Integer, Item> entry : this.getEquippedGear().entrySet()) {
 			//String key = entry.getKey();
-			Item item = entry.getValue();
+			
+			Item item = null;
+			
+			if(entry.getValue() instanceof WeaponItem){
+				WeaponItem wpitem = (WeaponItem)entry.getValue();
+				
+				StringBuffer BOchain = new StringBuffer("\nBO: " )
+						.append(wpitem.getBO()  + getModifTotalActivity())
+						.append(modifActividad);
+				
+				wpitem.setoutputBOChain(BOchain);
+			}
+			
+			item = entry.getValue();
 			sbGear.append(item.toString()).append("\n");
+			
+
 		}
 		
-		String deadInfo = getDead() != null ? " (Dead)" : "";
+		String deathInfo = getDead() != null ? " (Dead)" : "";
+		String stunInfo = getStunned() != null ? " (Stunned during "+getStunned().getAssaultsLeft()+" Assaults)" : "";
+		String bleedInfo = getBleedingList().size() > 0 ? " (Bleeding: "+getTotalBleedingValue()+" LP per Assault)" : "";
 		
+		ArmourItem armour = (ArmourItem)getEquippedGear().get(Item.ARMOUR);
+		int movSkillId = ArmourItem.getMovementSkillByArmour(armour.getType());
+		Skill movSkill = getSkills().get(movSkillId);
+		
+
 		StringBuffer sb = new StringBuffer();
 		sb.append("-------------------------------------------------------------------------------------------------")
 			.append("\nName: \t\t\t").append(getName())
@@ -914,9 +951,12 @@ public class Character {
 			.append("\nPX: \t\t\t").append(getPX())
 			.append("\nPP: \t\t\t").append(getPP())
 			.append("\nLife:\t\t\t").append(life.getCurrentLife()).append("/").append(life.getTotalLife())
-			.append(deadInfo)
+			.append(deathInfo)
+			.append(bleedInfo)
+			.append(stunInfo)
+			.append(activityInfo)
 			.append("\nBD:\t\t\t").append(getTotalBD())
-			
+			.append("\nMovement:\t\t").append(movSkill.getModifTotal() + getModifTotalActivity()).append(modifActividad)
 			
 			.append("\n\n---------------------------------------ATTRIBUTES---------------------------------------------------")
 			.append("\n\n\t\t\tBase\tAttrib.\tRacial\t Total")
@@ -997,7 +1037,7 @@ public class Character {
 			
 			sb.append("\n").append(Utils.padRight(sk.getDescription(), 20)).append("\t").append(sk.getGrades()).append("\t").append(sk.getModifGrades()).append("\t")
 				.append(sk.getModifAttributes()).append("\t").append(sk.getModifClass()).append("\t").append(sk.getModifObjects()).append("\t")
-				.append(sk.getModifSpecial()).append("\t").append(sk.getModifSpecial2()).append("\t\t").append(sk.getModifActivity())
+				.append(sk.getModifSpecial()).append("\t").append(sk.getModifSpecial2()).append("\t\t").append(getModifTotalActivity())
 				.append("\t\t ").append(modifTotalSkill);
 		
 			prevCategory = newCategory;
@@ -1069,18 +1109,13 @@ public class Character {
 		StringBuffer assaultsActivity = new StringBuffer();
 		StringBuffer activityInfo = new StringBuffer();
 
-		modifActividad.append(" ("+ getModifTotalActivity()+" Modif. Activity)");
-		activityInfo.append("\nActivity Modif:\t\t").append(
-				getModifTotalActivity());
-		
-		for (Map.Entry<Integer, CombatStatus> entry : getActivityList().entrySet()) {
-				//String key = entry.getKey();
-			CombatStatus activity = entry.getValue();
-			activityInfo.append("\t\tType: ").append(CombatStatus.activityType(activity.getType()));
-			if(activity.getAssaultsLeft() > 0){
-					assaultsActivity.append("\t\tAssaults Left: ").append(activity.getAssaultsLeft());
-			}
+
+		if(getModifTotalActivity() != 0){
+			modifActividad.append(" ("+ getModifTotalActivity()+" Modif. Activity)");
+			activityInfo.append(printActivityModifDetails());
 		}
+		
+		
 		
 		StringBuffer knockedOutInfo = getKnockedOut() != null ? 
 				new StringBuffer("\n").append(this.name).append(" can't fight: ").append(CombatStatus.knockedOutType(getKnockedOut().getType())).append(".")
@@ -1102,6 +1137,8 @@ public class Character {
 			assaultsToDieInfo = "\nATTENTION!! Assaults to die: "+getDead().getAssaultsLeft();
 		}
 		
+		String bleedInfo = getBleedingList().size() > 0 ? " (Bleeding: "+getTotalBleedingValue()+" LP per Assault)" : "";
+		
 		sb.append("\nMagic Realm: \t\t").append(sbDomain.toString())
 		
 		.append("\n\nLevel: \t\t\t").append(getLevel())
@@ -1110,6 +1147,7 @@ public class Character {
 		
 		.append("\n\n..............COMBAT..............")
 		.append("\nLife:\t\t\t").append(life.getCurrentLife()).append("/").append(life.getTotalLife())
+		.append(bleedInfo)
 		.append(knockedOutInfo)
 		.append(stunInfo)
 		.append(deadInfo).append(assaultsToDieInfo)
@@ -1176,6 +1214,26 @@ public class Character {
 		
 		System.out.println(sb.toString());
 	}
+
+	private StringBuffer printActivityModifDetails() {
+		
+		StringBuffer bf = new StringBuffer();
+	
+		bf.append("\nActivity Modif:\t\t").append(
+				getModifTotalActivity());
+		
+		for (Map.Entry<Integer, CombatStatus> entry : getActivityList().entrySet()) {
+				//String key = entry.getKey();
+			CombatStatus activity = entry.getValue();
+			bf.append("\n\t\t\tType"+entry.getKey()+" : ").append(CombatStatus.activityType(activity.getType()))
+			.append(" Modif"+entry.getKey()+" : "+activity.getActivityModif());
+			if(activity.getAssaultsLeft() > 0){
+				bf.append("\t\tAssaults Left: ").append(activity.getAssaultsLeft());
+			}
+		}
+		return bf;
+	}
+
 
 	/*Decrementar en uno los contadores de asalto. Si llegan a cero despenalizar*/
 	public void assaultDecrement(){
@@ -1284,7 +1342,7 @@ public class Character {
 			txt = " hasta que la herida sea tratada";
 		}
 		int key = getBleedingList().size()+1;
-		
+		setTotalBleedingValue(getTotalBleedingValue() + bleeding.getLifePointLostPerAssault());
 		getBleedingList().put(key, bleeding);
 		bleeding.setKey(key);
 		
@@ -1322,6 +1380,8 @@ public class Character {
 				cs.setLifePointLostPerAssault(cs.getLifePointLostPerAssault() - bandage_effect);
 			}
 		}
+
+		setTotalBleedingValue(getTotalBleedingValue() - cs.getLifePointLostPerAssault());
 	}
 	
 	public void restoreActivityModif(int k){
@@ -1413,7 +1473,17 @@ public class Character {
 		//Eliminamos penalizadores de actividad
 		//setActivityList(new HashMap<Integer,CombatStatus>());
 		getActivityList().keySet().removeAll(getActivityList().keySet());
-		modifTotalActivity = 0;
+		setModifTotalActivity(0);
+		
+		//Eliminamos bleeding y estabilizamos heridas
+		getBleedingList().keySet().removeAll(getBleedingList().keySet());
+		setTotalBleedingValue(0);
+		woundsStabilized = true;
+		
+		//Eliminamos Stun
+		if(getStunned() != null){
+			setStunned(null);
+		}
 		
 		dead = new CombatStatus(CombatStatus.DEAD, 0);
 	}

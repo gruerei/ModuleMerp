@@ -1,5 +1,9 @@
 package beans;
 
+import beans.combat.Attack;
+import utils.Tables.Tables;
+import utils.Tables.Tables_Crit;
+
 public class Critical {
 	
 	public static final int CRITICAL_SLASH = 1;
@@ -88,6 +92,44 @@ public class Critical {
 		}
 		
 	}
+	
+
+
+public static int modifyRollByCritGravity(String critGravity2) {
+	int roll = 0;
+	if(critGravity2.equals(Critical.CRITICAL_A)){
+		System.out.println("Critico A : -20");
+		return -20;
+	}else if(critGravity2.equals(Critical.CRITICAL_B)){
+		System.out.println("Critico B : -10");
+		return -10;
+	}else if(critGravity2.equals(Critical.CRITICAL_C)){
+		System.out.println("Critico C : 0");
+		return 0;
+	}else if(critGravity2.equals(Critical.CRITICAL_D)){
+		System.out.println("Critico D : +10");
+		return 10;
+	}else if(critGravity2.equals(Critical.CRITICAL_E)){
+		System.out.println("Critico E : +20");
+		return 20;
+	}else if(critGravity2.equals(Critical.CRITICAL_T)){
+		System.out.println("Critico T : -50");
+		return -50;
+	}
+	return roll;
+}
+
+public static String assessGravity(String tableRoll, String weaponCritMaxGravity) {
+	if(tableRoll.equals("T") || weaponCritMaxGravity.equals("T")){
+		return "T";
+	}else{
+		if(tableRoll.toUpperCase().compareTo(weaponCritMaxGravity.toUpperCase()) <= 0){
+			return tableRoll;
+		}else{
+			return weaponCritMaxGravity;
+		}
+	}
+}
 	
 
 }

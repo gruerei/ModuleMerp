@@ -27,7 +27,6 @@ public class BotchOutcome {
 	}
 
 	public BotchOutcome() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public int getBotchLifePoints() {

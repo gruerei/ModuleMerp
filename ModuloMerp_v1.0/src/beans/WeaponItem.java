@@ -77,6 +77,8 @@ public class WeaponItem extends Item implements Cloneable{
 	private Botch twoHandedBotch;
 	private Critical twoHandedCritical;
 	private int twoHandedMod;
+	
+	private StringBuffer outputBOChain;
 
 	public WeaponItem(String type, int category, Critical main_critical, Critical second_critical, Botch botch,
 			float range, float weight, int typeMod1, Integer [] typeMod1Applied, int typeMod2,
@@ -288,8 +290,9 @@ public class WeaponItem extends Item implements Cloneable{
 	@Override
 	public String toString() {
 		
-		StringBuffer sb = new StringBuffer("\n\n").append(name == null ? "" : name+ " - ").append(type).append(" - ").append(Tables.getSkillCategoryTable()[category][0])
-										.append("\nBO: " ).append(this.getBO())
+		StringBuffer sb = new StringBuffer("\n\n").append(name == null ? "" : name+ " - ")
+										.append(type).append(" - ").append(Tables.getSkillCategoryTable()[category][0])
+										.append(outputBOChain)
 										.append("\nCritico 1º:").append(mainCritical.toString()).append("\t2º:").append(secondCritical != null ? secondCritical.toString() : "")
 										.append("\nPifia: ").append(botch.getMin()).append(" - ").append(botch.getMax())
 										.append(" Crit. Taken: ").append((botch.getCriticalTaken() == null) ? "NO" : botch.getCriticalTaken().getCriticalMaxGravity())
@@ -379,6 +382,11 @@ public class WeaponItem extends Item implements Cloneable{
 				this.reloadAssaults, this.malusNotReload, this.price,
 				this.usedTwoHanded,this.twoHandedBotch, this.twoHandedCritical,this.twoHandedMod, new int[Skill.SKILLS_TOTAL_NUMBER]);
 		return clon;
+	}
+
+	public void setoutputBOChain(StringBuffer bOchain) {
+		outputBOChain = bOchain;
+		
 	}
 	
 
