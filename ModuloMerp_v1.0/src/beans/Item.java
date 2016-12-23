@@ -169,5 +169,40 @@ public class Item implements Cloneable{
 		Item clon = new Item(this.type, this.weight, this.price, new int[Skill.SKILLS_TOTAL_NUMBER]);
 		return clon;
 	};
+	
+	public static String getItemTypeToString(int itemType){
+		
+		String itmType = "";
+		
+		switch(itemType){
+		  case WEAPON_1:  itmType = "MAIN WEAPON";
+          	break;
+		  case WEAPON_2:  itmType = "SECONDARY WEAPON";
+        	break;
+		  case ARMOUR:  itmType = "ARMOUR";
+      		break;
+		  case SHIELD:  itmType = "SHIELD";
+    		break;
+		  case HELMET:  itmType = "HELMET";
+  			break;
+		  case BRACERS:  itmType = "BRACERS";
+			break;
+		  case GREAVES:  itmType = "GREAVES";
+			break;
+		  case RING_1:  itmType = "RING 1";
+			break;
+		  case RING_2:  itmType = "RING 2";
+			break;
+		  case AMULET:  itmType = "AMULET";
+			break;
+		  case OTHER1:  itmType = "OTHER1";
+			break;
+		  case OTHER2:  itmType = "OTHER2";
+			break;
+		  case OTHER3:  itmType = "OTHER3";
+			break;
+		}
+		return itmType;
+	}
 
 }

@@ -79,7 +79,7 @@ public class Character {
 	private int gradesLife;//vida obtenida a partir de las tiradas de dados
 	
 	private int totalBD;//BD con escudo
-	private int totalNoShield;//BD sin escudo
+	private int totalBDNoShield;//BD sin escudo
 	private int movSpeed;//Movimiento
 	private int loadPenal;//PenalizadorCarga
 	private int woundPenal;//PenalizadorHeridas
@@ -242,13 +242,17 @@ public class Character {
 		this.skills = calculSkills(this.skillGrades,this.profession, this.race, this.level, baseLife, this.attributes
 				,equippedGear,specialSkillModif);
 		
-	
 		int totalLife = this.skills.get(Skill.BODY_DEVELOPMENT).getModifTotal();
 		this.life = new Life(baseLife,totalLife);
 		
 		this.totalBD = this.skills.get(Skill.BD).getModifTotal();
 		ArmourItem shield = (ArmourItem)this.equippedGear.get(Item.SHIELD);
-		this.totalNoShield = totalBD - shield.getSkillMods()[Skill.BD];
+		
+		if(shield != null){
+			this.totalBDNoShield = totalBD - shield.getSkillMods()[Skill.BD];
+		}else{
+			this.totalBDNoShield = totalBD;
+		}
 		
 		WeaponItem weapon = (WeaponItem)this.equippedGear.get(Item.WEAPON_1);
 		
@@ -275,6 +279,18 @@ public class Character {
 			skill.calculSpecialModifiers(specialSkillModif2);
 			skill.calculTotalModifiers();
 			skills.put(skillidx, skill);
+		}
+		
+		return skills;
+	}
+	
+	
+	private Map<Integer, Skill> refreshSkillsByItemChange() {
+		
+		for(int skillidx = 0; skillidx < Skill.SKILLS_TOTAL_NUMBER ; skillidx++){
+			Skill skill = this.getSkills().get(skillidx);
+			skill.calculSkillObjectMods(this.getEquippedGear());
+			skill.calculTotalModifiers();
 		}
 		
 		return skills;
@@ -438,8 +454,8 @@ public class Character {
 		return totalBD;
 	}
 
-	public int getTotalNoShield() {
-		return totalNoShield;
+	public int getTotalBDNoShield() {
+		return totalBDNoShield;
 	}
 
 	public int getMovSpeed() {
@@ -581,8 +597,8 @@ public class Character {
 		this.totalBD = totalBD;
 	}
 
-	public void setTotalNoShield(int totalNoShield) {
-		this.totalNoShield = totalNoShield;
+	public void setTotalBDNoShield(int totalBDNoShield) {
+		this.totalBDNoShield = totalBDNoShield;
 	}
 
 	public void setMovSpeed(int movSpeed) {
@@ -1152,7 +1168,7 @@ public class Character {
 		.append(stunInfo)
 		.append(deadInfo).append(assaultsToDieInfo)
 		.append(activityInfo).append(assaultsActivity)
-		.append("\nBD:\t\t\t").append(getTotalBD()).append("\t\tBD no Shield:\t").append(getTotalNoShield())
+		.append("\nBD:\t\t\t").append(getTotalBD()).append("\t\tBD no Shield:\t").append(getTotalBDNoShield())
 		.append("\nMovement:\t\t").append(skill.getModifTotal() + getModifTotalActivity()).append(modifActividad)
 		
 		.append("\n\n..............GEAR..............")
@@ -1486,6 +1502,30 @@ public class Character {
 		}
 		
 		dead = new CombatStatus(CombatStatus.DEAD, 0);
+	}
+
+
+	public void unequipItem(int itemKey) {
+		Item it = getEquippedGear().get(itemKey);
+		getEquippedGear().remove(itemKey);
+		System.out.println(it.getType() +" has been destroyed");
+		 
+		WeaponItem weapon = (WeaponItem)this.equippedGear.get(Item.WEAPON_1);
+		
+		refreshSkillsByItemChange();
+		
+		this.totalBD = this.skills.get(Skill.BD).getModifTotal();
+		int weaponTotalBO = this.skills.get(weapon.getCategory()).getModifTotal();
+		
+		/*
+		if(itemKey == Item.SHIELD || itemKey == Item.ARMOUR || itemKey == Item.BRACERS
+				|| itemKey == Item.GREAVES || itemKey == Item.HELMET || itemKey == Item.ARMOUR){
+			
+			
+		}*/
+		weapon.setBO(weaponTotalBO);
+		this.equippedGear.put(Item.WEAPON_1,weapon);
+		 
 	}
 
 

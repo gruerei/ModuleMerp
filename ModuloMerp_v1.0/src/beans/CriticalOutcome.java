@@ -14,7 +14,7 @@ public class CriticalOutcome {
 	private int[] critMalusActivity;
 	private int critAssaultsStunned;
 	private String critTearItem;
-	private String critCauseBodyDisability;
+	private int critCauseBodyDisability;
 	private String critCauseDeath;
 	private String critCauseUnconsc;
 	private String critAssaultsToDeath;
@@ -59,10 +59,10 @@ public class CriticalOutcome {
 	public void setCritTearItem(String critTearItem) {
 		this.critTearItem = critTearItem;
 	}
-	public String getCritCauseBodyDisability() {
+	public int getCritCauseBodyDisability() {
 		return critCauseBodyDisability;
 	}
-	public void setCritCauseBodyDisability(String critCauseBodyDisability) {
+	public void setCritCauseBodyDisability(int critCauseBodyDisability) {
 		this.critCauseBodyDisability = critCauseBodyDisability;
 	}
 	public String getCritCauseDeath() {
@@ -162,10 +162,14 @@ public class CriticalOutcome {
 		String critAssaultsStunned = critOutcome[Tables_Crit.COL_STUNNED_ASSAULTS];
 		setCritAssaultsStunned(Utils.castToInt(critAssaultsStunned));
 		
-		@SuppressWarnings("unused")
+		
 		String critTearItem = critOutcome[Tables_Crit.COL_TEAR_ITEM];
-		@SuppressWarnings("unused")
+		setCritTearItem(critTearItem);
+		
 		String critCauseBodyDisability = critOutcome[Tables_Crit.COL_CAUSE_BODY_DISABILITY];
+		int calculCauseBodyDisability = calculOutcomeByProtection(critCauseBodyDisability,enemy,Tables_Crit.COL_CAUSE_BODY_DISABILITY);
+		setCritCauseBodyDisability(calculCauseBodyDisability);
+		
 		@SuppressWarnings("unused")
 		String critCauseDeath = critOutcome[Tables_Crit.COL_CAUSE_DEATH];
 		@SuppressWarnings("unused")
@@ -266,6 +270,48 @@ public class CriticalOutcome {
 			cs.setAssaultsLeft(getCritAssaultsStunned());
 			target.setStunned(cs);
 		}
+		
+
+		//BREAK ITEM
+		if(getCritTearItem()!= null && !getCritTearItem().equals("0")){
+			int itemKey =  Utils.castToInt(getCritTearItem().replace("?",""));
+			
+			boolean applyTearEffect = true;
+			
+			//En caso de decision por parte del DM
+			if(getCritTearItem().contains("?")){
+				
+				System.out.println("Apply Tear Item Crit Effect?: S/N :");
+				String entradaTeclado = Utils.readFromInputLine();
+				if(entradaTeclado.equalsIgnoreCase("s")){
+					applyTearEffect = true;
+				}else{
+					applyTearEffect = false;
+				}
+			}
+			
+			if(applyTearEffect){
+				Item it = target.getEquippedGear().get(itemKey);
+				/*Destruir objeto (lo quitamos del equippedGear)*/
+				if( it != null){
+
+					 System.out.println(target.getName() + " is wearing "+it.getType());
+					 target.unequipItem(itemKey);
+				}else{
+					 System.out.println(target.getName() + " is not wearing any "+ Item.getItemTypeToString(itemKey));
+					 System.out.println("Apply any effect due to not wearing this item (If applicable)");
+					 
+						if(getCritCauseBodyDisability()>0 && getCritTearItem().equals(getCritItemProtection())){
+							/*TODO*/
+						}
+				}
+			}
+		}
+		
+		if(getCritCauseBodyDisability()>0 && !getCritTearItem().equals(getCritItemProtection())){
+			/*TODO*/
+		}
+		
 	}	
 	
 }
