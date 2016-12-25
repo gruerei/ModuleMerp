@@ -1,8 +1,10 @@
 package test;
 
-import static org.junit.Assert.assertEquals;
+
+import static org.junit.Assert.*;
 
 import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 
 import beans.Character;
@@ -11,9 +13,7 @@ import beans.CriticalOutcome;
 import beans.combat.Attack;
 import beans.combat.AttackMelee;
 import utils.Utils;
-import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
-
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ActivityTest {
