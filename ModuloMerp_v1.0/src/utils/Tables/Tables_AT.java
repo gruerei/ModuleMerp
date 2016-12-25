@@ -36,29 +36,29 @@ public class Tables_AT {
 	/*AT1 TABLE*/
 	public static String[][] AT1 = 
 		{      
-				AT1_ROWS_01_08,
-				AT1_ROWS_09_45,
-				AT1_ROWS_46_50, 
-				AT1_ROWS_51_55, 
-				AT1_ROWS_56_60, 
-				AT1_ROWS_61_65, 
-				AT1_ROWS_66_70, 
-				AT1_ROWS_71_75,
-				AT1_ROWS_76_80, 
-				AT1_ROWS_81_85, 
-				AT1_ROWS_86_90, 
-				AT1_ROWS_91_95, 
-				AT1_ROWS_96_100, 
-				AT1_ROWS_101_105,
-				AT1_ROWS_106_110,
-				AT1_ROWS_111_115,
-				AT1_ROWS_116_120,
-				AT1_ROWS_121_125,
-				AT1_ROWS_126_130,
-				AT1_ROWS_131_135,
-				AT1_ROWS_136_140,
-				AT1_ROWS_141_145,
-				AT1_ROWS_146_150
+				AT1_ROWS_01_08,//0
+				AT1_ROWS_09_45,//1
+				AT1_ROWS_46_50,//2 
+				AT1_ROWS_51_55,//3 
+				AT1_ROWS_56_60,//4 
+				AT1_ROWS_61_65,//5 
+				AT1_ROWS_66_70,//6 
+				AT1_ROWS_71_75,//7
+				AT1_ROWS_76_80,//8 
+				AT1_ROWS_81_85,//9 
+				AT1_ROWS_86_90,//10 
+				AT1_ROWS_91_95,//11 
+				AT1_ROWS_96_100,//12 
+				AT1_ROWS_101_105,//13
+				AT1_ROWS_106_110,//14
+				AT1_ROWS_111_115,//15
+				AT1_ROWS_116_120,//16
+				AT1_ROWS_121_125,//17
+				AT1_ROWS_126_130,//18
+				AT1_ROWS_131_135,//19
+				AT1_ROWS_136_140,//20
+				AT1_ROWS_141_145,//21
+				AT1_ROWS_146_150//22
 		};
 	
 	/*AT2 ROWS							     PLA  	CHA		RL  	SL	    NOAR*/
@@ -91,30 +91,30 @@ public class Tables_AT {
 	/*AT2 TABLE*/
 	public static String[][] AT2 = 
 		{      
-				AT2_ROWS_01_08,
-				AT2_ROWS_09_35,
-				AT2_ROWS_36_40,
-				AT2_ROWS_41_45,
-				AT2_ROWS_46_50, 
-				AT2_ROWS_51_55, 
-				AT2_ROWS_56_60, 
-				AT2_ROWS_61_65, 
-				AT2_ROWS_66_70, 
-				AT2_ROWS_71_75,
-				AT2_ROWS_76_80, 
-				AT2_ROWS_81_85, 
-				AT2_ROWS_86_90, 
-				AT2_ROWS_91_95, 
-				AT2_ROWS_96_100, 
-				AT2_ROWS_101_105,
-				AT2_ROWS_106_110,
-				AT2_ROWS_111_115,
-				AT2_ROWS_116_120,
-				AT2_ROWS_121_125,
-				AT2_ROWS_126_130,
-				AT2_ROWS_131_135,
-				AT2_ROWS_136_140,
-				AT2_ROWS_141_145,
-				AT2_ROWS_146_150
+				AT2_ROWS_01_08,//0
+				AT2_ROWS_09_35,//1
+				AT2_ROWS_36_40,//2
+				AT2_ROWS_41_45,//3
+				AT2_ROWS_46_50,//4 
+				AT2_ROWS_51_55,//5 
+				AT2_ROWS_56_60,//6 
+				AT2_ROWS_61_65,//7 
+				AT2_ROWS_66_70,//8 
+				AT2_ROWS_71_75,//9
+				AT2_ROWS_76_80,//10 
+				AT2_ROWS_81_85,//11 
+				AT2_ROWS_86_90,//12 
+				AT2_ROWS_91_95,//13 
+				AT2_ROWS_96_100,//14 
+				AT2_ROWS_101_105,//15
+				AT2_ROWS_106_110,//16
+				AT2_ROWS_111_115,//17
+				AT2_ROWS_116_120,//18
+				AT2_ROWS_121_125,//19
+				AT2_ROWS_126_130,//20
+				AT2_ROWS_131_135,//21
+				AT2_ROWS_136_140,//22
+				AT2_ROWS_141_145,//23
+				AT2_ROWS_146_150//24
 		};
 }

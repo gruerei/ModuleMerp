@@ -5,10 +5,13 @@ import static org.junit.Assert.assertEquals;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import beans.ArmourItem;
 import beans.Character;
 import beans.CombatStatus;
 import beans.CriticalOutcome;
 import beans.Item;
+import beans.Skill;
+import beans.WeaponItem;
 import beans.combat.Attack;
 import beans.combat.AttackMelee;
 import utils.Utils;
@@ -40,7 +43,7 @@ public class TearItemTest {
 			parryBonus = 0;
 			otherBonus = 0;
 			otherBonusDescription = "";
-			attackCategory = Attack.EDGED;
+			attackCategory = Attack.CONCUSSION;
 			orcLife = OrcALvL1.getLife().getTotalLife();
 
     }
@@ -53,8 +56,6 @@ public class TearItemTest {
 		System.out.println("\n"+OrcALvL1.getName() +" ataca a "+Galadhil.getName());
 		System.out.println("****TIRADA DE DADOS****** RESULTADO: "+diceRoll);
 		Attack attack = new AttackMelee(OrcALvL1 , diceRoll, Galadhil , parryBonus, otherBonus, otherBonusDescription, attackCategory);
-		
-		System.out.println("");
 		
 	}
 	
@@ -77,9 +78,49 @@ public class TearItemTest {
 	
 	@Test
 	public void a3ApplyTearItemNull() {
-		Galadhil.unequipItem(Item.SHIELD);
+		Galadhil.unequipItem(Item.HELMET);
 		Galadhil.showCombatStatus();
 		//Galadhil.show();
 	}
 	
+	@Test
+	public void a4ApplyTearItemBracers() {
+		
+		WeaponItem wi = (WeaponItem) Galadhil.getEquippedGear().get(Item.WEAPON_1);
+		int boBracers = Galadhil.getSkills().get(wi.getCategory()).getModifTotal();
+		int boBracersWeapon = wi.getBO();
+		Galadhil.unequipItem(Item.BRACERS);
+		int boSinBracers = Galadhil.getSkills().get(wi.getCategory()).getModifTotal();
+		int boSinBracersWeapon = wi.getBO();
+		assertEquals(boSinBracers, boBracers + 5);
+		assertEquals(boSinBracersWeapon, boBracersWeapon + 5);
+		//Galadhil.showCombatStatus();
+		//Galadhil.show();
+	}
+	
+	@Test
+	public void a5ApplyTearItemGreaves() {
+		
+		ArmourItem wi = (ArmourItem) Galadhil.getEquippedGear().get(Item.ARMOUR);
+		int mmGreaves = Galadhil.getSkills().get(wi.getCategory()).getModifTotal();
+		Galadhil.unequipItem(Item.GREAVES);
+		int mmSinGreaves = Galadhil.getSkills().get(wi.getCategory()).getModifTotal();
+		
+		assertEquals(mmSinGreaves , mmGreaves + 5);
+		//Galadhil.showCombatStatus();
+		//Galadhil.show();
+	}
+	
+	@Test
+	public void a5ApplyTearItemHelmet() {
+		
+		ArmourItem wi = (ArmourItem) Galadhil.getEquippedGear().get(Item.HELMET);
+		int percHelmet= Galadhil.getSkills().get(Skill.PERCEPTION).getModifTotal();
+		Galadhil.unequipItem(Item.HELMET);
+		int percSinHelmet = Galadhil.getSkills().get(Skill.PERCEPTION).getModifTotal();
+		
+		assertEquals(percSinHelmet , percHelmet + 5);
+		//Galadhil.showCombatStatus();
+		//Galadhil.show();
+	}
 }

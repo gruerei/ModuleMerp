@@ -33,7 +33,7 @@ public class Tables_Crit {
 		};
 	
 	/*CT1 CONCUSSION - ROWS 						LIFE		ASSAUL	ACTIV	ASSAUL	ITEM	CAUSE	CAUSE	CAUSE	ASSAUL	ITEM	ADDITIONAL*/
-	/*       							     		POINTS		LIFEPT	MALUS	STUNN	TEAR	BDYDIS	DEAD	UNCON	DEATH	PROTEC	DESCRIPTION*/
+	/*       							     		POINTS		LIFEPT	MALUS	STUNN	TEAR	BDYDIS	DEATH	UNCON	DEATH	PROTEC	DESCRIPTION*/
 	private static String[] CT1_ROWS_MINUS49_05 = 	{"0",		"0",	"0",	"0",	"0",	"0",	"0",	"0",	"0",	"0",	"Poco dominio. No hay daño extra. +0."};
 	private static String[] CT1_ROWS_06_20 = 		{"5",		"0",	"-5_H",	"0",	"0",	"0",	"0",	"0",	"0",	"0",	"Fractura leve en las costillas. -5 PV. -5 a la actividad."};
 	private static String[] CT1_ROWS_21_35 = 		{"4",		"0",	"-40_1A","0",	"0",	"0",	"0",	"0",	"0",	"0",	"Golpe en un costado. -4 PV, -40 a la actividad durante 1 asalto."};

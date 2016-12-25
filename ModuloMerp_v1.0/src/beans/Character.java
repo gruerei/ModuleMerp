@@ -1506,25 +1506,33 @@ public class Character {
 
 
 	public void unequipItem(int itemKey) {
+		
 		Item it = getEquippedGear().get(itemKey);
-		getEquippedGear().remove(itemKey);
-		System.out.println(it.getType() +" has been destroyed");
-		 
-		WeaponItem weapon = (WeaponItem)this.equippedGear.get(Item.WEAPON_1);
 		
-		refreshSkillsByItemChange();
-		
-		this.totalBD = this.skills.get(Skill.BD).getModifTotal();
-		int weaponTotalBO = this.skills.get(weapon.getCategory()).getModifTotal();
-		
-		/*
-		if(itemKey == Item.SHIELD || itemKey == Item.ARMOUR || itemKey == Item.BRACERS
-				|| itemKey == Item.GREAVES || itemKey == Item.HELMET || itemKey == Item.ARMOUR){
+		if(it == null){
 			
+			System.out.println(getName() + " no lleva "+Item.getItemTypeToString(itemKey));
+		}else{
 			
-		}*/
-		weapon.setBO(weaponTotalBO);
-		this.equippedGear.put(Item.WEAPON_1,weapon);
+			getEquippedGear().remove(itemKey);
+			System.out.println(it.getType() +" has been destroyed");
+			 
+			WeaponItem weapon = (WeaponItem)this.equippedGear.get(Item.WEAPON_1);
+			
+			refreshSkillsByItemChange();
+			
+			this.totalBD = this.skills.get(Skill.BD).getModifTotal();
+			int weaponTotalBO = this.skills.get(weapon.getCategory()).getModifTotal();
+			
+			/*
+			if(itemKey == Item.SHIELD || itemKey == Item.ARMOUR || itemKey == Item.BRACERS
+					|| itemKey == Item.GREAVES || itemKey == Item.HELMET || itemKey == Item.ARMOUR){
+				
+				
+			}*/
+			weapon.setBO(weaponTotalBO);
+			this.equippedGear.put(Item.WEAPON_1,weapon);
+		}
 		 
 	}
 

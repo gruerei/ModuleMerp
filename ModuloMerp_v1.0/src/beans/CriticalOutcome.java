@@ -15,8 +15,8 @@ public class CriticalOutcome {
 	private int critAssaultsStunned;
 	private String critTearItem;
 	private int critCauseBodyDisability;
-	private String critCauseDeath;
-	private String critCauseUnconsc;
+	private int critCauseDeath;
+	private int critCauseUnconsc;
 	private String critAssaultsToDeath;
 	private int critItemProtection;
 	private String critDescription;
@@ -65,16 +65,16 @@ public class CriticalOutcome {
 	public void setCritCauseBodyDisability(int critCauseBodyDisability) {
 		this.critCauseBodyDisability = critCauseBodyDisability;
 	}
-	public String getCritCauseDeath() {
+	public int getCritCauseDeath() {
 		return critCauseDeath;
 	}
-	public void setCritCauseDeath(String critCauseDeath) {
+	public void setCritCauseDeath(int critCauseDeath) {
 		this.critCauseDeath = critCauseDeath;
 	}
-	public String getCritCauseUnconsc() {
+	public int getCritCauseUnconsc() {
 		return critCauseUnconsc;
 	}
-	public void setCritCauseUnconsc(String critCauseUnconsc) {
+	public void setCritCauseUnconsc(int critCauseUnconsc) {
 		this.critCauseUnconsc = critCauseUnconsc;
 	}
 	public String getCritAssaultsToDeath() {
@@ -172,8 +172,14 @@ public class CriticalOutcome {
 		
 		@SuppressWarnings("unused")
 		String critCauseDeath = critOutcome[Tables_Crit.COL_CAUSE_DEATH];
+		int calculCauseDeath = calculOutcomeByProtection(critCauseDeath,enemy,Tables_Crit.COL_CAUSE_DEATH);
+		setCritCauseDeath(calculCauseDeath);
+		
 		@SuppressWarnings("unused")
 		String critCauseUnconsc = critOutcome[Tables_Crit.COL_CAUSE_UNCONSCIOUSSNESS];
+		int calculCauseUnconsc = calculOutcomeByProtection(critCauseUnconsc,enemy,Tables_Crit.COL_CAUSE_UNCONSCIOUSSNESS);
+		setCritCauseUnconsc(calculCauseUnconsc);
+		
 		@SuppressWarnings("unused")
 		String critAssaultsToDeath = critOutcome[Tables_Crit.COL_ASSAULTS_TO_DEATH];
 		
@@ -271,6 +277,10 @@ public class CriticalOutcome {
 			target.setStunned(cs);
 		}
 		
+		//CAUSE DISABILITY IN ENEMY
+		if(getCritCauseBodyDisability()>0 || getCritCauseDeath()>0 || getCritCauseUnconsc()>0){
+			System.out.println("");
+		}
 
 		//BREAK ITEM
 		if(getCritTearItem()!= null && !getCritTearItem().equals("0")){
@@ -299,18 +309,11 @@ public class CriticalOutcome {
 					 target.unequipItem(itemKey);
 				}else{
 					 System.out.println(target.getName() + " is not wearing any "+ Item.getItemTypeToString(itemKey));
-					 System.out.println("Apply any effect due to not wearing this item (If applicable)");
-					 
-						if(getCritCauseBodyDisability()>0 && getCritTearItem().equals(getCritItemProtection())){
-							/*TODO*/
-						}
+
 				}
 			}
 		}
 		
-		if(getCritCauseBodyDisability()>0 && !getCritTearItem().equals(getCritItemProtection())){
-			/*TODO*/
-		}
 		
 	}	
 	

@@ -255,20 +255,22 @@ public class AttackOutcome {
 				rowId = 15;
 			}else if(rollCalculation >105 && rollCalculation <= 110){
 				rowId = 16;
-			}else if(rollCalculation >115 && rollCalculation <= 120){
+			}else if(rollCalculation >110 && rollCalculation <= 115){
 				rowId = 17;
-			}else if(rollCalculation >120 && rollCalculation <= 125){
+			}else if(rollCalculation >115 && rollCalculation <= 120){
 				rowId = 18;
-			}else if(rollCalculation >125 && rollCalculation <= 130){
+			}else if(rollCalculation >120 && rollCalculation <= 125){
 				rowId = 19;
-			}else if(rollCalculation >130 && rollCalculation <= 135){
+			}else if(rollCalculation >125 && rollCalculation <= 130){
 				rowId = 20;
-			}else if(rollCalculation >135 && rollCalculation <= 140){
+			}else if(rollCalculation >130 && rollCalculation <= 135){
 				rowId = 21;
-			}else if(rollCalculation >140 && rollCalculation <= 145){
+			}else if(rollCalculation >135 && rollCalculation <= 140){
 				rowId = 22;
-			}else if(rollCalculation >145){
+			}else if(rollCalculation >140 && rollCalculation <= 145){
 				rowId = 23;
+			}else if(rollCalculation >145){
+				rowId = 24;
 			}
 		}
 		
