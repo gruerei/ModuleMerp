@@ -60,7 +60,7 @@ public class CritTest {
 	
 	@Test
 	public void testUnconsciousAndDeadByAssaults() {
-		Galadhil.lifePointsLost(51);
+		Galadhil.lifePointsLost(58);
 		Galadhil.getDead().setAssaultsLeft(1);
 		Galadhil.showCombatStatus();
 		Galadhil.assaultDecrement();

@@ -69,7 +69,6 @@ public class Tables_Crit {
 			CT1_ROWS_87_89, 
 			CT1_ROWS_90, 
 			CT1_ROWS_91_96, 
-			CT1_ROWS_97_99, 
 			CT1_ROWS_97_99,
 			CT1_ROWS_100,
 			CT1_ROWS_101_106,

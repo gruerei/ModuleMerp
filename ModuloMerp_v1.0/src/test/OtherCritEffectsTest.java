@@ -58,21 +58,45 @@ public class OtherCritEffectsTest {
 		System.out.println("\n"+OrcALvL1.getName() +" ataca a "+Galadhil.getName() + " con "+wi.getType());
 		System.out.println("****TIRADA DE DADOS****** RESULTADO: "+diceRoll);
 		Attack attack = new AttackMelee(OrcALvL1 , diceRoll, Galadhil , parryBonus, otherBonus, otherBonusDescription, attackCategory);
-		
+	
 	}
 	
-	/*TODO*/
-	@Test
-	public void a2testCauseDeath() {
 
-		CriticalOutcome.critRollTest = 91;
+	@Test
+	public void a2testCauseDeath6Assaults() {
+
+		CriticalOutcome.critRollTest = 97;
 		diceRoll = 111;
 		WeaponItem wi = (WeaponItem)OrcALvL1.getEquippedGear().get(Item.WEAPON_1);
 		System.out.println("\n"+OrcALvL1.getName() +" ataca a "+Galadhil.getName() + " con "+wi.getType());
 		System.out.println("****TIRADA DE DADOS****** RESULTADO: "+diceRoll);
 		Attack attack = new AttackMelee(OrcALvL1 , diceRoll, Galadhil , parryBonus, otherBonus, otherBonusDescription, attackCategory);
-		
+		assertEquals(Galadhil.getDead().getName(),CombatStatus.DEAD);
+		assertEquals(Galadhil.getDead().getType(),CombatStatus.DEAD_ASSAULTS);
+		assertEquals(Galadhil.getDead().getAssaultsLeft(),6);
 	}
+	
+	@Test
+	public void a3testCauseDeathDirect(){
+		a2testCauseDeath6Assaults();
+		Galadhil.getDead().setAssaultsLeft(1);
+		Galadhil.assaultDecrement();
+	}
+	
+	@Test
+	public void a4testCauseDeathDirect() {
+
+		CriticalOutcome.critRollTest = 100;
+		diceRoll = 111;
+		WeaponItem wi = (WeaponItem)OrcALvL1.getEquippedGear().get(Item.WEAPON_1);
+		System.out.println("\n"+OrcALvL1.getName() +" ataca a "+Galadhil.getName() + " con "+wi.getType());
+		System.out.println("****TIRADA DE DADOS****** RESULTADO: "+diceRoll);
+		Attack attack = new AttackMelee(OrcALvL1 , diceRoll, Galadhil , parryBonus, otherBonus, otherBonusDescription, attackCategory);
+		assertEquals(Galadhil.getDead().getName(),CombatStatus.DEAD);
+		assertEquals(Galadhil.getDead().getType(),CombatStatus.DEAD_FINAL);
+		assertEquals(Galadhil.getDead().getAssaultsLeft(),0);
+	}
+	
 	/*TODO*/
 	@Test
 	public void c1testBodyDisAndTearItem() {

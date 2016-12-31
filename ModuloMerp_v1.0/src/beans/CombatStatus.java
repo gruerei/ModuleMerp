@@ -14,9 +14,12 @@ public class CombatStatus {
 	public static final int ACTIVITY_WOUND = 2;
 	public static final int ACTIVITY_PERMANENT = 3;
 	
+	public static final int DEAD_FINAL = 0;
+	public static final int DEAD_ASSAULTS = 1;
+	
 	public static final int KNOCKED_OUT_ASSAULTS = 1;
 	public static final int KNOCKED_OUT_WOUND = 2;//Caused by being crippled by a Critical Strike
-	public static final int KNOCKED_OUT_UNCONSCIOUS = 3;//Specifically caused by a Critical Strike
+	//public static final int KNOCKED_OUT_UNCONSCIOUS = 3;//Specifically caused by a Critical Strike
 	public static final int KNOCKED_OUT_LIFE_BELOW_ZERO = 4;//Life Below Zero
 	public static final int KNOCKED_OUT_PERMANENT = 5;//Probably not used, by it would be possible for being in a coma
 	

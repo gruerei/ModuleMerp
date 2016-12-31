@@ -1334,7 +1334,7 @@ public class Character {
 				
 			}else{
 				//Entra en inconsciencia y quedan 6 asaltos para muerte si no se tratan las heridas
-				fallUnconscious(CombatStatus.KNOCKED_OUT_LIFE_BELOW_ZERO);
+				fallUnconscious(CombatStatus.KNOCKED_OUT_LIFE_BELOW_ZERO,0);
 				//this.setActivityList(new HashMap<Integer,CombatStatus>());
 				//getActivityList().keySet().removeAll(getActivityList().keySet());
 			}
@@ -1441,7 +1441,7 @@ public class Character {
 	
 	
 
-	public void fallUnconscious(int knockedOutType) {
+	public void fallUnconscious(int knockedOutType,int assaults) {
 		
 		if(knockedOutType == CombatStatus.KNOCKED_OUT_LIFE_BELOW_ZERO){
 			
@@ -1450,12 +1450,24 @@ public class Character {
 			setKnockedOut(knocked);
 			
 			/*Porque solo mueres por heridas al sexto asalto despues de caer inconsciente (vida por debajo de cero)*/
-			CombatStatus dead = new CombatStatus("Dead", ASSAULTS_TO_DIE_LIFE_BELOW_ZERO);
-			dead.setAssaultsLeft(CombatStatus.ASSAULTS_TO_DIE);
-			setDead(dead);
-			System.out.println(getName()+" ha caido inconsciente debido a la acumulación "
-					+ "de heridas sufridas.");
+			System.out.println(getName()+" has fallen unconscious due to life below 0(wounds stack).");
+			deathInXassaults(CombatStatus.ASSAULTS_TO_DIE,"Dead due to life below 0(wounds stack).");
+			
 			woundsStabilized = false;
+		}
+		else if(knockedOutType == CombatStatus.KNOCKED_OUT_ASSAULTS){
+			CombatStatus knocked = new CombatStatus(CombatStatus.KNOCKED_OUT,CombatStatus.KNOCKED_OUT_ASSAULTS); 
+			knocked.setType(CombatStatus.KNOCKED_OUT_ASSAULTS);
+			knocked.setAssaultsLeft(assaults);
+			setKnockedOut(knocked);
+			System.out.println(getName()+" has fallen unconscious for "+assaults+" assaults due to a critical effect.");
+		}
+		
+		else{
+			CombatStatus knocked = new CombatStatus(CombatStatus.KNOCKED_OUT,knockedOutType); 
+			knocked.setType(knockedOutType);
+			setKnockedOut(knocked);
+			System.out.println(getName()+" has fallen unconscious due to critical effect.");
 		}
 	}
 		
@@ -1473,11 +1485,19 @@ public class Character {
 	}
 
 
-
+	public void deathInXassaults(int assaults, String desc){
+		System.out.println(name + " va a morir en "+assaults+" asaltos.");
+		CombatStatus dead = new CombatStatus(CombatStatus.DEAD, CombatStatus.DEAD_ASSAULTS);
+		dead.setDescription(desc);
+		dead.setAssaultsLeft(assaults);
+		setDead(dead);
+		woundsStabilized = false;
+	}
 
 	public void death() {
 		if(getLife().getCurrentLife() >=0){
-			getLife().setCurrentLife(-1);
+			getLife().setCurrentLife(-50);
+			System.out.println(name + " was with POSITIVE LIFE before this mortal effect. LP set to "+getLife().getCurrentLife());
 		}
 		
 		//if(getDead() != null && getDead().getAssaultsLeft() > 0)
@@ -1501,7 +1521,8 @@ public class Character {
 			setStunned(null);
 		}
 		
-		dead = new CombatStatus(CombatStatus.DEAD, 0);
+		dead = new CombatStatus(CombatStatus.DEAD, CombatStatus.DEAD_FINAL);
+		System.out.println(name + " HAS DIED. LP :  "+getLife().getCurrentLife() + "/"+getLife().getTotalLife());
 	}
 
 

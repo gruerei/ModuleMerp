@@ -17,7 +17,7 @@ public class CriticalOutcome {
 	private int critCauseBodyDisability;
 	private int critCauseDeath;
 	private int critCauseUnconsc;
-	private String critAssaultsToDeath;
+	private int critAssaultsToDeath;
 	private int critItemProtection;
 	private String critDescription;
 	
@@ -77,10 +77,10 @@ public class CriticalOutcome {
 	public void setCritCauseUnconsc(int critCauseUnconsc) {
 		this.critCauseUnconsc = critCauseUnconsc;
 	}
-	public String getCritAssaultsToDeath() {
+	public int getCritAssaultsToDeath() {
 		return critAssaultsToDeath;
 	}
-	public void setCritAssaultsToDeath(String critAssaultsToDeath) {
+	public void setCritAssaultsToDeath(int critAssaultsToDeath) {
 		this.critAssaultsToDeath = critAssaultsToDeath;
 	}
 	public int getCritItemProtection() {
@@ -172,17 +172,18 @@ public class CriticalOutcome {
 		
 		@SuppressWarnings("unused")
 		String critCauseDeath = critOutcome[Tables_Crit.COL_CAUSE_DEATH];
-		int calculCauseDeath = calculOutcomeByProtection(critCauseDeath,enemy,Tables_Crit.COL_CAUSE_DEATH);
+		int calculCauseDeath = calculOutcomeByProtection(critCauseDeath,enemy, Tables_Crit.COL_CAUSE_DEATH);
 		setCritCauseDeath(calculCauseDeath);
+		int assToDeath= Utils.castToInt(critOutcome[Tables_Crit.COL_ASSAULTS_TO_DEATH]);
+		setCritAssaultsToDeath(assToDeath);
+	
 		
 		@SuppressWarnings("unused")
 		String critCauseUnconsc = critOutcome[Tables_Crit.COL_CAUSE_UNCONSCIOUSSNESS];
 		int calculCauseUnconsc = calculOutcomeByProtection(critCauseUnconsc,enemy,Tables_Crit.COL_CAUSE_UNCONSCIOUSSNESS);
 		setCritCauseUnconsc(calculCauseUnconsc);
 		
-		@SuppressWarnings("unused")
-		String critAssaultsToDeath = critOutcome[Tables_Crit.COL_ASSAULTS_TO_DEATH];
-		
+
 		
 	}
 
@@ -234,6 +235,7 @@ public class CriticalOutcome {
 				}
 			}
 		}else{
+			
 			valueRetourned= Utils.castToInt(valueIn);
 		}
 			
@@ -279,7 +281,20 @@ public class CriticalOutcome {
 		
 		//CAUSE DISABILITY IN ENEMY
 		if(getCritCauseBodyDisability()>0 || getCritCauseDeath()>0 || getCritCauseUnconsc()>0){
-			System.out.println("");
+			
+			if(getCritCauseUnconsc()>0){
+				target.fallUnconscious(CombatStatus.KNOCKED_OUT_WOUND, 0);
+			}
+			
+			if(getCritCauseDeath()>0){
+				
+				if(getCritAssaultsToDeath() > 0){
+					target.deathInXassaults(getCritAssaultsToDeath(),this.getCritDescription());
+				}else{
+					target.death();
+				}
+				
+			}
 		}
 
 		//BREAK ITEM
