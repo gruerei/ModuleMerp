@@ -32,6 +32,15 @@ public class Character {
 	public static int LEFT_HANDED = 2;
 	public static int BOTH_HANDED = 3;
 	
+	public static int DISABILITY_MAIN_ARM = 1;
+	public static int DISABILITY_WEAK_ARM = 2;
+	public static int DISABILITY_RIGHT_LEG = 3;
+	public static int DISABILITY_LEFT_LEG = 4;
+	public static int DISABILITY_LEFT_EYE = 5;
+	public static int DISABILITY_RIGHT_EYE = 6;
+	public static int DISABILITY_LEFT_EAR = 7;
+	public static int DISABILITY_RIGHT_EAR = 8;
+	
 	private int id;
 	
 	/*Principales*/
@@ -92,10 +101,7 @@ public class Character {
 	private boolean isBigCreature = false;
 	
 	private boolean isDisabled = false;
-	private boolean leftArmDisabled = false;
-	private boolean rightArmDisabled = false;
-	private boolean leftLegDisabled = false;
-	private boolean rightLegDisabled = false;
+	private boolean [] bodyPartDisabled = {false};
 	
 	private boolean woundsStabilized = true;
 	
@@ -793,46 +799,6 @@ public class Character {
 		equippedGear.remove(key);
 	}
 
-	
-	public boolean isLeftArmDisabled() {
-		return leftArmDisabled;
-	}
-
-
-	public void setLeftArmDisabled(boolean leftArmDisabled) {
-		this.leftArmDisabled = leftArmDisabled;
-	}
-
-
-	public boolean isRightArmDisabled() {
-		return rightArmDisabled;
-	}
-
-
-	public void setRightArmDisabled(boolean rightArmDisabled) {
-		this.rightArmDisabled = rightArmDisabled;
-	}
-
-
-	public boolean isLeftLegDisabled() {
-		return leftLegDisabled;
-	}
-
-
-	public void setLeftLegDisabled(boolean leftLegDisabled) {
-		this.leftLegDisabled = leftLegDisabled;
-	}
-
-
-	public boolean isRightLegDisabled() {
-		return rightLegDisabled;
-	}
-
-
-	public void setRightLegDisabled(boolean rightLegDisabled) {
-		this.rightLegDisabled = rightLegDisabled;
-	}
-
 
 	public int getMainHandedUsed() {
 		return mainHandedUsed;
@@ -892,6 +858,18 @@ public class Character {
 
 	public void setBleedingList(Map<Integer,CombatStatus> bleedingList) {
 		this.bleedingList = bleedingList;
+	}
+	
+	
+
+
+	public boolean[] getBodyPartDisabled() {
+		return bodyPartDisabled;
+	}
+
+
+	public void setBodyPartDisabled(boolean[] bodyPartDisabled) {
+		this.bodyPartDisabled = bodyPartDisabled;
 	}
 
 

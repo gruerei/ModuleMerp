@@ -279,11 +279,15 @@ public class CriticalOutcome {
 			target.setStunned(cs);
 		}
 		
-		//CAUSE DISABILITY IN ENEMY
+		//CAUSE DISABILITY,DEATH/UNCOUN IN ENEMY
 		if(getCritCauseBodyDisability()>0 || getCritCauseDeath()>0 || getCritCauseUnconsc()>0){
 			
 			if(getCritCauseUnconsc()>0){
 				target.fallUnconscious(CombatStatus.KNOCKED_OUT_WOUND, 0);
+			}
+			
+			if(getCritCauseBodyDisability()>0){
+				//target.fallUnconscious(CombatStatus.KNOCKED_OUT_WOUND, 0);
 			}
 			
 			if(getCritCauseDeath()>0){

@@ -81,6 +81,8 @@ public class OtherCritEffectsTest {
 		a2testCauseDeath6Assaults();
 		Galadhil.getDead().setAssaultsLeft(1);
 		Galadhil.assaultDecrement();
+		assertEquals(Galadhil.getDead().getName(),CombatStatus.DEAD);
+		assertEquals(Galadhil.getDead().getType(),CombatStatus.DEAD_FINAL);
 	}
 	
 	@Test

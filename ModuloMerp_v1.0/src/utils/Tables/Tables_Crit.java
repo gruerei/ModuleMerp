@@ -40,7 +40,7 @@ public class Tables_Crit {
 	private static String[] CT1_ROWS_36_50 = 		{"5",		"0",	"0",	"1",	"0",	"0",	"0",	"0",	"0",	"0",	"Golpe en el antebrazo. -5 PV. Aturdido durante un asalto."};
 	private static String[] CT1_ROWS_51_65 = 		{"0",		"0",	"0",	"0",	"4",	"NP2",	"0",	"0",	"0",	"4",	"Un golpe al hombro del lado del escudo, rompe el escudo. Si no hay, el hombro se rompe y el brazo queda inutilizado."};
 	private static String[] CT1_ROWS_66_79 = 		{"12",		"0",	"-40_H","2",	"0",	"3",	"0",	"0",	"0",	"0",	"El golpe rompe un hueso de la pierna. -12 PV. -40 a la actividad. Aturdido durante 2 asaltos."};
-	private static String[] CT1_ROWS_80 = 			{"30",		"0",	"0",	"24",	"0",	"0",	"0",	"NP1",	"0",	"5",	"Golpe en la frente. -30 PV. Un ojo destruido. Aturdido 24 asaltos. Si no se lleva yelmo puesto, en coma 1 mes."};
+	private static String[] CT1_ROWS_80 = 			{"30",		"0",	"0",	"24",	"0",	"5",	"0",	"NP1",	"0",	"5",	"Golpe en la frente. -30 PV. Un ojo destruido. Aturdido 24 asaltos. Si no se lleva yelmo puesto, en coma 1 mes."};
 	private static String[] CT1_ROWS_81_86 = 		{"8",		"0",	"0",	"2",	"0",	"1",	"0",	"0",	"0",	"0",	"El golpe rompe el brazo del arma. El brazo inutilizado. Daño en los tendones. -8PV. Aturdido durante 2 asaltos."};
 	private static String[] CT1_ROWS_87_89 = 		{"9",		"0",	"-60_H","3",	"0",	"0",	"0",	"0",	"0",	"0",	"Rodilla hecha trizas.-9 PV.-60 a la actividad. Derribado y aturdido durante 3 asaltos."};
 	private static String[] CT1_ROWS_90 = 			{"25",		"0",	"0",	"0",	"0",	"0",	"0",	"1",	"0",	"0",	"Un golpe en la base del cuello deja paralizado de los hombros hacia abajo. -25 PV. El enemigo queda desconcertado."};
@@ -89,7 +89,7 @@ public class Tables_Crit {
 	private static String[] CT2_ROWS_66_79 = 		{"6",		"1",	"-10_H","2",	"0",	"0",	"0",	"0",	"0",	"0",	"Herida menos grave en el muslo. -6 PV. 1 PV por asalto. - 10 a la actividad. Aturdido durante 2 asaltos."};
 	private static String[] CT2_ROWS_80 = 			{"0",		"0",	"0",	"0",	"0",	"0",	"1",	"1",	"1",	"0",	"Un golpe en el cuello secciona la arteria carótida. Cuello roto. Muerte tras 1 asalto de intensa agonia."};
 	private static String[] CT2_ROWS_81_86 = 		{"10",		"1",	"0",	"0",	"0",	"1",	"0",	"0",	"0",	"0",	"Tajo en los músculos y tendones del brazo que esgrime el arma. El brazo queda inutilizado -10PV y 1 PV más cada asalto."};
-	private static String[] CT2_ROWS_87_89 = 		{"10",		"0",	"0",	"30",	"0",	"0",	"0",	"0",	"0",	"0",	"Un ojo destruido. - 10 PV y aturdido 30 asaltos."};
+	private static String[] CT2_ROWS_87_89 = 		{"10",		"0",	"0",	"30",	"0",	"5",	"0",	"0",	"0",	"0",	"Un ojo destruido. - 10 PV y aturdido 30 asaltos."};
 	private static String[] CT2_ROWS_90 = 			{"0",		"0",	"0",	"0",	"0",	"0",	"1",	"0",	"0",	"0",	"Destripado, muere instantaneamente. 25% de que tu arma se quede atrancada en el contrincante durante 2 asaltos."};
 	private static String[] CT2_ROWS_91_96 = 		{"15",		"0",	"0",	"0",	"0",	"0",	"NP1",	"1",	"0",	"5",	"Inconsciente 6 horas debido a un tajo al lado de la cabeza. -15 PV. Si no se lleva yelmo muerte instantánea."};
 	private static String[] CT2_ROWS_97_99 = 		{"0",		"20",	"0",	"0",	"0",	"3",	"0",	"1",	"0",	"0",	"Extremo inferior de la pierna seccionado. -20 PV por asalto. Cae y se desmaya."};

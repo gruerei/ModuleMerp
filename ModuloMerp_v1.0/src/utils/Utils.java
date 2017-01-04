@@ -12,7 +12,7 @@ import beans.Item;
 import beans.Skill;
 import beans.WeaponItem;
 import cache.Cache;
-import utils.Tables.Tables;
+import utils.Tables.Tables; 
 
 public class Utils {
 

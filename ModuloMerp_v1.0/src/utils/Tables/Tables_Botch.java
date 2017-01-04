@@ -90,7 +90,7 @@ public class Tables_Botch {
 	private static String[] FT2_ROWS_36_50 = 		{"0",		"0",	"30-3A","0",	"0",	"0",	"0",	"0",	"0",	"0",	"Se te rompe la munición y pierdes la serenidad. Te encuentras con -30 a la actividad durante 3 asaltos."};
 	private static String[] FT2_ROWS_51_65 = 		{"0",		"0",	"0",	"1",	"0",	"0",	"0",	"0",	"0",	"0",	"Se te cae la munición. Aturdido este asalto y el siguiente intentando decidir si la recuperas."};
 	private static String[] FT2_ROWS_66_79 = 		{"0",		"0",	"0",	"2",	"0",	"0",	"0",	"0",	"0",	"0",	"Realmente te estás haciendo un lío con el arma. Aturdido durante 2 asaltos."};
-	private static String[] FT2_ROWS_80 = 			{"5",		"2?",	"0",	"0",	"0",	"4?",	"0",	"0",	"0",	"0",	"Falta de criterio. Pierdes 5 PV. Si no estás usando una ballesta, se te escapa una flecha, te arrancas una oreja y pierdes 2 PV por asalto."};
+	private static String[] FT2_ROWS_80 = 			{"5",		"2?",	"0",	"0",	"0",	"7?",	"0",	"0",	"0",	"0",	"Falta de criterio. Pierdes 5 PV. Si no estás usando una ballesta, se te escapa una flecha, te arrancas una oreja y pierdes 2 PV por asalto."};
 	private static String[] FT2_ROWS_81_86 = 		{"0",		"0",	"0",	"0",	"0",	"0",	"0",	"0",	"0",	"0",	"Se te rompe la cuerda de tu arma. Tardarás 2 asaltos en sacar una nueva."};
 	private static String[] FT2_ROWS_87_89 = 		{"0",		"0",	"0",	"0",	"0",	"0",	"0",	"0",	"0",	"0",	"Pifia con la munición cuando recargabas. Esparces tu munición en una superficie de 3 metros de radio."};
 	private static String[] FT2_ROWS_90 = 			{"0",		"0",	"0",	"4",	"1",	"0",	"0",	"0",	"0",	"0",	"Tu arma se hace añicos. Quedas aturdido durante 4 asaltos de combate. Que tengas suerte chaval."};
