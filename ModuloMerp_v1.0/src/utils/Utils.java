@@ -151,7 +151,7 @@ public class Utils {
 			equippedGear.put(Item.SHIELD, Cache.armourItems.get(ArmourItem.MEDIUM_SHIELD).clone());
 			//equippedGear.put(Item.BRACERS, Cache.armourItems.get(ArmourItem.METAL_BRACERS).clone());
 			//equippedGear.put(Item.GREAVES, Cache.armourItems.get(ArmourItem.METAL_GREAVERS).clone());
-			//equippedGear.put(Item.HELMET, Cache.armourItems.get(ArmourItem.METAL_HELMET).clone());
+			equippedGear.put(Item.HELMET, Cache.armourItems.get(ArmourItem.METAL_HELMET).clone());
 
 			//Lectura Habilidades
 			int[] skillGrades = new int[Skill.SKILLS_TOTAL_NUMBER];

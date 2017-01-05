@@ -36,10 +36,11 @@ public class Character {
 	public static int DISABILITY_WEAK_ARM = 2;
 	public static int DISABILITY_RIGHT_LEG = 3;
 	public static int DISABILITY_LEFT_LEG = 4;
-	public static int DISABILITY_LEFT_EYE = 5;
-	public static int DISABILITY_RIGHT_EYE = 6;
-	public static int DISABILITY_LEFT_EAR = 7;
-	public static int DISABILITY_RIGHT_EAR = 8;
+	public static int DISABILITY_RIGHT_EYE = 5;
+	public static int DISABILITY_LEFT_EYE = 6;
+	public static int DISABILITY_RIGHT_EAR = 7;
+	public static int DISABILITY_LEFT_EAR = 8;
+	public static int DISABILITY_BOTH_LEGS = 20;
 	
 	private int id;
 	
@@ -101,7 +102,7 @@ public class Character {
 	private boolean isBigCreature = false;
 	
 	private boolean isDisabled = false;
-	private boolean [] bodyPartDisabled = {false};
+	private boolean [] bodyPartDisabled = new boolean[8];
 	
 	private boolean woundsStabilized = true;
 	
@@ -1432,7 +1433,7 @@ public class Character {
 			deathInXassaults(CombatStatus.ASSAULTS_TO_DIE,"Dead due to life below 0(wounds stack).");
 			
 			woundsStabilized = false;
-		}
+		}//Este caso, por ahora, no se está usando
 		else if(knockedOutType == CombatStatus.KNOCKED_OUT_ASSAULTS){
 			CombatStatus knocked = new CombatStatus(CombatStatus.KNOCKED_OUT,CombatStatus.KNOCKED_OUT_ASSAULTS); 
 			knocked.setType(CombatStatus.KNOCKED_OUT_ASSAULTS);
@@ -1536,7 +1537,30 @@ public class Character {
 	}
 
 
-
+	public static String disabilityToString(int idxDis){
+		
+		String cad = "";
+		
+		if (idxDis == DISABILITY_MAIN_ARM){
+			cad = "Main Arm";
+		}else if(idxDis == DISABILITY_WEAK_ARM){
+			cad = "Weak Arm";
+		}else if(idxDis == DISABILITY_RIGHT_LEG){
+			cad = "Right Leg";	
+		}else if(idxDis == DISABILITY_LEFT_LEG){
+			cad = "Left Leg";
+		}else if(idxDis == DISABILITY_RIGHT_EYE){
+			cad = "Right Eye";
+		}else if(idxDis == DISABILITY_LEFT_EYE){
+			cad = "Left Eye";
+		}else if(idxDis == DISABILITY_RIGHT_EAR){
+			cad = "Right Ear";
+		}else if(idxDis == DISABILITY_LEFT_EAR){
+			cad = "Left Ear";
+		}
+		return cad;
+		
+	}
 	
 	
 	/*Recorre el equipo en uso y obtiene y suman los bonos a habilidades de los objetos equipados*/

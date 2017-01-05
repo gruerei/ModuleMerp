@@ -47,6 +47,7 @@ public class AttackMelee extends Attack {
 		}else{
 			
 			int enemyTotalBD = enemy.getTotalBD();
+			String otherBonusInfo = "";
 
 			ArmourItem enemyShield = (ArmourItem)enemy.getEquippedGear().get(Item.SHIELD);
 			if(!enemy.isAbleToBlock() && enemyShield!=null){
@@ -56,33 +57,43 @@ public class AttackMelee extends Attack {
 			if(enemy.getStunned() != null && enemy.isOffGuarded() && enemy.isAttackedFromBehind()){
 				enemyTotalBD = enemyTotalBD - enemy.getAttributes().get(Attribute.AGILITY).getModifTotal();
 				otherBonus = otherBonus + Cache.combatProperties.get(Combat.STUNNED_OFF_GUARDED_ATTACKED_FROM_BEHIND);
+				otherBonusInfo = " + "+otherBonus+" STUN-OFFGUARD-BEHIND ";
 			}else if(enemy.isOffGuarded() && enemy.isFlanked()){
 				enemyTotalBD = enemyTotalBD - enemy.getAttributes().get(Attribute.AGILITY).getModifTotal();
 				otherBonus = otherBonus + Cache.combatProperties.get(Combat.OFF_GUARDED_FLANKED);
+				otherBonusInfo = " + "+otherBonus+" OFFGUARD-FLANK ";
 			}else if(enemy.isOffGuarded() && enemy.isAttackedFromBehind()){
 				enemyTotalBD = enemyTotalBD - enemy.getAttributes().get(Attribute.AGILITY).getModifTotal();
 				otherBonus = otherBonus + Cache.combatProperties.get(Combat.OFF_GUARDED_ATTACKED_FROM_BEHIND);
+				otherBonusInfo = " + "+otherBonus+" OFFGUARD-BEHIND ";
 			}else if(enemy.getStunned() != null && enemy.isFlanked()){
 				otherBonus = otherBonus + Cache.combatProperties.get(Combat.STUNNED_FLANKED);
+				otherBonusInfo = " + "+otherBonus+" STUN-FLANK ";
 			}else if(enemy.getStunned() != null && enemy.isAttackedFromBehind()){
 				otherBonus = otherBonus + Cache.combatProperties.get(Combat.STUNNED_ATTACKED_FROM_BEHIND);
+				otherBonusInfo = " + "+otherBonus+" STUN-BEHIND ";
 			}else if(enemy.getStunned() != null && enemy.isOffGuarded()){
 				enemyTotalBD = enemyTotalBD - enemy.getAttributes().get(Attribute.AGILITY).getModifTotal();
 				otherBonus = otherBonus + Cache.combatProperties.get(Combat.STUNNED_OFF_GUARDED);
+				otherBonusInfo = " + "+otherBonus+" STUN-OFFGUARD ";
 			}
 			
 			else if(enemy.isFlanked()){
 				otherBonus = otherBonus + Cache.combatProperties.get(Combat.FLANKED);
+				otherBonusInfo = " + "+otherBonus+" FLANK ";
 			}else if(enemy.isAttackedFromBehind()){
 				//El enemigo no puede parar(controlar con mensaje informativo en interfaz)
 				otherBonus = otherBonus + Cache.combatProperties.get(Combat.ATTACKED_FROM_BEHIND);
+				otherBonusInfo = " + "+otherBonus+" BEHIND ";
 			}else if(enemy.getStunned() != null){
 				//El enemigo solo puede parar con la mitad de su BO(controlar con mensaje informativo en interfaz)
 				otherBonus = otherBonus + Cache.combatProperties.get(Combat.STUNNED);
+				otherBonusInfo = " + "+otherBonus+" STUN ";
 			}else if(enemy.isOffGuarded()){
 				//El enemigo no puede parar(controlar con mensaje informativo en interfaz)
 				enemyTotalBD = enemyTotalBD - enemy.getAttributes().get(Attribute.AGILITY).getModifTotal();
 				otherBonus = otherBonus + Cache.combatProperties.get(Combat.OFF_GUARDED);
+				otherBonusInfo = " + "+otherBonus+ " OFFGUARD ";
 			}
 			
 			int bonusAct = 0;
@@ -98,7 +109,7 @@ public class AttackMelee extends Attack {
 					- super.parryBonus + otherBonus + bonusAct;
 			
 			System.out.println(diceRoll + " Roll + "+ weapon.getBO() +" BO - " + actor.getParryBonusInUse() + " BO used to parry - " +
-			enemyTotalBD + " BD " +enemy.getName() + " - " +super.parryBonus+ " Enemy Parry " 
+			enemyTotalBD + " BD " +enemy.getName() + " - " +super.parryBonus+ " Enemy Parry " +otherBonusInfo
 					+ (bonusAct != 0 ? bonusAct + " Modif. Actividad "  : "" ) + "= " +rollCalculation);
 			outcome = new AttackOutcome(rollCalculation, this);
 		}

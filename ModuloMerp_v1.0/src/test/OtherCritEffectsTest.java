@@ -48,22 +48,9 @@ public class OtherCritEffectsTest {
     }
 	
 
-	
-	/*TODO*/
+	/*Tests de Critico de Muerte por Asalto y Muerte Directa completos*/
 	@Test
-	public void a1testCauseBodyDis() {
-
-		CriticalOutcome.critRollTest = 86;
-		WeaponItem wi = (WeaponItem)OrcALvL1.getEquippedGear().get(Item.WEAPON_1);
-		System.out.println("\n"+OrcALvL1.getName() +" ataca a "+Galadhil.getName() + " con "+wi.getType());
-		System.out.println("****TIRADA DE DADOS****** RESULTADO: "+diceRoll);
-		Attack attack = new AttackMelee(OrcALvL1 , diceRoll, Galadhil , parryBonus, otherBonus, otherBonusDescription, attackCategory);
-	
-	}
-	
-
-	@Test
-	public void a2testCauseDeath6Assaults() {
+	public void a1testCauseDeath6Assaults() {
 
 		CriticalOutcome.critRollTest = 97;
 		diceRoll = 111;
@@ -77,8 +64,8 @@ public class OtherCritEffectsTest {
 	}
 	
 	@Test
-	public void a3testCauseDeathDirect(){
-		a2testCauseDeath6Assaults();
+	public void a2testCauseDeathDirect(){
+		a1testCauseDeath6Assaults();
 		Galadhil.getDead().setAssaultsLeft(1);
 		Galadhil.assaultDecrement();
 		assertEquals(Galadhil.getDead().getName(),CombatStatus.DEAD);
@@ -86,7 +73,7 @@ public class OtherCritEffectsTest {
 	}
 	
 	@Test
-	public void a4testCauseDeathDirect() {
+	public void a3testCauseDeathDirect() {
 
 		CriticalOutcome.critRollTest = 100;
 		diceRoll = 111;
@@ -99,7 +86,52 @@ public class OtherCritEffectsTest {
 		assertEquals(Galadhil.getDead().getAssaultsLeft(),0);
 	}
 	
-	/*TODO*/
+	/*Tests Body Disability Completos*/
+	@Test
+	public void b1testCauseRightLegDis() {
+
+		CriticalOutcome.critRollTest = 86;
+		WeaponItem wi = (WeaponItem)OrcALvL1.getEquippedGear().get(Item.WEAPON_1);
+		System.out.println("\n"+OrcALvL1.getName() +" ataca a "+Galadhil.getName() + " con "+wi.getType());
+		System.out.println("****TIRADA DE DADOS****** RESULTADO: "+diceRoll);
+		Attack attack = new AttackMelee(OrcALvL1 , diceRoll, Galadhil , parryBonus, otherBonus, otherBonusDescription, attackCategory);
+	
+	}
+	
+	@Test
+	public void b2testCauseRightEyeDis() {
+
+		CriticalOutcome.critRollTest = 100;
+		WeaponItem wi = (WeaponItem)OrcALvL1.getEquippedGear().get(Item.WEAPON_1);
+		System.out.println("\n"+OrcALvL1.getName() +" ataca a "+Galadhil.getName() + " con "+wi.getType());
+		System.out.println("****TIRADA DE DADOS****** RESULTADO: "+diceRoll);
+		Attack attack = new AttackMelee(OrcALvL1 , diceRoll, Galadhil , parryBonus, otherBonus, otherBonusDescription, attackCategory);
+	
+	}
+	
+	@Test
+	public void b2testCauseMainArmDis() {
+
+		CriticalOutcome.critRollTest = 101;
+		WeaponItem wi = (WeaponItem)OrcALvL1.getEquippedGear().get(Item.WEAPON_1);
+		System.out.println("\n"+OrcALvL1.getName() +" ataca a "+Galadhil.getName() + " con "+wi.getType());
+		System.out.println("****TIRADA DE DADOS****** RESULTADO: "+diceRoll);
+		Attack attack = new AttackMelee(OrcALvL1 , diceRoll, Galadhil , parryBonus, otherBonus, otherBonusDescription, attackCategory);
+	
+	}
+	
+	@Test
+	public void b3testCauseWeakArmDis() {
+		b2testCauseMainArmDis();
+		CriticalOutcome.critRollTest = 91;
+		WeaponItem wi = (WeaponItem)OrcALvL1.getEquippedGear().get(Item.WEAPON_1);
+		System.out.println("\n"+OrcALvL1.getName() +" ataca a "+Galadhil.getName() + " con "+wi.getType());
+		System.out.println("****TIRADA DE DADOS****** RESULTADO: "+diceRoll);
+		Attack attack = new AttackMelee(OrcALvL1 , diceRoll, Galadhil , parryBonus, otherBonus, otherBonusDescription, attackCategory);
+	
+	}
+	
+	/*Tests Body Disability y Rotura de item Completos*/
 	@Test
 	public void c1testBodyDisAndTearItem() {
 
@@ -111,4 +143,26 @@ public class OtherCritEffectsTest {
 		
 	}
 	
+	@Test
+	public void c2testBodyDisAndTearItem() {
+		c1testBodyDisAndTearItem();
+		CriticalOutcome.critRollTest = 71;
+		WeaponItem wi = (WeaponItem)OrcALvL1.getEquippedGear().get(Item.WEAPON_1);
+		System.out.println("\n"+OrcALvL1.getName() +" ataca a "+Galadhil.getName() + " con "+wi.getType());
+		System.out.println("****TIRADA DE DADOS****** RESULTADO: "+diceRoll);
+		Attack attack = new AttackMelee(OrcALvL1 , diceRoll, Galadhil , parryBonus, otherBonus, otherBonusDescription, attackCategory);
+		
+	}
+	
+	/*TODO: Test de Unconciousness*/
+	@Test
+	public void d1testUncounciousness() {
+		CriticalOutcome.critRollTest = 90;
+		diceRoll = 108;
+		WeaponItem wi = (WeaponItem)OrcALvL1.getEquippedGear().get(Item.WEAPON_1);
+		System.out.println("\n"+OrcALvL1.getName() +" ataca a "+Galadhil.getName() + " con "+wi.getType());
+		System.out.println("****TIRADA DE DADOS****** RESULTADO: "+diceRoll);
+		Attack attack = new AttackMelee(OrcALvL1 , diceRoll, Galadhil , parryBonus, otherBonus, otherBonusDescription, attackCategory);
+		
+	}
 }

@@ -276,6 +276,7 @@ public class CriticalOutcome {
 			cs = new CombatStatus(CombatStatus.STUNNED, 0);
 			cs.setDescription(this.getCritDescription());
 			cs.setAssaultsLeft(getCritAssaultsStunned());
+			System.out.println(target.getName() + " STUNNED for "+getCritAssaultsStunned()+" assaults.");
 			target.setStunned(cs);
 		}
 		
@@ -287,7 +288,23 @@ public class CriticalOutcome {
 			}
 			
 			if(getCritCauseBodyDisability()>0){
-				//target.fallUnconscious(CombatStatus.KNOCKED_OUT_WOUND, 0);
+
+				int disIdx = getCritCauseBodyDisability();
+				if(disIdx == Character.DISABILITY_BOTH_LEGS){
+					target.getBodyPartDisabled()[Character.DISABILITY_RIGHT_LEG] = true;
+					target.getBodyPartDisabled()[Character.DISABILITY_LEFT_LEG] = true;
+					System.out.println(target.getName() + "s' Both Legs have been critically injured and are disabled.");
+				}else{
+					
+					if(target.getBodyPartDisabled()[disIdx] == true){
+						disIdx = disIdx+1;
+						setCritCauseBodyDisability(disIdx);
+					}
+
+					String disStr = Character.disabilityToString(disIdx);
+					target.getBodyPartDisabled()[disIdx] = true;
+					System.out.println(target.getName() + "'s "+disStr+" has been critically injured and is disabled.");
+				}
 			}
 			
 			if(getCritCauseDeath()>0){
