@@ -39,22 +39,22 @@ public class Tables_Botch {
 	private static String[] FT1_ROWS_MINUS49_05 = 	{"0",		"0",	"0",	"0",	"0",	"0",	"0",	"0",	"0",	"0",	"Pierdes el control. No haces nada más este asalto."};
 	private static String[] FT1_ROWS_06_20 =		{"0",		"0",	"0",	"0",	"1?",	"0",	"0",	"0",	"0",	"0",	"Resbalas. Si tu arma se maneja con una sola mano y no es mágica, se rompe."};
 	private static String[] FT1_ROWS_21_35 = 		{"2",		"0",	"0",	"0",	"0",	"0",	"0",	"0",	"0",	"0",	"Mala continuación, pierdes tu oportunidad y 2 puntos de vida."};
-	private static String[] FT1_ROWS_36_50 = 		{"0",		"0",	"0",	"0",	"0",	"0",	"0",	"0",	"0",	"0",	"Se te cae el arma. Tardarás 1 asalto en desenvainar otra o 2 asaltos en recuperar la que ha caido."};
-	private static String[] FT1_ROWS_51_65 = 		{"0",		"0",	"40-2A","0",	"0",	"0",	"0",	"0",	"0",	"0",	"Pierdes el hilo y te das cuenta de que deberias relajarte. -40 a la actividad durante dos asaltos"};
+	private static String[] FT1_ROWS_36_50 = 		{"0",		"0",	"0",	"0",	"1",	"0",	"0",	"0",	"0",	"0",	"Se te cae el arma. Tardarás 1 asalto en desenvainar otra o 2 asaltos en recuperar la que ha caido."};
+	private static String[] FT1_ROWS_51_65 = 		{"0",		"0",	"-40_2A","0",	"0",	"0",	"0",	"0",	"0",	"0",	"Pierdes el hilo y te das cuenta de que deberias relajarte. -40 a la actividad durante dos asaltos"};
 	private static String[] FT1_ROWS_66_79 = 		{"0",		"0",	"0",	"2",	"0",	"0",	"0",	"0",	"0",	"0",	"Tropiezas. Semejante demostración de falta de estilo te deja aturdido durante dos asaltos. Con suerte, sobrevivirás."};
-	private static String[] FT1_ROWS_80 = 			{"0",		"0",	"0",	"0",	"1?",	"0",	"B",	"0",	"0",	"0",	"Movimiento increiblemente inepto. Te haces a ti mismo un Crítico 'B'. (Tira en la tabla corresp.). Si el oponente está usando un arma de tajo, tu arma se rompe."};
+	private static String[] FT1_ROWS_80 = 			{"0",		"0",	"0",	"0",	"1?",	"0",	"?-B",	"0",	"0",	"0",	"Movimiento increiblemente inepto. Te haces a ti mismo un Crítico 'B'. (Tira en la tabla corresp.). Si el oponente está usando un arma de tajo, tu arma se rompe."};
 	private static String[] FT1_ROWS_81_86 = 		{"0",		"0",	"0",	"2",	"0",	"0",	"0",	"0",	"0",	"0",	"Con los nervios te muerdes la lengua. Aturdido durante 2 asaltos."};
 	private static String[] FT1_ROWS_87_89 = 		{"0",		"0",	"0",	"3",	"0",	"0",	"0",	"0",	"0",	"0",	"Pierdes el control del arma y de la realidad. Aturdido 3 asaltos."};
-	private static String[] FT1_ROWS_90 = 			{"0",		"0",	"0",	"0",	"1",	"0",	"C",	"0",	"0",	"0",	"Mala maniobra. Intentas automutilarte al tiempo que tu arma se rompe. Te haces un critico de 'C' (tira en al tabla corresp.)"};
+	private static String[] FT1_ROWS_90 = 			{"0",		"0",	"0",	"0",	"1",	"0",	"?-C",	"0",	"0",	"0",	"Mala maniobra. Intentas automutilarte al tiempo que tu arma se rompe. Te haces un critico de 'C' (tira en al tabla corresp.)"};
 	private static String[] FT1_ROWS_91_96 =		{"0",		"0",	"0",	"0",	"0",	"0",	"CR-B*","0",	"0",	"0",	"Increible tu forma de esgrimir el arma. Cualquier combatiente de tu bando cercano, recibe un critico 'B' de aplastamiento."};
 	private static String[] FT1_ROWS_97_99 = 		{"0",		"0",	"0",	"3",	"0",	"0",	"0",	"0",	"0",	"0",	"Tropiezas con una imaginaria, e invisible, tortuga fenecida. Quedas bastante confundido. Aturdido 3 asaltos."};
-	private static String[] FT1_ROWS_100 = 			{"0",		"0",	"60-30A","0",	"0",	"0",	"0",	"0",	"0",	"0",	"El peor movimiento visto en años. -60 a la actividad por un tirón en la ingle. El enemigo queda aturdido 2 asaltos, muerto de risa."};
+	private static String[] FT1_ROWS_100 = 			{"0",		"0",	"-60_4A","2*",	"0",	"0",	"0",	"0",	"0",	"0",	"El peor movimiento visto en años. -60 a la actividad por un tirón en la ingle durante 4 asaltos. El enemigo queda aturdido 2 asaltos, muerto de risa."};
 	private static String[] FT1_ROWS_101_106 = 		{"0",		"0",	"0",	"3",	"1?",	"0",	"0",	"0",	"0",	"0",	"Te tambaleas y te caes en un aparente intento de suicidio. Quedas aturdido 3 asaltos. Si usas un arma de asta, se rompe el mango."};
 	private static String[] FT1_ROWS_107_109 = 		{"0",		"0",	"0",	"4",	"1",	"0",	"0",	"0",	"0",	"0",	"Rompes tu arma por inepto. Quedas aturdido 4 asaltos"};
-	private static String[] FT1_ROWS_110 = 			{"0",		"0",	"0",	"5",	"0",	"0",	"CR-C?","0",	"0",	"0",	"Tropiezas y claves la punta de tu arma en el suelo. Aturdido 5 asaltos. Si estas montado, tu arma de asta te hace saltar 9 metros y Recibes un crítico 'C' de aplastamiento."};
+	private static String[] FT1_ROWS_110 = 			{"0",		"0",	"0",	"5",	"0",	"0",	"CR-C", "0",	"0",	"0",	"Tropiezas y clavas la punta de tu arma en el suelo. Aturdido 5 asaltos. Si estas montado, tu arma de asta te hace saltar 9 metros y Recibes un crítico 'C' de aplastamiento."};
 	private static String[] FT1_ROWS_111_116 = 		{"0",		"0",	"0",	"3",	"0",	"0",	"0",	"0",	"0",	"0",	"Tu montura se encabrita súbitamente. Aturdido 3 asaltos recuperándote."};
-	private static String[] FT1_ROWS_117_119 = 		{"0",		"0",	"90-3A","0",	"0",	"0",	"0",	"0",	"0",	"0",	"No coordinas tus movimientos con los de tu montura. -90 a la actividad los siguientes 3 asaltos mientras intentas seguir siendo el jinete."};
-	private static String[] FT1_ROWS_120 = 			{"0",		"0",	"0",	"0",	"0",	"0",	"CD-D",	"0",	"0",	"0",	"Te caes de tu montura, te haces un crítico 'D' de aplastamiento."};
+	private static String[] FT1_ROWS_117_119 = 		{"0",		"0",	"-90_3A","0",	"0",	"0",	"0",	"0",	"0",	"0",	"No coordinas tus movimientos con los de tu montura. -90 a la actividad los siguientes 3 asaltos mientras intentas seguir siendo el jinete."};
+	private static String[] FT1_ROWS_120 = 			{"0",		"0",	"0",	"0",	"0",	"0",	"CR-D",	"0",	"0",	"0",	"Te caes de tu montura, te haces un crítico 'D' de aplastamiento."};
 
 	
 	/*FT1 WEAPONS TABLE*/
@@ -72,7 +72,6 @@ public class Tables_Botch {
 			FT1_ROWS_90, 
 			FT1_ROWS_91_96, 
 			FT1_ROWS_97_99, 
-			FT1_ROWS_97_99,
 			FT1_ROWS_100,
 			FT1_ROWS_101_106,
 			FT1_ROWS_107_109,

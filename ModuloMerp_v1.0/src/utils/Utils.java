@@ -12,7 +12,8 @@ import beans.Item;
 import beans.Skill;
 import beans.WeaponItem;
 import cache.Cache;
-import utils.Tables.Tables; 
+import utils.Tables.Tables;
+import utils.Tables.Tables_Crit; 
 
 public class Utils {
 
@@ -145,6 +146,7 @@ public class Utils {
 			//scimitarHighQuality.setSpecialMod1(10);
 			broadSworHighQuality.getSkillMods()[Skill.EDGED] = 10;
 			broadSworHighQuality.setName("Silver Broadsword");
+			broadSworHighQuality.setQuality(WeaponItem.MAGICAL);
 			equippedGear.put(Item.WEAPON_1, broadSworHighQuality);
 			
 			equippedGear.put(Item.ARMOUR, Cache.armourItems.get(ArmourItem.RIGID_LEATHER).clone());
@@ -163,7 +165,7 @@ public class Utils {
 			skillGrades[Skill.STALK_HIDE] = 1;skillGrades[Skill.DISARM_TRAP] = 1;
 			skillGrades[Skill.READ_RUNES] = 1;skillGrades[Skill.USE_MAG_ITEM] = 1;
 			skillGrades[Skill.PERCEPTION] = 1;skillGrades[Skill.BODY_DEVELOPMENT] = 5;
-			skillGrades[Skill.CAVE_KNOWL] = 5;
+			skillGrades[Skill.CAVE_KNOWL] = 5;skillGrades[Skill.MARTIAL_ARTS]  = 1;
 			
 			specialSkillModi[Skill.TRACK][Skill.SPECIAL1] = 10; specialSkillModi[Skill.PERCEPTION][Skill.SPECIAL1] = 10;
 			
@@ -237,6 +239,73 @@ public class Utils {
 		ReadProperties.readWeaponFile();
 		ReadProperties.readArmourFile();
 		ReadProperties.readCombatFile();
+	}
+
+	public static void unequipItem(Character target, String critTearItem) {
+
+			int itemKey =  Utils.castToInt(critTearItem.replace("?",""));
+			
+			boolean applyTearEffect = askConfirmation(critTearItem);
+			
+			
+			if(applyTearEffect){
+				Item it = target.getEquippedGear().get(itemKey);
+				/*Destruir objeto (lo quitamos del equippedGear)*/
+				if( it != null){
+
+					 System.out.println(target.getName() + " is wearing "+it.getType());
+					 target.unequipItem(itemKey);
+				}else{
+					 System.out.println(target.getName() + " is not wearing any "+ Item.getItemTypeToString(itemKey));
+
+				}
+			}
+	}
+
+	public static boolean askConfirmation(String desc) {
+		boolean ret=true;
+		
+		if(desc.contains("?")){
+			
+			System.out.println("Apply Tear Item Crit Effect?: S/N :");
+			String entradaTeclado = Utils.readFromInputLine();
+			if(entradaTeclado.equalsIgnoreCase("s")){
+				ret = true;
+			}else{
+				ret = false;
+			}
+		}
+		return ret;
+	}
+	
+	public static int calculOutcomeByProtection(String valueIn, Character enemy, int effectApplied, int itemProtection) {
+		int valueRetourned = 0;
+		 
+		if(valueIn.contains("NP")){
+			String[] split = valueIn.split("-");
+			String valueInNoProtection = split[0].replace("NP", "");
+			
+			String valueInWithProtection = "";
+			if(split.length > 1)
+				valueInWithProtection = split[1];
+			
+			if(itemProtection > 0){
+				if(enemy.getEquippedGear().get(itemProtection) == null){
+					valueRetourned = Utils.castToInt(valueInNoProtection);
+					System.out.println("Enemy does not carry "+ Tables.getItem_categories()[itemProtection] +" protection. "
+					+ Tables_Crit.CRIT_EFFECTS[effectApplied] +" APPLIED.");
+				}else{
+					valueRetourned = Utils.castToInt(valueInWithProtection);
+					System.out.println("Enemy carries protection");
+				}
+			}
+		}else{
+			
+			valueRetourned= Utils.castToInt(valueIn);
+		}
+			
+		
+		return valueRetourned;
 	}
 
 	

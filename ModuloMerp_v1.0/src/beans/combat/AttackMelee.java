@@ -41,8 +41,8 @@ public class AttackMelee extends Attack {
 
 			
 			BotchOutcome bo = new BotchOutcome(this);
-			bo.botchAssess(actor);
-			bo.applyOutcome(actor);
+			bo.botchAssess(actor, this);
+			bo.applyOutcome(actor, enemy);
 
 		}else{
 			

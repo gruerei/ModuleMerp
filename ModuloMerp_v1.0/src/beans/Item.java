@@ -55,6 +55,7 @@ public class Item implements Cloneable{
 		this.name = name;
 	}
 
+	/**broadsword, dagger, Soft Leather, Rigid Leather , etc*/
 	public String getType() {
 		return type;
 	}

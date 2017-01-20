@@ -20,6 +20,14 @@ public class WeaponItem extends Item implements Cloneable{
 	public static final int PROJECTILE = 9;//Proyectil (Arcos)
 	public static final int POLEARM = 10;//De asta
 	
+	
+	public static final int NORMAL = 1;//NORMAL
+	public static final int HIGH = 2;//ALTA CALIDAD
+	public static final int MAGICAL = 3;//MAGICA
+	public static final int MITHRIL = 4;//MITHRIL
+	public static final int HOLY = 5;//SAGRADA
+	public static final int SLAYING = 6;//ANIQUILADORA
+	
 	public static final int BROADSWORD = 1;
 	public static final int DAGGER = 2;
 	public static final int AXE = 3;
@@ -50,6 +58,7 @@ public class WeaponItem extends Item implements Cloneable{
 	
 	
 	private int category;//Filo, Contundente, 2 Manos, Arrojadiza, Proyectiles ,Asta
+	private int quality;//Normal, High, Magical, Mithril, Holy, Slaying
 	private Botch botch;
 	private Critical mainCritical;
 	//Si se obtiene un critico mayor de B, puede haber derecho a un critico secundario
@@ -80,7 +89,7 @@ public class WeaponItem extends Item implements Cloneable{
 	
 	private StringBuffer outputBOChain;
 
-	public WeaponItem(String type, int category, Critical main_critical, Critical second_critical, Botch botch,
+	public WeaponItem(String type, int category, int quality, Critical main_critical, Critical second_critical, Botch botch,
 			float range, float weight, int typeMod1, Integer [] typeMod1Applied, int typeMod2,
 			Integer [] typeMod2Applied, int specialMod1, String [] specialMod1Applied, int specialMod2,
 			String [] specialMod2Applied, int reloadAssaults, int malusNoReload, Price price_obj
@@ -89,6 +98,7 @@ public class WeaponItem extends Item implements Cloneable{
 		super(type,weight,price_obj,skillMods);
 		
 		this.category = category;
+		this.quality = quality;
 		this.mainCritical = main_critical;
 		this.secondCritical = second_critical;
 		this.botch = botch;
@@ -114,7 +124,7 @@ public class WeaponItem extends Item implements Cloneable{
 			this.specialMod2AppliedTo = specialMod2Applied;
 	}
 	
-	public WeaponItem(String type, int category, Critical main_critical, Critical second_critical, Botch botch,
+	public WeaponItem(String type, int category, int quality, Critical main_critical, Critical second_critical, Botch botch,
 			float range, float weight, int specialMod1, String [] specialMod1Applied, int specialMod2,
 			String [] specialMod2Applied, int reloadAssaults, int malusNoReload, Price price_obj
 			,boolean usedTwoHanded,Botch twoHandedBotch, Critical twoHandedCritical,int twoHandedMod, int [] skillMods) {
@@ -122,6 +132,7 @@ public class WeaponItem extends Item implements Cloneable{
 		super(type,weight,price_obj,skillMods);
 		
 		this.category = category;
+		this.quality = quality;
 		this.mainCritical = main_critical;
 		this.secondCritical = second_critical;
 		this.botch = botch;
@@ -149,6 +160,7 @@ public class WeaponItem extends Item implements Cloneable{
 		this.name = name;
 	}
 	
+	/**EDGED, CONCUSSION, TWO HANDED, ETC*/
 	public int getCategory() {
 		return category;
 	}
@@ -376,7 +388,7 @@ public class WeaponItem extends Item implements Cloneable{
 	
 	@Override
 	public WeaponItem clone(){
-		WeaponItem clon = new WeaponItem(this.type, this.category, this.mainCritical, this.secondCritical,
+		WeaponItem clon = new WeaponItem(this.type, this.category, this.quality, this.mainCritical, this.secondCritical,
 				this.botch, this.range, this.weight, this.typeMod1, this.typeMod1AppliedTo, this.typeMod2,
 				this.typeMod2AppliedTo, 0, new String[10], 0,new String[10],
 				this.reloadAssaults, this.malusNotReload, this.price,
@@ -387,6 +399,14 @@ public class WeaponItem extends Item implements Cloneable{
 	public void setoutputBOChain(StringBuffer bOchain) {
 		outputBOChain = bOchain;
 		
+	}
+
+	public int getQuality() {
+		return quality;
+	}
+
+	public void setQuality(int quality) {
+		this.quality = quality;
 	}
 	
 

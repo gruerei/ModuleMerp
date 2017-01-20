@@ -95,6 +95,7 @@ public class ReadProperties {
 				skillMods[Skill.THROWN] = skillMods[Skill.THROWN] + BO;
 				skillMods[Skill.PROJECTILE] = skillMods[Skill.PROJECTILE] + BO;
 				skillMods[Skill.POLEARM] = skillMods[Skill.POLEARM] + BO;
+				skillMods[Skill.MARTIAL_ARTS] = skillMods[Skill.MARTIAL_ARTS] + BO;
 				
 				ArmourItem ai = new ArmourItem(type, weight,price_obj,category, material, skillMods, BO);
 				
@@ -245,6 +246,21 @@ public class ReadProperties {
 					category = WeaponItem.POLEARM;
 				}
 				
+				String quality_ = weaponProperties.getProperty("weapon." + weapon + ".quality");
+				int quality = 0;
+				if(quality_ == null || quality_.equalsIgnoreCase("NORMAL")){
+					quality = WeaponItem.NORMAL;
+				}else if(quality_.equalsIgnoreCase("HIGH")){
+					quality = WeaponItem.HIGH;
+				}else if(quality_.equalsIgnoreCase("MAGICAL")){
+					quality = WeaponItem.MAGICAL;
+				}else if(quality_.equalsIgnoreCase("MITHRIL")){
+					quality = WeaponItem.MITHRIL;
+				}else if(quality_.equalsIgnoreCase("HOLY")){
+					quality = WeaponItem.HOLY;
+				}else if(quality_.equalsIgnoreCase("SLAYING")){
+					quality = WeaponItem.SLAYING;
+				}
 				
 				String main_critical_ = weaponProperties.getProperty("weapon." + weapon + ".maincritical");
 				Critical main_critical = createCritical(main_critical_);
@@ -301,7 +317,7 @@ public class ReadProperties {
 				Price price_obj = new Price(price);
 				 
 				/*----------------------------------*/
-				WeaponItem wi = new WeaponItem(type,category,main_critical,second_critical,botch,range
+				WeaponItem wi = new WeaponItem(type,category,quality,main_critical,second_critical,botch,range
 						,weight,specialMod1,specialMod1AppliedTo,specialMod2,specialMod2AppliedTo
 						,reloadAssaults,malusNoReload,price_obj,usedTwoHanded,botchTwoHanded,
 						botch_critical,bonus2H,skillMods);

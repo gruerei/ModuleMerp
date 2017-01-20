@@ -97,7 +97,7 @@ public class CriticalOutcome {
 	}
 	
 
-	public void criticalAssess(String tableCrit, Attack attack, Critical critical) {
+	public void criticalAssess(String tableCrit, Character enemy, Character actor, Critical critical) {
 
 		
 		String critType = Tables.getCritical_type()[critical.getCriticalType()];
@@ -135,10 +135,12 @@ public class CriticalOutcome {
 		System.out.println("Critico Modificado : "+critRoll);
 		String[] critOutcome = Tables_Crit.getTableValue(critType, critRoll);
 		
-		fillOutcome(critOutcome, attack.getEnemy(), attack.getActor());
+		fillOutcome(critOutcome, enemy, actor);
 		
 				
 	}
+	
+	
 	
 	public void fillOutcome(String[] critOutcome, Character enemy, Character actor) {
 
@@ -148,7 +150,7 @@ public class CriticalOutcome {
 		System.out.println(actor.getName()+" causa crítico : "+critDescription);
 		
 		String critLifePoints = critOutcome[Tables_Crit.COL_LIFE_POINTS];
-		int calculLP = calculOutcomeByProtection(critLifePoints,enemy,Tables_Crit.COL_LIFE_POINTS);
+		int calculLP = Utils.calculOutcomeByProtection(critLifePoints,enemy,Tables_Crit.COL_LIFE_POINTS,getCritItemProtection());
 		setCritLifePoints(calculLP);
 		
 		String critLifePointsPerAssault = critOutcome[Tables_Crit.COL_LIFE_POINTS_PER_ASSAULT];
@@ -243,7 +245,7 @@ public class CriticalOutcome {
 		return valueRetourned;
 	}
 		
-	/*TODO: Aplicar Efectos Critico*/
+	/* Aplicar Efectos Critico*/
 	public void applyOutcome(Character target) {
 		CombatStatus cs = null;
 		
@@ -258,7 +260,7 @@ public class CriticalOutcome {
 		}
 		
 		//ACTIVITY MALUS
-		if(getCritMalusActivity()[0] != 0){
+		if(critMalusActivity[0] != 0){
 			if(critMalusActivity[1] == 999){
 				cs = new CombatStatus(CombatStatus.ACTIVITY, CombatStatus.ACTIVITY_WOUND); 
 			}else{
@@ -276,8 +278,14 @@ public class CriticalOutcome {
 			cs = new CombatStatus(CombatStatus.STUNNED, 0);
 			cs.setDescription(this.getCritDescription());
 			cs.setAssaultsLeft(getCritAssaultsStunned());
-			System.out.println(target.getName() + " STUNNED for "+getCritAssaultsStunned()+" assaults.");
-			target.setStunned(cs);
+			
+			if(target.getStunned() == null || target.getStunned().getAssaultsLeft()<=getCritAssaultsStunned()){
+				target.setStunned(cs);
+				System.out.println(target.getName() + " STUNNED for "+getCritAssaultsStunned()+" assaults.");
+			}else{
+				System.out.println(target.getName() + " already was STUNNED for longer assaults. This STUN won't be applied.");
+			}
+			
 		}
 		
 		//CAUSE DISABILITY,DEATH/UNCOUN IN ENEMY
@@ -318,39 +326,15 @@ public class CriticalOutcome {
 			}
 		}
 
-		//BREAK ITEM
+		//BREAK/UNEQUIP ITEM
 		if(getCritTearItem()!= null && !getCritTearItem().equals("0")){
-			int itemKey =  Utils.castToInt(getCritTearItem().replace("?",""));
 			
-			boolean applyTearEffect = true;
+			Utils.unequipItem(target, getCritTearItem());
 			
-			//En caso de decision por parte del DM
-			if(getCritTearItem().contains("?")){
-				
-				System.out.println("Apply Tear Item Crit Effect?: S/N :");
-				String entradaTeclado = Utils.readFromInputLine();
-				if(entradaTeclado.equalsIgnoreCase("s")){
-					applyTearEffect = true;
-				}else{
-					applyTearEffect = false;
-				}
-			}
-			
-			if(applyTearEffect){
-				Item it = target.getEquippedGear().get(itemKey);
-				/*Destruir objeto (lo quitamos del equippedGear)*/
-				if( it != null){
-
-					 System.out.println(target.getName() + " is wearing "+it.getType());
-					 target.unequipItem(itemKey);
-				}else{
-					 System.out.println(target.getName() + " is not wearing any "+ Item.getItemTypeToString(itemKey));
-
-				}
-			}
 		}
 		
 		
-	}	
+	}
+	
 	
 }

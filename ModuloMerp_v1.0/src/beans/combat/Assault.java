@@ -8,7 +8,7 @@ import beans.Character;
 
 public class Assault {
 	
-	private List<Action> actions = new ArrayList<>();
+	private List<Action> actions = new ArrayList<Action>();
 	private String log;
 	
 	public List<Action> getActions() {

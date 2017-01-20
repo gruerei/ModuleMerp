@@ -22,6 +22,8 @@ public class Action implements Comparable<Action>{
 	protected int iniciative;
 	protected String description;
 
+	public Action(){};
+	
 	public Action(Character actor) {
 		this.actor = actor;
 	}

@@ -62,7 +62,7 @@ public class Skill {
 	//SECONDARY SKILLS
 	public static final int INFLUENCE_LEADERSHIP = 26;//Percepcion
 	public static final int ACROBACIES = 27;//Acrobacias
-	public static final int IMPERSONATE = 28;//Suplantar identidad
+	public static final int IMPERSONATE = 28;//Suplantar identidad, Disfraz
 	public static final int ANIMAL_HANDLING = 29;//Trato con Animales
 	public static final int APPRAISE  = 30;//Evaluar/Tasar
 	public static final int NAVIGATION = 31;//Navegacion
@@ -80,8 +80,9 @@ public class Skill {
 	public static final int SIGNS = 43;//Señales, Lenguaje de Signos
 	public static final int TRICK = 44;//Maña, Trucos, Embaucar, Juegos de Manos
 	public static final int SHAPE_SHIFT = 45;//Cambio de Forma (no va con ninguna atributo)
-
-	public static final int SKILLS_TOTAL_NUMBER = 46;
+	public static final int MARTIAL_ARTS = 46;//Artes Marciales / Pelea
+	
+	public static final int SKILLS_TOTAL_NUMBER = 47;
 
 
 	/*Modificadores especiales de una Skill(Indices de una tabla de dos columnas)*/
@@ -380,9 +381,21 @@ public class Skill {
 	/** Calcula el Modificador por Atributo segun que habilidad seas*/
 	public void calculAttribModifier(Map<String, Attribute> attributes, Race race){
 		
+		if(this.name == MARTIAL_ARTS){
+			//Between AGI and STR, we use the highest one
+			int agi = attributes.get(Attribute.AGILITY).getModifAtt() + race.getModAgility();
+			int str = attributes.get(Attribute.STRENTGTH).getModifAtt() + race.getModStrength();
+			
+			if(str>=agi){
+				this.modifAttributes = str;
+			}else{
+				this.modifAttributes = agi;
+			}
+		}
+		
 		/*STRENGTH SKILLS*/
 		if(this.name == CHAIN || this.name == PLATE || this.name == EDGED
-				|| this.name == CONCUSSION || this.name == TWO_HANDED || this.name == POLEARM){
+				|| this.name == CONCUSSION || this.name == TWO_HANDED || this.name == POLEARM ){
 			this.modifAttributes = attributes.get(Attribute.STRENTGTH).getModifAtt() + race.getModStrength();
 		}
 		

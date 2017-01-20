@@ -154,7 +154,7 @@ public class OtherCritEffectsTest {
 		
 	}
 	
-	/*TODO: Test de Unconciousness*/
+	/* Test de Unconciousness*/
 	@Test
 	public void d1testUncounciousness() {
 		CriticalOutcome.critRollTest = 90;

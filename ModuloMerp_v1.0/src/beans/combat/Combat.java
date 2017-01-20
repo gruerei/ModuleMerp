@@ -2,6 +2,7 @@ package beans.combat;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -49,8 +50,8 @@ public class Combat {
 	 */
 	
 	
-	Map<String, Character> pjs;
-	Map<String, Character> pnjs;
+	public static Map<String, Character> pjs = new HashMap<String, Character>();
+	public static Map<String, Character> pnjs = new HashMap<String, Character>();
 	
 	
 	List<Assault> assaults = new ArrayList<Assault>();
@@ -234,32 +235,32 @@ public class Combat {
 		int movSkillId = ArmourItem.getMovementSkillByArmour(armour.getType());
 		Skill mov = character.getSkills().get(movSkillId);
 		
-		switch (entradaTeclado) {
-		case "1":
+		switch (Utils.castToInt(entradaTeclado)) {
+		case 1:
 			action.setIniciative(Action.RANGED_INICIATIVE + mov.getModifTotal());
 			action.setType(Action.RANGED);
 			Character enemy = selectEnemy(character);
 			action.setTarget(enemy);
 			action.setDescription(character.getName() + " selected RANGED Attack/Spell against "+enemy.getName());
 			break;
-		case "2":
+		case 2:
 			action.setIniciative(Action.MELEE_INICIATIVE + mov.getModifTotal());
 			action.setType(Action.MELEEE);
 			Character enemy2 = selectEnemy(character);
 			action.setTarget(enemy2);
 			action.setDescription(character.getName() + " selected MELEE Attack against "+enemy2.getName());
 			break;
-		case "3":
+		case 3:
 			action.setIniciative(Action.MOVE_MANE_INICIATIVE + mov.getModifTotal());
 			action.setType(Action.MOVE_MANE);
 			action.setDescription(character.getName() + " is going to do a MOVEMENT or a MANEUVER");
 			break;
-		case "4":
+		case 4:
 			action.setIniciative(Action.OPORTUNITY_INICIATIVE + mov.getModifTotal());
 			action.setType(Action.OPORTUNITY);
 			action.setDescription(character.getName() + " is in Oportunity Action");
 			break;
-		case "5":
+		case 5:
 			action.setIniciative(Action.MOVE_MANE_INICIATIVE + mov.getModifTotal());
 			action.setType(Action.ESCAPE);
 			action.setDescription(character.getName() + " will Flee in the next Action");
@@ -274,7 +275,7 @@ public class Combat {
 		return action;
 	}
 
-	private Character selectEnemy(Character character) {
+	public static Character selectEnemy(Character character) {
 		
 		String entradaTeclado = "";
 		String figherVsGroup = "";
@@ -334,9 +335,72 @@ public class Combat {
 		
 		Character enemyFighted = null;
 		if(figherVsGroup.equals("1")){
-			enemyFighted = this.pnjs.get(enemyName);
+			enemyFighted = pnjs.get(enemyName);
 		}else if(figherVsGroup.equals("2")){
-			enemyFighted = this.pjs.get(enemyName);
+			enemyFighted = pjs.get(enemyName);
+		}
+		return enemyFighted;
+	}
+	
+public static Character selectEnemy() {
+		
+		String entradaTeclado = "";
+		String figherVsGroup = "";
+		String enemyName = "";
+		
+		do{
+			System.out.println("1.PNJs\n2.PJs\n0.None\n");
+			entradaTeclado = Utils.readFromInputLine();
+			
+			figherVsGroup = entradaTeclado;
+			
+			boolean wrongSelection = false;
+			do{
+				
+				wrongSelection = false;
+				if(figherVsGroup.equals("1")){
+					System.out.println("PNJS: \tSelect Target: ");
+					showFightersList(Cache.pnjsCombatList);
+				}else if(figherVsGroup.equals("2")){
+					System.out.println("PJS: \tSelect Target: ");
+					showFightersList(Cache.pjsCombatList);
+				}else if(figherVsGroup.equals("0")){
+					return null;
+				}
+				System.out.println("0. Back");
+				
+				entradaTeclado = Utils.readFromInputLine();
+				int fighterVsIndex = Utils.castToInt(entradaTeclado);
+				
+				if(figherVsGroup.equals("1") && (fighterVsIndex > Cache.pnjsCombatList.size())){
+					System.out.println("Error seleccionando en la Lista de PNJs. Seleccione de nuevo.");
+					wrongSelection = true;
+				}
+				
+				if(figherVsGroup.equals("2") && (fighterVsIndex > Cache.pjsCombatList.size())){
+					System.out.println("Error seleccionando en la Lista de PJs. Seleccione de nuevo.");
+					wrongSelection = true;
+				}
+	
+				if(!entradaTeclado.equals("0") && !wrongSelection){
+					
+					if(figherVsGroup.equals("1")){
+						enemyName = searchFighterName(Cache.pnjsCombatList,fighterVsIndex);
+					}else if(figherVsGroup.equals("2")){
+						enemyName = searchFighterName(Cache.pjsCombatList,fighterVsIndex);
+					}
+					
+				}
+			}while((wrongSelection) && !entradaTeclado.equals("0"));
+			
+		}while(!entradaTeclado.equals("1") && !entradaTeclado.equals("2"));
+
+		
+		Character enemyFighted = null;
+		if(figherVsGroup.equals("1")){
+			enemyFighted = pnjs.get(enemyName);
+		}else if(figherVsGroup.equals("2")){
+			enemyFighted = pjs.get(enemyName);
 		}
 		return enemyFighted;
 	}

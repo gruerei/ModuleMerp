@@ -94,6 +94,7 @@ public class Character {
 	private int loadPenal;//PenalizadorCarga
 	private int woundPenal;//PenalizadorHeridas
 	
+	private boolean mounted = false;
 	private boolean flanked = false;
 	private boolean attackedFromBehind = false;
 	private boolean offGuarded = false;
@@ -278,6 +279,7 @@ public class Character {
 		Map<Integer, Skill> skills = new HashMap<Integer, Skill>();
 		
 		for(int skillidx = 0; skillidx < Skill.SKILLS_TOTAL_NUMBER ; skillidx++){
+
 			Skill skill = new Skill(skillidx,skillGrades2[skillidx]);
 			skill.calculGradesModifier(gradesLife);
 			skill.calculAttribModifier(attributes2,race);
@@ -1073,7 +1075,14 @@ public class Character {
 		ResistanceRoll fire = getResistanceRolls().get(ResistanceRoll.FIRE);
 	
 		WeaponItem weapon = (WeaponItem) getEquippedGear().get(Item.WEAPON_1);
-		String weaponName = (weapon.getName() == null ? weapon.getType() : weapon.getName());
+		String weaponName = "";
+		
+		if(weapon == null){
+			weaponName = "NO WEAPON";
+		}else{
+			weaponName = (weapon.getName() == null ? weapon.getType() : weapon.getName());
+		}
+		
 		ArmourItem shield = (ArmourItem)getEquippedGear().get(Item.SHIELD);
 		ArmourItem armour = (ArmourItem)getEquippedGear().get(Item.ARMOUR);
 		ArmourItem helmet = (ArmourItem)getEquippedGear().get(Item.HELMET);
@@ -1134,6 +1143,15 @@ public class Character {
 		
 		String bleedInfo = getBleedingList().size() > 0 ? " (Bleeding: "+getTotalBleedingValue()+" LP per Assault)" : "";
 		
+		StringBuffer boInfo = new StringBuffer();
+		
+		if(weapon == null){
+			int martialArts = skills.get(Skill.MARTIAL_ARTS).getModifTotal();
+			boInfo.append(martialArts + getModifTotalActivity()).append(modifActividad);
+		}else{
+			boInfo.append(weapon.getBO() + getModifTotalActivity()).append(modifActividad);
+		}
+		
 		sb.append("\nMagic Realm: \t\t").append(sbDomain.toString())
 		
 		.append("\n\nLevel: \t\t\t").append(getLevel())
@@ -1151,8 +1169,10 @@ public class Character {
 		.append("\nMovement:\t\t").append(skill.getModifTotal() + getModifTotalActivity()).append(modifActividad)
 		
 		.append("\n\n..............GEAR..............")
-		.append("\nWeapon: ").append(weaponName).append(" ").append("\tBO: ")
-		.append(weapon == null ? "" : weapon.getBO() + getModifTotalActivity()).append(modifActividad)
+		.append("\nWeapon: ").append(weaponName).append(" ")
+		
+		/*BO INFO*/
+		.append("\tBO: ").append(boInfo.toString())
 		.append("\nArmour: ").append(armour == null ? "NO" : armour.getType())
 		.append("\nShield(10-25 BD): ").append(shield == null ? "NO" : shield.getType())
 		.append("\nHelmet(-5 Perc): ").append(helmet == null ? "NO" : helmet.getType())
@@ -1514,15 +1534,23 @@ public class Character {
 			System.out.println(getName() + " no lleva "+Item.getItemTypeToString(itemKey));
 		}else{
 			
+
 			getEquippedGear().remove(itemKey);
-			System.out.println(it.getType() +" has been destroyed");
+			System.out.println(it.getType() +" has been unequipped");
 			 
-			WeaponItem weapon = (WeaponItem)this.equippedGear.get(Item.WEAPON_1);
 			
 			refreshSkillsByItemChange();
 			
 			this.totalBD = this.skills.get(Skill.BD).getModifTotal();
-			int weaponTotalBO = this.skills.get(weapon.getCategory()).getModifTotal();
+			
+			//Actualizar BO de Arma si el Item a Destruir no fuese un arma (por ejemplo en el caso de un escudo)
+			WeaponItem weapon = (WeaponItem)this.equippedGear.get(Item.WEAPON_1);
+			if(weapon != null){
+				int weaponTotalBO = this.skills.get(weapon.getCategory()).getModifTotal();
+	
+				weapon.setBO(weaponTotalBO);
+				this.equippedGear.put(Item.WEAPON_1,weapon);
+			}
 			
 			/*
 			if(itemKey == Item.SHIELD || itemKey == Item.ARMOUR || itemKey == Item.BRACERS
@@ -1530,8 +1558,6 @@ public class Character {
 				
 				
 			}*/
-			weapon.setBO(weaponTotalBO);
-			this.equippedGear.put(Item.WEAPON_1,weapon);
 		}
 		 
 	}
@@ -1561,6 +1587,18 @@ public class Character {
 		return cad;
 		
 	}
+
+
+	public boolean isMounted() {
+		return mounted;
+	}
+
+
+	public void setMounted(boolean mounted) {
+		this.mounted = mounted;
+	}
+	
+	
 	
 	
 	/*Recorre el equipo en uso y obtiene y suman los bonos a habilidades de los objetos equipados*/

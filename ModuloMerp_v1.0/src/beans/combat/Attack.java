@@ -30,6 +30,10 @@ public abstract class Attack extends Action{
 	protected WeaponItem weapon;
 	protected ArmourItem enemyArmour;
 	
+	public Attack(){
+		super();
+	};
+	
 	public Attack(Character actor, int diceRoll, Character enemy, int parryBonus,
 			int otherBonus, String otherBonusDescription, int attackCategory) {
 		

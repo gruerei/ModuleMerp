@@ -112,7 +112,7 @@ public class AttackOutcome {
 			if(weapon.getMainCritical() != null){
 				
 				mainCriticalOutcome = new CriticalOutcome();
-				mainCriticalOutcome.criticalAssess(tableCrit, attack, weapon.getMainCritical());
+				mainCriticalOutcome.criticalAssess(tableCrit, attack.getEnemy(), attack.getActor(), weapon.getMainCritical());
 				/*Añadir al total los daños causados del 1º CRIT*/
 				
 				mainCriticalOutcome.applyOutcome(attack.getEnemy());
@@ -125,7 +125,7 @@ public class AttackOutcome {
 						+ " de tipo " + Tables.getCritical_type()[weapon.getSecondCritical().getCriticalType()] );
 				
 				secondCriticalOutcome = new CriticalOutcome();
-				secondCriticalOutcome.criticalAssess(tableCrit, attack, weapon.getSecondCritical());
+				secondCriticalOutcome.criticalAssess(tableCrit, attack.getEnemy(), attack.getActor(), weapon.getSecondCritical());
 
 				/*Añadir al total los daños causados del 2º CRIT*/
 				secondCriticalOutcome.applyOutcome(attack.getEnemy());

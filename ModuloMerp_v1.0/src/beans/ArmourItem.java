@@ -112,6 +112,7 @@ public class ArmourItem extends Item implements Cloneable{
 	}
 	
 
+
 	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer("\n\n").append(name == null ? "" : name + " - ").append(type).append(" - ").append(Tables.getItem_categories()[category])

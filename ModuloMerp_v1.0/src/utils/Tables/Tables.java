@@ -198,6 +198,7 @@ public class Tables {
 			{"SIGNS","6"},
 			{"TRICK","6"},
 			{"SHAPE_SHIFT","6"},
+			{"MARTIAL_ARTS","12"}
 			};
 	
 	private static String[] magic_realms_descrip_table = {"ESSENCE","CHANNELING","MAGICIAN","BARD","ANIMIST","RANGER"};
@@ -208,9 +209,10 @@ public class Tables {
 	private static String[] material_categories = {"LEATHER","METAL"};
 	
 	private static String[] critical_type = {"","SLASH","PUNCTURE","CRUNCH","GRAPPLE","UNBALANCING"};
+	private static String[] critical_type_abb = {"","SL","PU","CR","GRLE","UN"};
 	
 	private static String[] botch_type = {"","WEAPON","PROJECTILE","SPELL","MANEUVER"};
-
+	
 	
 	public static String[] getBotch_type() {
 		return botch_type ;
@@ -218,6 +220,10 @@ public class Tables {
 	
 	public static String[] getCritical_type() {
 		return critical_type ;
+	}
+	
+	public static String[] getCritical_typeAbb() {
+		return critical_type_abb ;
 	}
 	
 	public static String[] getMaterial_categories() {

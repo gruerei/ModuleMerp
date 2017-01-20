@@ -2,12 +2,16 @@ package beans.combat;
 
 import beans.Botch;
 import beans.Character;
+import beans.CombatStatus;
 import beans.Critical;
+import beans.CriticalOutcome;
 import beans.Item;
 import beans.WeaponItem;
+import cache.Cache;
 import utils.Utils;
 import utils.Tables.Tables;
 import utils.Tables.Tables_Botch;
+import utils.Tables.Tables_Crit;
 
 public class BotchOutcome {
 
@@ -15,12 +19,18 @@ public class BotchOutcome {
 	private int botchLifePoints;
 	private int botchLifePointsPerAssault;
 	private int[] botchMalusActivity;
-	private int botchAssaultsStunned;
-	private Botch botch;
+	private String botchAssaultsStunned;
+	private String botchTearItem;
+	private int botchCauseBodyDisability;
+	private String botchCauseAddCrit;
+	private int botchCauseUnconsc;
+	private int botchItemProtection;
 	private Critical critical;
-	private int resistanceRollModificators;
+	private CriticalOutcome criticalOutcome;
 	private Action action;
+	private String botchDescription;
 	
+	public static int botchRollTest = 0;
 	
 	public BotchOutcome(Attack attack) {
 		this.action = attack;
@@ -41,11 +51,11 @@ public class BotchOutcome {
 	public void setBotchLifePointsPerAssault(int botchLifePointsPerAssault) {
 		this.botchLifePointsPerAssault = botchLifePointsPerAssault;
 	}
-	public int getBotchAssaultsStunned() {
+	public String getBotchAssaultsStunned() {
 		return botchAssaultsStunned;
 	}
 
-	public void setBotchAssaultsStunned(int botchAssaultsStunned) {
+	public void setBotchAssaultsStunned(String botchAssaultsStunned) {
 		this.botchAssaultsStunned = botchAssaultsStunned;
 	}
 
@@ -56,15 +66,67 @@ public class BotchOutcome {
 	public void setBotchMalusActivity(int[] botchMalusActivity) {
 		this.botchMalusActivity = botchMalusActivity;
 	}
+	
+	public String getBotchTearItem() {
+		return botchTearItem;
+	}
+	public void setBotchTearItem(String botchTearItem) {
+		this.botchTearItem = botchTearItem;
+	}
+	
+	public String getBotchDescription() {
+		return botchDescription;
+	}
 
-	public void botchAssess(Character actor) {
+	public void setBotchDescription(String botchDescription) {
+		this.botchDescription = botchDescription;
+	}
+	
+
+	public int getBotchCauseBodyDisability() {
+		return botchCauseBodyDisability;
+	}
+
+	public void setBotchCauseBodyDisability(int botchCauseBodyDisability) {
+		this.botchCauseBodyDisability = botchCauseBodyDisability;
+	}
+
+	public String getBotchCauseAddCrit() {
+		return botchCauseAddCrit;
+	}
+
+	public void setBotchCauseAddCrit(String botchCauseAddCrit) {
+		this.botchCauseAddCrit = botchCauseAddCrit;
+	}
+
+	public int getBotchCauseUnconsc() {
+		return botchCauseUnconsc;
+	}
+
+	public void setBotchCauseUnconsc(int botchCauseUnconsc) {
+		this.botchCauseUnconsc = botchCauseUnconsc;
+	}
+	
+	
+
+	public int getBotchItemProtection() {
+		return botchItemProtection;
+	}
+
+	public void setBotchItemProtection(int botchItemProtection) {
+		this.botchItemProtection = botchItemProtection;
+	}
+
+	public void botchAssess(Character actor,  AttackMelee attackMelee) {
 		int botchRoll = 0;
 		boolean inputOk;
 		
 		do{
 			try{
 				System.out.print("Introduzca el valor de la tirada de pifia: ");
-				botchRoll = Utils.castToInt(Utils.readFromInputLine());
+				botchRoll = botchRollTest;
+				//botchRoll = Utils.castToInt(Utils.readFromInputLine());
+				System.out.println("\nTirada de Pifia: "+botchRoll);		
 				inputOk = true;
 			}catch(NumberFormatException e){
 				System.out.println("Valor introducido incorrecto. Debe introducir un valor numerico.");
@@ -72,22 +134,27 @@ public class BotchOutcome {
 			}
 		}while(inputOk == false);
 		
+		boolean montado = actor.isMounted();
+		/*
 		String montadoIn = "";
-		boolean montado = false;
 		do{
 			try{
-				System.out.print("Combatiente Montado?: Y/N\n");
-				montadoIn = Utils.readFromInputLine();
+				System.out.print("Combatiente Montado?: Y/N ");
+				//montadoIn = Utils.readFromInputLine();
+				montadoIn = mountedTest;
 				if(montadoIn.equalsIgnoreCase("Y")){
-					System.out.println("Combatiente montado asignado.");
+					System.out.println("\nCombatiente montado asignado.");
 					montado = true;
+				}else{
+					System.out.println("");
 				}
+				
 				
 			}catch(NumberFormatException e){
 				System.out.println("Valor introducido incorrecto.");
 				inputOk = false;
 			}
-		}while(inputOk == false);
+		}while(inputOk == false);*/
 		
 		String botchType = "";
 		
@@ -105,14 +172,11 @@ public class BotchOutcome {
 			botchType = "MANEUVER";
 		}
 		
+
+		botchRoll = botchRoll + Botch.modifyRollByBotchType(botchType, attackMelee, montado);
+		System.out.println("Pifia Modificada : "+botchRoll);
 		
 		WeaponItem weapon = (WeaponItem) actor.getEquippedGear().get(Item.WEAPON_1);
-		
-
-		//botchRoll = 50;
-		System.out.println("Tirada de Pifia: "+botchRoll);
-		botchRoll =  botchRoll + modifyRollByBotchTable(botchType,weapon.getCategory(),montado);
-		System.out.println("Pifia Modificada : "+botchRoll);
 		
 		if(weapon.getBotch().getCriticalTaken() != null){
 			/*TODO: El arma provoca un critico adicional por una pifia*/
@@ -123,48 +187,17 @@ public class BotchOutcome {
 		String[] botchOutcome = Tables_Botch.getTableValue(botchType, botchRoll);
 		
 		
-		fillOutcome(botchOutcome, actor);
+		fillOutcome(botchOutcome, actor, botchRoll);
 
 	}
 	
 	
-	private int modifyRollByBotchTable(String botchType, int weaponCategory, boolean montado) {
-		
-		int roll = 0;
-		
-		if(botchType.equals("PROJECTILE")){
-			
-		}else if(botchType.equals("SPELL")){
-				
-		}else if(botchType.equals("WEAPON")){
-			
-			if(montado){
-				System.out.println("Mounted (doesn't matter the Weapon used) : +20");
-				return 20;
-			}else if(weaponCategory == WeaponItem.CONCUSSION){
-				System.out.println("Crush Weapons : -20");
-				return -20;
-			}else if(weaponCategory == WeaponItem.EDGED){
-				System.out.println("Edged Weapons : -10");
-				return -10;
-			}else if(weaponCategory == WeaponItem.TWO_HANDED){
-				System.out.println("Two-Handed Weapons : 0");
-				return 0;
-			}else if(weaponCategory == WeaponItem.POLEARM){
-				System.out.println("Polearms : +10");
-				return 10;
-			}
-			
-		}else if(botchType.equals("MANEUVER")){
-				
-		}
-		
-		return roll;
-	}
 	
-	private void fillOutcome(String[] botchOutcome, Character actor) {
+	private void fillOutcome(String[] botchOutcome, Character actor, int botchRoll) {
 		
-		String botchDescription = botchOutcome[Tables_Botch.COL_DESCRIPTION];
+		setBotchItemProtection(Utils.castToInt(botchOutcome[Tables_Botch.COL_ITEM_PROTECTION]));
+		
+		botchDescription = botchOutcome[Tables_Botch.COL_DESCRIPTION];
 		System.out.println(actor.getName() + " : "+botchDescription);
 		
 		String botchLifePoints = botchOutcome[Tables_Botch.COL_LIFE_POINTS];
@@ -180,21 +213,46 @@ public class BotchOutcome {
 		setBotchMalusActivity(calculMalusActivity);
 
 		String botchAssaultsStunned = botchOutcome[Tables_Botch.COL_STUNNED_ASSAULTS];
-		setBotchAssaultsStunned(Utils.castToInt(botchAssaultsStunned));
+		setBotchAssaultsStunned(botchAssaultsStunned);
 		
-		String critTearItem = botchOutcome[Tables_Botch.COL_TEAR_ITEM];
-		String critCauseBodyDisability = botchOutcome[Tables_Botch.COL_CAUSE_BODY_DISABILITY];
-		String critCauseDeath = botchOutcome[Tables_Botch.COL_CAUSE_CRIT];
-		String critCauseUnconsc = botchOutcome[Tables_Botch.COL_CAUSE_UNCONSCIOUSSNESS];
-		String critAssaultsToDeath = botchOutcome[Tables_Botch.COL_ASSAULTS_TO_DEATH];
+		String botchTearItem = botchOutcome[Tables_Botch.COL_TEAR_ITEM];
+		setBotchTearItem(botchTearItem);
+		
+
+		String botchCauseBodyDisability = botchOutcome[Tables_Botch.COL_CAUSE_BODY_DISABILITY];
+		if(botchCauseBodyDisability.contains("?")){
+			boolean applyEffect = Utils.askConfirmation(botchCauseBodyDisability);
+			if(applyEffect){
+				int bodyPart = Utils.castToInt(botchCauseBodyDisability.replace("?", ""));
+				setBotchCauseBodyDisability(bodyPart);
+			}
+		}else{
+			setBotchCauseBodyDisability(Utils.castToInt(botchCauseBodyDisability));
+		}
+		
+		String botchCauseCrit = botchOutcome[Tables_Botch.COL_CAUSE_CRIT];
+		if(botchRoll == 110){
+			if(!actor.isMounted())
+				botchCauseCrit = "0";
+		}
+		setBotchCauseAddCrit(botchCauseCrit);
+		
+		
+		String botchCauseUnconsc = botchOutcome[Tables_Botch.COL_CAUSE_UNCONSCIOUSSNESS];
+		int calculCauseUnconsc = Utils.calculOutcomeByProtection(botchCauseUnconsc,actor,Tables_Crit.COL_CAUSE_UNCONSCIOUSSNESS,  getBotchItemProtection());
+		setBotchCauseUnconsc(calculCauseUnconsc);
+		
+		//String critAssaultsToDeath = botchOutcome[Tables_Botch.COL_ASSAULTS_TO_DEATH];
 	
 	}
+	
+
 	
 	private int[] calculActivity(String valueIn) {
 		int[] valueRetourned = new int[2];
 		
-		if( valueIn.contains("-")){
-			String[] split = valueIn.split("-");
+		if( valueIn.contains("_")){
+			String[] split = valueIn.split("_");
 			valueRetourned[0] = Utils.castToInt(split[0]);
 			
 			/*El tipo de Malus a la Actividad(H - Heridas / A - Asaltos)*/
@@ -215,16 +273,141 @@ public class BotchOutcome {
 		return valueRetourned;
 	}
 	/*TODO: Aplicar Efectos Pifia*/
-	public void applyOutcome(Character actor) {
+	public void applyOutcome(Character actor, Character enemy) {
+		CombatStatus cs = null;
+		
 		//LIFE POINTS
-		if(getBotchLifePoints() >= 0)
+		if(getBotchLifePoints() > 0)
 			actor.lifePointsLost(getBotchLifePoints());
 		
 		//LIFE POINTS PER ASSAULT
+		if(getBotchLifePointsPerAssault() > 0){
+			cs = actor.addBleeding(getBotchLifePointsPerAssault(), CombatStatus.BLEEDING_WOUND, 0);
+			cs.setDescription(getBotchDescription());
+		}
 		
 		//ACTIVITY MALUS
+		if(botchMalusActivity[0] != 0){
+			if(botchMalusActivity[1] == 999){
+				cs = new CombatStatus(CombatStatus.ACTIVITY, CombatStatus.ACTIVITY_WOUND); 
+			}else{
+				cs = new CombatStatus(CombatStatus.ACTIVITY, CombatStatus.ACTIVITY_ASSAULTS);
+				cs.setAssaultsLeft(botchMalusActivity[1]);
+			}
+			cs.setActivityModif(botchMalusActivity[0]);
+			cs.setDescription(getBotchDescription());
+			actor.getActivityList().put(actor.getActivityList().size() + 1,cs);
+			actor.setModifTotalActivity(actor.getModifTotalActivity() + cs.getActivityModif());
+		}
 		
 		//ASSAULTS STUNNED
+		if(!getBotchAssaultsStunned().equals("0")){
+			cs = new CombatStatus(CombatStatus.STUNNED, 0);
+			cs.setDescription(this.getBotchDescription());
+
+			
+			if(getBotchAssaultsStunned().contains("*")){
+				int assaults = Utils.castToInt(getBotchAssaultsStunned().replace("*", ""));
+				cs.setAssaultsLeft(assaults);
+				
+				if(enemy.getStunned() == null || enemy.getStunned().getAssaultsLeft()<=assaults){
+					enemy.setStunned(cs);
+					System.out.println(enemy.getName() + " STUNNED for "+getBotchAssaultsStunned().replace("*", "")+" assaults.");
+				}else{
+					System.out.println(enemy.getName() + " already was STUNNED for longer assaults. This STUN won't be applied.");
+				}
+			}else{
+				int assaults = Utils.castToInt(getBotchAssaultsStunned());
+				cs.setAssaultsLeft(assaults);
+				
+				if(actor.getStunned() == null || actor.getStunned().getAssaultsLeft()<=assaults){
+					actor.setStunned(cs);
+					System.out.println(actor.getName() + " STUNNED for "+getBotchAssaultsStunned()+" assaults.");
+				}else{
+					System.out.println(actor.getName() + " already was STUNNED for longer assaults. This STUN won't be applied.");
+				}
+			}
+		}
+		
+		//CAUSE DISABILITY,CRIT, UNCOUN IN ACTOR
+		if(getBotchCauseBodyDisability()>0  || !getBotchCauseAddCrit().equals("0")  || getBotchCauseUnconsc()>0){
+			
+			if(getBotchCauseUnconsc()>0){
+				actor.fallUnconscious(CombatStatus.KNOCKED_OUT_WOUND, 0);
+			}
+			
+			if(getBotchCauseBodyDisability()>0){
+
+				int disIdx = getBotchCauseBodyDisability();
+				if(disIdx == Character.DISABILITY_BOTH_LEGS){
+					actor.getBodyPartDisabled()[Character.DISABILITY_RIGHT_LEG] = true;
+					actor.getBodyPartDisabled()[Character.DISABILITY_LEFT_LEG] = true;
+					System.out.println(actor.getName() + "s' Both Legs have been critically injured and are disabled.");
+				}else{
+					
+					if(actor.getBodyPartDisabled()[disIdx] == true){
+						disIdx = disIdx+1;
+						setBotchCauseBodyDisability(disIdx);
+					}
+
+					String disStr = Character.disabilityToString(disIdx);
+					actor.getBodyPartDisabled()[disIdx] = true;
+					System.out.println(actor.getName() + "'s "+disStr+" has been critically injured and is disabled.");
+				}
+			}
+			
+			if(!getBotchCauseAddCrit().equals("0")){
+				//Seleccionar un pj o un pnj a quien se dirige el crítico
+				if(getBotchCauseAddCrit().contains("*")){
+					Character target = Combat.selectEnemy();
+					if(target == null){
+						System.out.println("No fighter selected. Critical Strike in Botch ignored.");
+					}else{
+						botchCriticalReceivedAssess(getBotchCauseAddCrit().replace("*", ""),target,actor);
+					}
+				}else{
+					botchCriticalReceivedAssess(getBotchCauseAddCrit().replace("*", ""),actor,actor);
+				}
+				
+			}
+			
+		}
+
+		//BREAK/UNEQUIP ITEM
+		if(getBotchTearItem()!= null && !getBotchTearItem().equals("0")){
+					
+			Utils.unequipItem(actor, getBotchTearItem());		
+		}
+		
 	}
+	
+public void botchCriticalReceivedAssess(String crit,  Character target, Character actor) {
+
+		
+		String[] crit_ = crit.split("-");
+		int critIndx;
+		WeaponItem weapon = (WeaponItem) actor.getEquippedGear().get(Item.WEAPON_1);
+		
+		//Si aparece el simbolo de interrogacion, hay que poner el Critico del Arma.
+		if(crit_[0].equals("?")){
+			critIndx = weapon.getMainCritical().getCriticalType();
+			crit = crit.replace("?", Tables.getCritical_typeAbb()[critIndx]);
+			
+		}else{
+			critIndx = Critical.assesCriticalType(crit_[0]);
+		}
+		
+		String critMaxGravity = crit_[1];
+				
+		critical = new Critical(critIndx, critMaxGravity);
+		criticalOutcome = new CriticalOutcome();
+		
+		
+		criticalOutcome.criticalAssess(crit_[1], target, actor, critical);
+		criticalOutcome.applyOutcome(target);
+		
+		
+	}
+	
 
 }
