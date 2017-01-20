@@ -178,7 +178,7 @@ public class BotchOutcome {
 		
 		if(botchRoll>120){
 			botchRoll = 120;
-			System.out.println("Maximo de tirada de Pifia superado. Establecido al valor máximo : 120");
+			System.out.println("Maximo de Pifia superado. Establecido al valor máximo : 120");
 		}
 		
 		WeaponItem weapon = (WeaponItem) actor.getEquippedGear().get(Item.WEAPON_1);
