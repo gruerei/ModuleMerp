@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import beans.Character;
 import beans.CombatStatus;
+import beans.CriticalOutcome;
 import beans.combat.Attack;
 import beans.combat.AttackMelee;
 import beans.combat.AttackOutcome;
@@ -25,6 +26,10 @@ public class CritTest {
 	static boolean inititatedConfigs = false;
 	static Character Galadhil = null;
 	static Character OrcALvL1 = null;
+	static int diceRoll = 0;
+	static int parryBonus = 0;
+	static int otherBonus = 0;
+	
 	
 	@BeforeClass 
     public static void setUpBeforeClass() {
@@ -196,6 +201,22 @@ public class CritTest {
 
 	}
 	
+	
+	@Test
+	public void testCrit5() {
+		
+		CriticalOutcome.critRollTest = 96;
+		diceRoll = 113;
+		parryBonus = 0;
+		otherBonus = 0;
+		
+		String otherBonusDescription = "";
+		int attackCategory = Attack.CONCUSSION;
+		
+		Attack attack = new AttackMelee(OrcALvL1, diceRoll, Galadhil , parryBonus, otherBonus, otherBonusDescription, attackCategory);
+		Galadhil.showCombatStatus();
+
+	}
 	
 	
 	

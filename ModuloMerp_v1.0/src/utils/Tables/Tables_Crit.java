@@ -41,8 +41,8 @@ public class Tables_Crit {
 	private static String[] CT1_ROWS_51_65 = 		{"0",		"0",	"0",	"0",	"4",	"NP2",	"0",	"0",	"0",	"4",	"Un golpe al hombro del lado del escudo, rompe el escudo. Si no hay, el hombro se rompe y el brazo queda inutilizado."};
 	private static String[] CT1_ROWS_66_79 = 		{"12",		"0",	"-40_H","2",	"0",	"3",	"0",	"0",	"0",	"0",	"El golpe rompe un hueso de la pierna. -12 PV. -40 a la actividad. Aturdido durante 2 asaltos."};
 	private static String[] CT1_ROWS_80 = 			{"30",		"0",	"0",	"24",	"0",	"5",	"0",	"NP1",	"0",	"5",	"Golpe en la frente. -30 PV. Un ojo destruido. Aturdido 24 asaltos. Si no se lleva yelmo puesto, en coma 1 mes."};
-	private static String[] CT1_ROWS_81_86 = 		{"8",		"0",	"0",	"2",	"0",	"1",	"0",	"0",	"0",	"0",	"El golpe rompe el brazo del arma. El brazo inutilizado. Daño en los tendones. -8PV. Aturdido durante 2 asaltos."};
-	private static String[] CT1_ROWS_87_89 = 		{"9",		"0",	"-60_H","3",	"0",	"0",	"0",	"0",	"0",	"0",	"Rodilla hecha trizas.-9 PV.-60 a la actividad. Derribado y aturdido durante 3 asaltos."};
+	private static String[] CT1_ROWS_81_86 = 		{"8",		"0",	"0",	"2",	"0",	"1",	"0",	"0",	"0",	"0",	"El golpe rompe el brazo del arma. El brazo inutilizado. Daño en los tendones. -8 PV. Aturdido durante 2 asaltos."};
+	private static String[] CT1_ROWS_87_89 = 		{"9",		"0",	"-60_H","3",	"0",	"3",	"0",	"0",	"0",	"0",	"Rodilla hecha trizas.-9 PV.-60 a la actividad. Derribado y aturdido durante 3 asaltos."};
 	private static String[] CT1_ROWS_90 = 			{"25",		"0",	"0",	"0",	"0",	"0",	"0",	"1",	"0",	"0",	"Un golpe en la base del cuello deja paralizado de los hombros hacia abajo. -25 PV. El enemigo queda desconcertado."};
 	private static String[] CT1_ROWS_91_96 = 		{"20",		"0",	"0",	"0",	"0",	"0",	"NP1",	"1",	"0",	"5",	"Inconsciente 4 horas por un golpe en un lado de la cabeza. Si no se lleva yelmo el craneo queda aplastado. -20 PV."};
 	private static String[] CT1_ROWS_97_99 = 		{"0",		"0",	"0",	"0",	"0",	"0",	"1",	"1",	"6",	"0",	"Un golpe tremendo en el pecho hace que las costillas perforen los pulmones. Cae y muere en 6 asaltos. Salvaje."};
