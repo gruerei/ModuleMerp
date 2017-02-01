@@ -1524,6 +1524,33 @@ public class Character {
 		System.out.println(name + " HAS DIED. LP :  "+getLife().getCurrentLife() + "/"+getLife().getTotalLife());
 	}
 
+	public void equipItem(int itemType, Item it){
+		
+		getEquippedGear().put(itemType, it);
+		
+		refreshSkillsByItemChange();
+		
+		if(it instanceof WeaponItem){
+			//Actualizar BO de Arma 
+			WeaponItem weapon = (WeaponItem)it;
+			if(weapon != null){
+				int weaponTotalBO = this.skills.get(weapon.getCategory()).getModifTotal();
+
+				weapon.setBO(weaponTotalBO);
+			}
+			
+			if(weapon.getCategory() == WeaponItem.TWO_HANDED){
+				System.out.println(weapon.getType() +" to be equipped is Two-Handed. Checking if any Shield is used.");
+				unequipItem(Item.SHIELD);
+			}
+		}
+		
+		System.out.println(it.getType() +" has been equipped");
+		
+		
+	}
+	
+
 
 	public void unequipItem(int itemKey) {
 		

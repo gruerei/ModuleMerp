@@ -29,6 +29,7 @@ public abstract class Attack extends Action{
 	protected AttackOutcome outcome;
 	protected WeaponItem weapon;
 	protected ArmourItem enemyArmour;
+	protected BotchOutcome botchOutcome;
 	
 	public Attack(){
 		super();
@@ -133,14 +134,18 @@ public abstract class Attack extends Action{
 	}
 
 
-
-
 	public void setEnemyArmour(ArmourItem enemyArmour) {
 		this.enemyArmour = enemyArmour;
 	}
+	
+	
+	public BotchOutcome getBotchOutcome() {
+		return botchOutcome;
+	}
 
-
-
+	public void setBotchOutcome(BotchOutcome botchOutcome) {
+		this.botchOutcome = botchOutcome;
+	}
 
 	protected abstract void resolveAttack();
 	 

@@ -143,6 +143,24 @@ public class ArmourItem extends Item implements Cloneable{
 		}
 		return ret;
 	}
+
+
+	public static int calculThresold(String armourType) {
+		int ret = 0;
+		
+		if(armourType == null){
+			ret = Tables_AT.NO_ARMOUR_THRESHOLD;
+		}else if(armourType.equalsIgnoreCase("SOFT LEATHER")){
+			ret = Tables_AT.SOFT_LEATHER_THRESHOLD;
+		}else if(armourType.equalsIgnoreCase("RIGID LEATHER")){
+			ret = Tables_AT.RIGID_LEATHER_THRESHOLD;
+		}else if(armourType.equalsIgnoreCase("CHAIN")){
+			ret = Tables_AT.CHAIN_THRESHOLD;
+		}else if(armourType.equalsIgnoreCase("PLATE")){
+			ret = Tables_AT.PLATE_THRESHOLD;
+		}
+		return ret;
+	}
 	
 	
 }

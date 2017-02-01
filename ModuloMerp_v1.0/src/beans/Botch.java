@@ -100,7 +100,7 @@ public class Botch {
 			}
 
 			
-		}else if(attackMelee instanceof AttackSpell){
+		}else if(botchType.equals("SPELL")){
 			
 		}
 		

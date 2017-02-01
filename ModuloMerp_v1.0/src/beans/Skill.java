@@ -473,9 +473,7 @@ public class Skill {
 						sumModifObjects = sumModifObjects + wi.getTypeMod2();
 					}
 					
-					/**TODO  Calculate the TypeWeaponModifier in the Combat
-					//because here you don't have any information related to the enemy armor*/
-					
+
 					/**TODO En Caso de algun modificador magico/especial de un arma aplicado
 					 * a una raza o armadura especifica, de momento no esta hecho*/
 				}

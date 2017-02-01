@@ -145,7 +145,7 @@ public class Utils {
 			/*Dos formas de hacer lo mismo (¿Quitar la primera o dejarla para cosas especiales(ver)?)*/
 			//scimitarHighQuality.setSpecialMod1(10);
 			broadSworHighQuality.getSkillMods()[Skill.EDGED] = 10;
-			broadSworHighQuality.setName("Silver Broadsword");
+			broadSworHighQuality.setName("Silver Scimitar");
 			broadSworHighQuality.setQuality(WeaponItem.MAGICAL);
 			equippedGear.put(Item.WEAPON_1, broadSworHighQuality);
 			
@@ -193,7 +193,7 @@ public class Utils {
 			int lvl = 1;
 			
 			//Lectura de Atributos
-			int str = 90, agi = 78, con = 80; 
+			int str = 90, agi = 82, con = 80; 
 			int inte = 45, i = 50, car = 40;
 			int ap =42;
 			int life = 20;
@@ -222,6 +222,7 @@ public class Utils {
 			skillGrades[Skill.AMBUSH] = 1;
 			skillGrades[Skill.PERCEPTION] = 1;
 			skillGrades[Skill.BODY_DEVELOPMENT] = 4;
+			skillGrades[Skill.MARTIAL_ARTS]  = 1;
 			
 			character = new Character(name, player, lvl, PX, raceIn, cultureIn, professionIn, equippedGear
 					,str, agi, con, inte, i, car, ap, life, magicalDomainChoosen, skillGrades ,specialSkillModi);
@@ -306,6 +307,19 @@ public class Utils {
 			
 		
 		return valueRetourned;
+	}
+
+	public static boolean findValueInArray(int arCat, Integer[] array) {
+		boolean found = false;
+		
+		for(int i = 0; i < array.length ; i++){
+			if(array[i] == arCat){
+				found = true;
+				return found;
+			}
+		}
+		
+		return found;
 	}
 
 	

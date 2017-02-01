@@ -1,9 +1,13 @@
 package beans.combat;
 
+import beans.ArmourItem;
+import beans.Attribute;
 import beans.Botch;
 import beans.Character;
 import beans.Critical;
 import beans.CriticalOutcome;
+import beans.Item;
+import beans.Skill;
 import beans.WeaponItem;
 import utils.Utils;
 import utils.Tables.Tables;
@@ -43,7 +47,7 @@ public class AttackOutcome {
 		}
 		
 		
-		if(attack instanceof AttackMelee){
+		if(attack.getEnemyArmour() != null && attack instanceof AttackMelee){
 			
 			if(attack.enemyArmour.getType().equalsIgnoreCase("SOFT LEATHER")){
 				enemyArmourType = Tables_AT.AT_SOFLEA;
@@ -93,8 +97,11 @@ public class AttackOutcome {
 		if(lifePointsCaused > 0){
 			System.out.println("Impacto!! -> El golpe aplica "+lifePointsCaused+" puntos de vida." );
 		}else{
-			/*TODO Dar mas informacion sobre que ha pasado con el gope (segun tirada)*/
-			System.out.println("El golpe no se consigue dañar al objetivo");
+			
+			System.out.println("El golpe no se consigue dañar al objetivo.");
+			
+			showAdditionalAttackInformation(attack.getParryBonus(), attack.getActor(),attack.getEnemy());
+			
 		}
 		
 		attack.getEnemy().lifePointsLost(lifePointsCaused);
@@ -121,15 +128,23 @@ public class AttackOutcome {
 			}
 			
 			if(weapon.getSecondCritical() != null){
-				System.out.println("GOLPE CRITICO ADICIONAL!! Gravedad : "+tableOutcomeSplit[1]
-						+ " de tipo " + Tables.getCritical_type()[weapon.getSecondCritical().getCriticalType()] );
 				
-				secondCriticalOutcome = new CriticalOutcome();
-				secondCriticalOutcome.criticalAssess(tableCrit, attack.getEnemy(), attack.getActor(), weapon.getSecondCritical());
-
-				/*Añadir al total los daños causados del 2º CRIT*/
-				secondCriticalOutcome.applyOutcome(attack.getEnemy());
-				//assaultsStunned = assaultsStunned + secondCritical.getAssaultsStunned();*/
+				if(mainCriticalOutcome.getCritGravity().equals(Critical.CRITICAL_C) ||
+						mainCriticalOutcome.getCritGravity().equals(Critical.CRITICAL_D)
+						|| mainCriticalOutcome.getCritGravity().equals(Critical.CRITICAL_E)){
+				
+					String secondCritMaxGravity = secondCriticalGravityAssess(mainCriticalOutcome.getCritGravity());
+						
+					System.out.println("GOLPE CRITICO ADICIONAL!! Gravedad : "+secondCritMaxGravity
+							+ " de tipo " + Tables.getCritical_type()[weapon.getSecondCritical().getCriticalType()] );
+					
+					secondCriticalOutcome = new CriticalOutcome();
+					secondCriticalOutcome.criticalAssess(secondCritMaxGravity, attack.getEnemy(), attack.getActor(), weapon.getSecondCritical());
+	
+					/*Añadir al total los daños causados del 2º CRIT*/
+					secondCriticalOutcome.applyOutcome(attack.getEnemy());
+					//assaultsStunned = assaultsStunned + secondCritical.getAssaultsStunned();*/
+				}
 				
 			}
 			
@@ -139,6 +154,76 @@ public class AttackOutcome {
 	}
 
 	
+	/** Show a detailed information about what happened with a Missed Attack*/
+	private void showAdditionalAttackInformation(int enemyParryBonus, Character actor, Character enemy) {
+		
+		
+		ArmourItem enemyShield = (ArmourItem)enemy.getEquippedGear().get(Item.SHIELD);
+		ArmourItem enemyArmour = (ArmourItem)enemy.getEquippedGear().get(Item.ARMOUR);
+		int enemyBDDex = enemy.getAttributes().get(Attribute.AGILITY).getModifTotal();
+		
+		int enemyShieldBD = 0;
+		if(enemyShield!=null)
+			enemyShieldBD = enemyShield.getSkillMods()[Skill.BD];
+		
+		String enemyArmourType= "";
+		if(enemyArmour == null){
+			enemyArmourType = null;
+		}else{
+			enemyArmourType = enemyArmour.getType();
+		}
+		
+		int thresold = ArmourItem.calculThresold(enemyArmourType);
+		
+		if(enemyParryBonus>0 && enemyShield!=null && enemy.isAbleToBlock()){
+			
+			if(rollCalculation + enemyParryBonus >= thresold){
+				System.out.println(actor.getName()+"'s Attack has been PARRIED by "+ enemy.getName() + "'s Ability!!");
+			}else if(rollCalculation + enemyParryBonus + enemyShieldBD >= thresold){
+				System.out.println(actor.getName()+"'s Attack has been DEFLECTED by "+ enemy.getName() + "'s Shield!!");
+			}else if(rollCalculation + enemyParryBonus + enemyShieldBD + enemyBDDex >= thresold){
+				System.out.println(actor.getName()+"'s Attack has been DODGED by "+ enemy.getName() + "'s Reflexes !!");
+			}else{
+				System.out.println(actor.getName()+"'s Attack has MISSED!");
+			}
+				
+		}else if(enemyParryBonus>0 && (enemyShield==null || !enemy.isAbleToBlock())){
+			if(rollCalculation + enemyParryBonus >= thresold){
+				System.out.println(actor.getName()+"'s Attack has been PARRIED by "+ enemy.getName() + "'s Ability!!");
+			}else if(rollCalculation + enemyParryBonus + enemyBDDex >= thresold){
+				System.out.println(actor.getName()+"'s Attack has been DODGED by "+ enemy.getName() + "'s Reflexes !!");
+			}else{
+				System.out.println(actor.getName()+"'s Attack has MISSED!");
+			}
+		}else if(enemyShield!=null && enemy.isAbleToBlock() && enemyParryBonus == 0){
+			if(rollCalculation + enemyShieldBD >= thresold){
+				System.out.println(actor.getName()+"'s Attack has been DEFLECTED by "+ enemy.getName() + "'s Shield!!");
+			}else if(rollCalculation + enemyShieldBD + enemyBDDex >= thresold){
+				System.out.println(actor.getName()+"'s Attack has been DODGED by "+ enemy.getName() + "'s Reflexes !!");
+			}else{
+				System.out.println(actor.getName()+"'s Attack has MISSED!");
+			}
+		}else if((enemyShield==null || !enemy.isAbleToBlock()) && enemyParryBonus == 0){
+			if(rollCalculation + enemyBDDex >= thresold){
+				System.out.println(actor.getName()+"'s Attack has been DODGED by "+ enemy.getName() + "'s Reflexes !!");
+			}else{
+				System.out.println(actor.getName()+"'s Attack has MISSED!");
+			}
+		}
+		
+	}
+
+	private String secondCriticalGravityAssess(String critGravity) {
+		String ret = "";
+		if(critGravity.equals(Critical.CRITICAL_C)){
+			return Critical.CRITICAL_A;
+		}else if(critGravity.equals(Critical.CRITICAL_D)){
+			return Critical.CRITICAL_B;
+		}else if(critGravity.equals(Critical.CRITICAL_E)){
+			return Critical.CRITICAL_C;
+		}
+		return ret;
+	}
 
 	public String getTableAttackRoll() {
 		return tableAttackRoll;
@@ -271,6 +356,50 @@ public class AttackOutcome {
 				rowId = 23;
 			}else if(rollCalculation >145){
 				rowId = 24;
+			}
+		}else if(table.equals("AT3")){
+			if(rollCalculation <= 8){
+				rowId = 0;
+			}else if(rollCalculation >8 && rollCalculation <= 55){
+				rowId = 1;
+			}else if(rollCalculation >55 && rollCalculation <= 60){
+				rowId = 2;
+			}else if(rollCalculation >60 && rollCalculation <= 65){
+				rowId = 3;
+			}else if(rollCalculation >65 && rollCalculation <= 70){
+				rowId = 4;
+			}else if(rollCalculation >70 && rollCalculation <= 75){
+				rowId = 5;
+			}else if(rollCalculation >75 && rollCalculation <= 80){
+				rowId = 6;
+			}else if(rollCalculation >80 && rollCalculation <= 85){
+				rowId = 7;
+			}else if(rollCalculation >85 && rollCalculation <= 90){
+				rowId = 8;
+			}else if(rollCalculation >90 && rollCalculation <= 95){
+				rowId = 9;
+			}else if(rollCalculation >95 && rollCalculation <= 100){
+				rowId = 10;
+			}else if(rollCalculation >100 && rollCalculation <= 105){
+				rowId = 11;
+			}else if(rollCalculation >105 && rollCalculation <= 110){
+				rowId = 12;
+			}else if(rollCalculation >110 && rollCalculation <= 115){
+				rowId = 13;
+			}else if(rollCalculation >115 && rollCalculation <= 120){
+				rowId = 14;
+			}else if(rollCalculation >120 && rollCalculation <= 125){
+				rowId = 15;
+			}else if(rollCalculation >125 && rollCalculation <= 130){
+				rowId = 16;
+			}else if(rollCalculation >130 && rollCalculation <= 135){
+				rowId = 17;
+			}else if(rollCalculation >135 && rollCalculation <= 140){
+				rowId = 18;
+			}else if(rollCalculation >140 && rollCalculation <= 145){
+				rowId = 19;
+			}else if(rollCalculation >145){
+				rowId = 20;
 			}
 		}
 		

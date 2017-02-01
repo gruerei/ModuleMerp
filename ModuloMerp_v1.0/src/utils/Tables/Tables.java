@@ -211,12 +211,6 @@ public class Tables {
 	private static String[] critical_type = {"","SLASH","PUNCTURE","CRUNCH","GRAPPLE","UNBALANCING"};
 	private static String[] critical_type_abb = {"","SL","PU","CR","GRLE","UN"};
 	
-	private static String[] botch_type = {"","WEAPON","PROJECTILE","SPELL","MANEUVER"};
-	
-	
-	public static String[] getBotch_type() {
-		return botch_type ;
-	}
 	
 	public static String[] getCritical_type() {
 		return critical_type ;
@@ -265,6 +259,8 @@ public class Tables {
 			ret = Tables_AT.AT1[rowIdx][colIdx] + "";
 		}else if(table_name.equals("AT2")){
 			ret = Tables_AT.AT2[rowIdx][colIdx] + "";
+		}else if(table_name.equals("AT3")){
+			ret = Tables_AT.AT3[rowIdx][colIdx] + "";
 		}
 		
 		return ret;

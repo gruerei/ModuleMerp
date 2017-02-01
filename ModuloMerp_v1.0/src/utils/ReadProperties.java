@@ -224,6 +224,7 @@ public class ReadProperties {
 
 			for(String weapon : weapons){
 				
+				
 				int [] skillMods = new int[Skill.SKILLS_TOTAL_NUMBER];
 				String name = weaponProperties.getProperty("weapon." + weapon + ".name");
 				

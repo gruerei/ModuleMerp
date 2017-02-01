@@ -26,23 +26,33 @@ public class AttackMelee extends Attack {
 	@Override
 	protected void resolveAttack() {
 		
-		
+		System.out.println(actor.getName() +" attacks "+enemy.getName()+" in Melee with "
+		+ (weapon.getName() != null ? weapon.getName() : weapon.getType()));
 		//attackFromBehind: Enemigo no puede parar y no hay bono por escudo
 		//stunned: Enemigo para como máximo con la mitad
 		//offguarded : Enemigo no para y no puede usar BD escudo
 		//flanked: Segun sitio del escudo, no se cuenta BD
 		
 		if(diceRoll <= weapon.getBotch().getMax()){
-			/*TODO: PIFIA*/
 			if(weapon.getName() != null)
 				System.out.println("PIFIA con "+weapon.getName());
 			else
 				System.out.println("PIFIA con "+ weapon.getType());
 
-			
 			BotchOutcome bo = new BotchOutcome(this);
+			WeaponItem weapon = (WeaponItem) actor.getEquippedGear().get(Item.WEAPON_1);
+
+			if (weapon.getBotch().getCriticalTaken() != null) {
+				
+				String botchCritParam = weapon.getBotch().getCriticalTaken().toString().replace(" ", "");
+				System.out.println("OHH NOOOO: "+actor.getName() +" se provoca un Auto-Critico "+botchCritParam+" con "+weapon.getType()+" debido a la Pifia. ");
+				bo.setBotchWeaponCriticalOutcome(bo.botchCriticalReceivedAssess(botchCritParam, actor, actor));
+			}
+
+		
 			bo.botchAssess(actor, this);
 			bo.applyOutcome(actor, enemy);
+			setBotchOutcome(bo);
 
 		}else{
 			
@@ -96,6 +106,10 @@ public class AttackMelee extends Attack {
 				otherBonusInfo = " + "+otherBonus+ " OFFGUARD ";
 			}
 			
+			ArmourItem enemyArmour = (ArmourItem)enemy.getEquippedGear().get(Item.ARMOUR);
+			int weaponTypeBonus = WeaponItem.calculWeaponTypeBonus(weapon, enemyArmour);
+			
+			
 			int bonusAct = 0;
 			if(actor.getActivityList().size() > 0){
 				for (Map.Entry<Integer, CombatStatus> entry : actor.getActivityList().entrySet()){
@@ -106,10 +120,13 @@ public class AttackMelee extends Attack {
 			actor.setModifTotalActivity(bonusAct);
 			
 			rollCalculation = diceRoll + weapon.getBO() - actor.getParryBonusInUse() -  enemy.getTotalBD()
-					- super.parryBonus + otherBonus + bonusAct;
+					- super.parryBonus + otherBonus + bonusAct + weaponTypeBonus;
 			
 			System.out.println(diceRoll + " Roll + "+ weapon.getBO() +" BO - " + actor.getParryBonusInUse() + " BO used to parry - " +
-			enemyTotalBD + " BD " +enemy.getName() + " - " +super.parryBonus+ " Enemy Parry " +otherBonusInfo
+			enemyTotalBD + " BD " +enemy.getName() + " - " +super.parryBonus+ " Enemy Parry " + otherBonusInfo
+					+ (weaponTypeBonus != 0 ? 
+							(weaponTypeBonus > 0 ? "+ " : "") +
+							weaponTypeBonus + " Bonus Type Weapon "  : "" ) 
 					+ (bonusAct != 0 ? bonusAct + " Modif. Actividad "  : "" ) + "= " +rollCalculation);
 			outcome = new AttackOutcome(rollCalculation, this);
 		}

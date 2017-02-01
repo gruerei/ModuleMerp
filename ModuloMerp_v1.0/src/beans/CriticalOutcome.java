@@ -20,6 +20,8 @@ public class CriticalOutcome {
 	private int critAssaultsToDeath;
 	private int critItemProtection;
 	private String critDescription;
+	private int critRoll;
+	private int critRollModified;
 	
 	public static int critRollTest = 0;
 	
@@ -95,20 +97,31 @@ public class CriticalOutcome {
 	public void setCritDescription(String critDescription) {
 		this.critDescription = critDescription;
 	}
-	
 
-	public void criticalAssess(String tableCrit, Character enemy, Character actor, Critical critical) {
+	public int getCritRoll() {
+		return critRoll;
+	}
+	public void setCritRoll(int critRoll) {
+		this.critRoll = critRoll;
+	}
+	public int getCritRollModified() {
+		return critRollModified;
+	}
+	public void setCritRollModified(int critRollModified) {
+		this.critRollModified = critRollModified;
+	}
+	public void criticalAssess(String critGravityin, Character enemy, Character actor, Critical critical) {
 
 		
 		String critType = Tables.getCritical_type()[critical.getCriticalType()];
-		System.out.println("GOLPE CRITICO !! Gravedad : "+tableCrit
+		System.out.println("GOLPE CRITICO !! Gravedad : "+critGravityin
 				+ " de tipo " + critType );
 		
-		String critGravity = Critical.assessGravity(tableCrit,critical.getCriticalMaxGravity());
+		String critGravity = Critical.assessGravity(critGravityin,critical.getCriticalMaxGravity());
 		setCritGravity(critGravity);
 		
-		if(!critGravity.equals(tableCrit)){
-			System.out.println("CRITICO "+tableCrit+" tiene un tope de "+critGravity+"."
+		if(!critGravity.equals(critGravityin)){
+			System.out.println("CRITICO "+critGravityin+" tiene un tope de "+critGravity+"."
 					+ " El critico se calculará como critico "+critGravity);
 		}
 		
@@ -131,7 +144,9 @@ public class CriticalOutcome {
 		//int critRoll = Utils.castToInt(Utils.readFromInputLine());
 		//critRoll = 50;
 		System.out.println("Tirada de Critico: "+critRoll);
+		setCritRoll(critRoll);
 		critRoll = critRoll + Critical.modifyRollByCritGravity(critGravity);
+		setCritRollModified(critRoll);
 		System.out.println("Critico Modificado : "+critRoll);
 		String[] critOutcome = Tables_Crit.getTableValue(critType, critRoll);
 		
