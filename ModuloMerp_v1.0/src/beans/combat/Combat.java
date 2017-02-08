@@ -82,6 +82,7 @@ public class Combat {
 			
 			System.out.println(asalto.getActions().toString());
 			
+			/*** 2º RESOLVER LAS ACCIONES: ***/
 			resolveActions(asalto);
 			
 
@@ -94,6 +95,7 @@ public class Combat {
 				}
 			}while(!entradaTeclado.equalsIgnoreCase("Y") && !entradaTeclado.equalsIgnoreCase("N"));
 			
+			/**SIGUIENTE ASALTO EN CASO DE QUE EL COMBATE NO ACABE*/
 		}while(!combatFinished);
 		
 		/* TODO: Dar info del combate	*/

@@ -178,7 +178,7 @@ public class Tables {
 			{"BODY_DEVELOPMENT","5"},
 			{"PERCEPTION","5"},
 			{"BD","5"},
-			{"INFLUENCE_LEADERSHIP","6"},
+			{"INFLUENCE_LEADERSHIP","10"},
 			{"ACROBACIES","8"},
 			{"IMPERSONATE","10"},
 			{"ANIMAL_HANDLING","10"},
@@ -196,7 +196,7 @@ public class Tables {
 			{"MEDITATION","6"},
 			{"ROPES","6"},
 			{"SIGNS","6"},
-			{"TRICK","6"},
+			{"TRICK","10"},
 			{"SHAPE_SHIFT","6"},
 			{"MARTIAL_ARTS","12"}
 			};

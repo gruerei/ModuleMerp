@@ -173,7 +173,7 @@ public class Profession {
 		}else if(profession.equalsIgnoreCase(CONJURER)){
 			/** Con mis Reglas, para poder ser conjurador hay que ser antes Erudito y obtener
 			 * Conocimiento de la Esencia (bloqueada por defecto) y Conocimiento de la Canalización.**/
-			//He learn spell for both Realms
+			//He learns spell for both Realms
 			cha.getMAGICAL_DOMAIN().add(SpellList.CHANNELING);
 			cha.getMAGICAL_DOMAIN().add(SpellList.ESSENCE);
 			int avgPoints = Math.round((intel + intui) / 2);//Redondea hacia arriba

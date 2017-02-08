@@ -121,7 +121,7 @@ public class Utils {
 		if(sheetNumber == 1){
 			//Lectura Basicos
 			String name = "Galadhil";
-			String player = "PlayerTest";
+			String player = "Lourun";
 			String raceIn = "Dunedain";
 			String cultureIn = "";
 			String professionIn = "Ranger";
@@ -145,7 +145,7 @@ public class Utils {
 			/*Dos formas de hacer lo mismo (¿Quitar la primera o dejarla para cosas especiales(ver)?)*/
 			//scimitarHighQuality.setSpecialMod1(10);
 			broadSworHighQuality.getSkillMods()[Skill.EDGED] = 10;
-			broadSworHighQuality.setName("Silver Scimitar");
+			broadSworHighQuality.setName("Silver Broadsword");
 			broadSworHighQuality.setQuality(WeaponItem.MAGICAL);
 			equippedGear.put(Item.WEAPON_1, broadSworHighQuality);
 			
@@ -204,6 +204,7 @@ public class Utils {
 			
 			//Identificada arma de uso, extraer la de la plantilla y clonarla
 			WeaponItem mace = (WeaponItem)Cache.weaponItems.get(WeaponItem.MACE).clone();
+			mace.setQuality(WeaponItem.NORMAL);
 			equippedGear.put(Item.WEAPON_1, mace);
 			
 			equippedGear.put(Item.ARMOUR, Cache.armourItems.get(ArmourItem.SOFT_LEATHER).clone());
