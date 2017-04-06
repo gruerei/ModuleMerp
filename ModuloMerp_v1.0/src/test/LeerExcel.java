@@ -14,8 +14,42 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class LeerExcel {
 
+	public static int FINAL_DOC_ROW = 119;
 	static DataFormatter formatter = new DataFormatter();
  
+	/*
+	// Recorremos todas las filas para mostrar el contenido de cada celda
+	while (rowIterator.hasNext()){
+	    row = (XSSFRow) rowIterator.next();
+	    // Obtenemos el iterator que permite recorres todas las celdas de una fila
+
+	    Iterator<Cell> cellIterator = row.cellIterator();
+	    XSSFCell celda;
+	    while (cellIterator.hasNext()){
+			celda = (XSSFCell)cellIterator.next();
+			System.out.println(celda.getRichStringCellValue());
+			// Dependiendo del formato de la celda el valor se debe mostrar como String, Fecha, boolean, entero...
+			/*switch(celda.getCellTypeEnum()) {
+				case NUMERIC:
+				    if( DateUtil.isCellDateFormatted(celda) ){
+				       System.out.println(celda.getDateCellValue());
+				    }else{
+				       System.out.println(celda.getNumericCellValue());
+		
+				    }
+				    break;
+				case STRING:
+				    System.out.println(celda.getStringCellValue());
+				    break;
+				case BOOLEAN:
+				    System.out.println(celda.getBooleanCellValue());
+				    break;
+				default:
+					;
+				}*/
+			/*
+	    }
+	}*/
 
 	@SuppressWarnings("deprecation")
 	public static void main(String args[]) throws IOException{
@@ -110,43 +144,115 @@ public class LeerExcel {
 	List<List> armourItems = new ArrayList<List>();
 	readCharacterDataFromExcelDefensiveItems(sheet, firstItemRow, lastItemRow, lastSectionRow, armourItems, LEFT_COLUMN, RIGHT_COLUMN);
 	
-	/*
-	// Recorremos todas las filas para mostrar el contenido de cada celda
-	while (rowIterator.hasNext()){
-	    row = (XSSFRow) rowIterator.next();
-	    // Obtenemos el iterator que permite recorres todas las celdas de una fila
-
-	    Iterator<Cell> cellIterator = row.cellIterator();
-	    XSSFCell celda;
-	    while (cellIterator.hasNext()){
-			celda = (XSSFCell)cellIterator.next();
-			System.out.println(celda.getRichStringCellValue());
-			// Dependiendo del formato de la celda el valor se debe mostrar como String, Fecha, boolean, entero...
-			/*switch(celda.getCellTypeEnum()) {
-				case NUMERIC:
-				    if( DateUtil.isCellDateFormatted(celda) ){
-				       System.out.println(celda.getDateCellValue());
-				    }else{
-				       System.out.println(celda.getNumericCellValue());
-		
-				    }
-				    break;
-				case STRING:
-				    System.out.println(celda.getStringCellValue());
-				    break;
-				case BOOLEAN:
-				    System.out.println(celda.getBooleanCellValue());
-				    break;
-				default:
-					;
-				}*/
-			/*
-	    }
-	}*/
-
+	/************** GEAR NOT IN USE (WEAPONS, ARMOURS, DEFENSIVE, RINGS) *************/
+	firstRow = 45;
+	LEFT_COLUMN = 0;
+	RIGHT_COLUMN = 5;
+	List<List> inventory = new ArrayList<List>();
+	int firstSectionRow = readCharacterDataFromExcelNotInUse(sheet, firstRow, inventory, LEFT_COLUMN, RIGHT_COLUMN, 1);
+	
+	/************** GEAR NOT IN USE (OTHERS) *************/
+	readCharacterDataFromExcelNotInUse(sheet, firstSectionRow, inventory, LEFT_COLUMN, RIGHT_COLUMN, 2);
+	
 	// cerramos el libro excel
 	workbook.close();
     }
+
+	private static int readCharacterDataFromExcelNotInUse(XSSFSheet sheet, int firstRow, List<List> list,int LEFT_COLUMN, int RIGHT_COLUMN, int section) {
+		
+		String typeValue = "", nameValue  = "";
+		List<List> item = new ArrayList<List>();
+		List<List> itemSkills = new ArrayList<List>();
+		int COLUMN = 0;
+		boolean othersSection = false;
+		
+		//for(int k = 0; k < 4; k++){//4 rows x 2 columns = 8 ITEMS: from Shield(top left) to Right Ring (bottom right)
+		int k = 0;
+		while(!othersSection){
+		
+			for(int h = 0; h < 2; h++){
+				if(h==0){
+					COLUMN = LEFT_COLUMN;
+				}else if(h==1){
+					//This is for the second item column
+					COLUMN = RIGHT_COLUMN;
+				}
+				
+				
+				boolean saltarItem = false;
+				int rowToNextItem = 2; //rows to jump until the next item
+				
+				int itemFirstRow = firstRow;
+				int itemLastRow = firstRow + rowToNextItem;
+				
+				for(int i = itemFirstRow; i <= itemLastRow && !othersSection ; i++){
+					
+					XSSFRow  row = sheet.getRow(i);
+					XSSFCell cell = row.getCell(COLUMN);
+					String cellTag = formatter.formatCellValue(cell);
+					
+					if(cellTag.equals("WEAPON")){
+						
+						itemLastRow++;
+						
+					}if(cellTag.equals("OTHER GEAR")){
+						
+						othersSection = true;
+						
+					}else{
+					
+						if(cellTag.equals("TYPE")){
+							
+							XSSFCell weaponTypeCell = row.getCell(COLUMN + 1);
+							typeValue = formatter.formatCellValue(weaponTypeCell);
+							if(typeValue.isEmpty()){
+								saltarItem = true;
+							}
+							
+						}else if(cellTag.equals("NAME") && !saltarItem){
+							
+							XSSFCell weaponNameCell = row.getCell(COLUMN + 1);
+							nameValue = formatter.formatCellValue(weaponNameCell);
+							
+						}
+						
+						if(!saltarItem){
+						
+							XSSFCell weaponSkillTagCell = row.getCell(COLUMN + 2);
+							String skillTagCellValue = formatter.formatCellValue(weaponSkillTagCell);
+							if(!skillTagCellValue.isEmpty()){
+								XSSFCell weaponSkillValueCell = row.getCell(COLUMN + 3);
+								String skillValueCell = formatter.formatCellValue(weaponSkillValueCell);
+								List<String> itemSkill = new ArrayList<String>();
+								itemSkill.add(skillTagCellValue);
+								itemSkill.add(skillValueCell);
+								itemSkills.add(itemSkill);
+							}
+						
+						}
+					
+					}
+				
+				}
+
+				if(!saltarItem){
+					List details = new ArrayList();
+					details.add(typeValue);
+					details.add(nameValue);
+					item.add(details);
+					item.add(itemSkills);
+					list.add(item);
+				
+					item = new ArrayList<List>();
+					itemSkills = new ArrayList<List>();
+				}
+			}
+			
+			k++;
+		}
+		
+		return 0;
+	}
 
 	/** Lee desde el Excel los valores del Excel segun los parámetros indicados (se lee en vertical, de arriba a abajo)
 	 * @sheet Hoja actual desde donde se lee
@@ -281,7 +387,7 @@ public class LeerExcel {
 		return true;
 	}
 	
-	/** Read from the Excel , the Weapons assigned to a character 
+	/** Read from the Excel , the Defensive Items assigned to a character 
 	 * @param lastSectionRow */
 	private static void readCharacterDataFromExcelDefensiveItems(XSSFSheet sheet, int firstItemRow, int lastItemRow, int lastSectionRow, List<List> list, int LEFT_COLUMN, int RIGHT_COLUMN) {
 		
